@@ -1,0 +1,162 @@
+﻿@import "css/Layout.css";
+@import "css/AppHeader.css";
+@import "css/Profiles.css";
+
+@import "https://fonts.googleapis.com/css?family=Montserrat:400,700,200";
+@import "https://use.fontawesome.com/releases/v5.7.1/css/all.css";
+@import "assets/css/bootstrap.min.css";
+@import "assets/css/now-ui-dashboard.css";
+@import "assets/demo/demo.css";
+
+
+
+body {
+    font-family: 'DroidArabicKufiRegular';
+}
+
+.btn {
+    font-family: 'DroidArabicKufiRegular';
+}
+
+@font-face {
+    font-family: 'DroidArabicKufiRegular';
+    src: url('fonts/DroidKufi-Regular.eot') format('embedded-opentype'), url('fonts/DroidKufi-Regular.woff') format('woff'), url('fonts/DroidKufi-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.el-input__inner {
+    font-family: 'DroidArabicKufiRegular';
+}
+textarea {
+    font-family: 'DroidArabicKufiRegular';
+}
+
+.DataSet {
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-top: -39px;
+}
+
+.cardRTL {
+    text-align: right;
+    direction: rtl;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #f96332!important;
+    border-color: #f96332!important;
+}
+
+.btn-next {
+    border: 0;
+    border-radius: 30px !important;
+    
+}
+
+.btn-prev {
+    border: 0;
+    border-radius: 30px !important;
+}
+
+.number {
+    border: 0;
+    border-radius: 30px !important;
+    transition: all .3s;
+    padding: 0px 11px;
+    margin: 0 3px;
+    min-width: 30px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    color: #2c2c2c;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+    background: transparent;
+    outline: none;
+}
+
+
+
+
+.zoomIn {
+    -webkit-animation-name: zoomIn;
+    animation-name: zoomIn;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@-webkit-keyframes zoomIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale3d(.3, .3, .3);
+        transform: scale3d(.3, .3, .3);
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale3d(.3, .3, .3);
+        transform: scale3d(.3, .3, .3);
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+.el-form-item__content label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.el-form-item__error {
+    left:unset;
+    right: 0;
+}
+
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width:100%;
+}
+
+.el-input--prefix .el-input__inner {
+    border-radius: 30px;
+}
+.el-input__inner {
+    border-radius: 30px;
+}
+
+.el-select {
+    width: 100%;
+}
+
+.fas {
+    font-size: 26px;
+    color:black!important;
+}
+
+.fa-On {
+    color: #eaff41 !important;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.fa-off {
+    color:black!important;
+}
+
+td a {
+    padding: 6px;
+}
+
+.AddButtonLeftSide{
+    float:left;
+}
+

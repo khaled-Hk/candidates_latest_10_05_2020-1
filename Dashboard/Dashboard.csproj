@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Vue</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="clientapp - Copy\**" />
+    <Compile Remove="clientapp\dist\Web\**" />
+    <Compile Remove="clientapp\public\element-ui\**" />
+    <Compile Remove="clientapp\src\components\Cities\**" />
+    <Compile Remove="clientapp\src\components\Companies\**" />
+    <Compile Remove="clientapp\src\components\Countries\**" />
+    <Compile Remove="clientapp\src\components\Courses\**" />
+    <Compile Remove="clientapp\src\components\HelloWorld\**" />
+    <Compile Remove="Models\**" />
+    <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="clientapp - Copy\**" />
+    <Content Remove="clientapp\dist\Web\**" />
+    <Content Remove="clientapp\public\element-ui\**" />
+    <Content Remove="clientapp\src\components\Cities\**" />
+    <Content Remove="clientapp\src\components\Companies\**" />
+    <Content Remove="clientapp\src\components\Countries\**" />
+    <Content Remove="clientapp\src\components\Courses\**" />
+    <Content Remove="clientapp\src\components\HelloWorld\**" />
+    <Content Remove="Models\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="clientapp - Copy\**" />
+    <EmbeddedResource Remove="clientapp\dist\Web\**" />
+    <EmbeddedResource Remove="clientapp\public\element-ui\**" />
+    <EmbeddedResource Remove="clientapp\src\components\Cities\**" />
+    <EmbeddedResource Remove="clientapp\src\components\Companies\**" />
+    <EmbeddedResource Remove="clientapp\src\components\Countries\**" />
+    <EmbeddedResource Remove="clientapp\src\components\Courses\**" />
+    <EmbeddedResource Remove="clientapp\src\components\HelloWorld\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="clientapp - Copy\**" />
+    <None Remove="clientapp\dist\Web\**" />
+    <None Remove="clientapp\public\element-ui\**" />
+    <None Remove="clientapp\src\components\Cities\**" />
+    <None Remove="clientapp\src\components\Companies\**" />
+    <None Remove="clientapp\src\components\Countries\**" />
+    <None Remove="clientapp\src\components\Courses\**" />
+    <None Remove="clientapp\src\components\HelloWorld\**" />
+    <None Remove="Models\**" />
+    <None Remove="wwwroot\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="clientapp\src\App.vue" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.Validation" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="VueCliMiddleware" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="clientapp\src\components\Administration\Branches\" />
+    <Folder Include="clientapp\src\components\Administration\Offices\" />
+    <Folder Include="clientapp\src\components\Rules\Constituencies\" />
+    <Folder Include="clientapp\src\components\Rules\ConstituencyDetails\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\bootstrap.min.css" />
+    <None Include="wwwroot\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\css\now-ui-dashboard.css" />
+    <None Include="wwwroot\css\now-ui-dashboard.css.map" />
+    <None Include="wwwroot\css\now-ui-dashboard.min.css" />
+    <None Include="wwwroot\fonts\DroidKufi-Regular.eot" />
+    <None Include="wwwroot\fonts\DroidKufi-Regular.ttf" />
+    <None Include="wwwroot\fonts\DroidKufi-Regular.woff" />
+    <None Include="wwwroot\img\logo.jpg" />
+    <None Include="wwwroot\js\axios.min.js" />
+    <None Include="wwwroot\js\login.js" />
+    <None Include="wwwroot\js\sweetalert.min.js" />
+    <None Include="wwwroot\js\vue.js" />
+  </ItemGroup>
+
+
+</Project>

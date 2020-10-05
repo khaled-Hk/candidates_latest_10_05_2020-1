@@ -1,0 +1,10 @@
+﻿
+.nav span {
+    text-align: right;
+}
+
+@media only screen and (max-device-width: 988px) {
+    .navbar {
+        direction: rtl;
+    }
+}

@@ -133,9 +133,9 @@ namespace Dashboard
            services.AddMvc(config =>
             {
                 // Require a authenticated user
-                var policy = new AuthorizationPolicyBuilder()
-                   .RequireAuthenticatedUser()
-                   .Build();
+                //var policy = new AuthorizationPolicyBuilder()
+                //   .RequireAuthenticatedUser()
+                //   .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
                 config.EnableEndpointRouting = false;
 

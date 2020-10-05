@@ -20,7 +20,7 @@
             warning: { confirmButtonText: 'OK', type: 'warning', dangerouslyUseHTMLString: true, center: true },
             rules: {},
             forgetPassowrd: false,
-
+            Loading: false
 
 
         };
@@ -44,15 +44,16 @@
                 });
                 return;
             }
-
+            this.Loading = true;
             axios.post(`/Security/loginUser`, this.form)
                 .then(response => {
-                    ///   $blockUI.close();
                     sessionStorage.setItem('currentUser', JSON.stringify(response.data));
                     window.location.href = '/';
+                
                 })
                 .catch((error) => {
                     //$blockUI.close();
+                    this.Loading = false;
                     swal({
                         title: "خطأ",
                         text: error.response.data,

@@ -52,6 +52,12 @@ export default {
     GetConstituenciesBasedOn(RegionId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituenciesBasedOn/${RegionId}`); 
     },
+    GetConstituencyBasedOn(constituencyId) {
+        return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
+    },
+    UpdateConstituency(constituency) {
+        return axios.put(`/Api/Admin/Constituencies/UpdateConstituency/`, constituency);
+    },
      // ************************ ConstituencyDetails **************************
     AddConstituencyDetails(constituencyDetials) {
          return axios.post(`/api/Admin/ConstituencyDetails/CreateConstituencyDetails`, constituencyDetials);

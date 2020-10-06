@@ -197,7 +197,7 @@ namespace Vue.Controllers
             try
             {
                 var selectConstituencies = db.Constituencies.Where(x => x.Status == 1).Select(obj => new { obj.ConstituencyId, obj.ArabicName, obj.EnglishName, obj.RegionId, obj.OfficeId, obj.CreatedOn}).ToList();
-                var constituencies = (from sc in selectConstituencies join r in db.Regions on sc.RegionId equals r.RegionId select new { sc.ConstituencyId, sc.EnglishName, sc.ArabicName, sc.RegionId, regionName = r.ArabicName, sc.OfficeId, sc.CreatedOn }).ToList();
+                var constituencies = (from sc in selectConstituencies join r in db.Regions on sc.RegionId equals r.RegionId where r.Status == 1 select new { sc.ConstituencyId, sc.EnglishName, sc.ArabicName, sc.RegionId, regionName = r.ArabicName, sc.OfficeId, sc.CreatedOn }).ToList();
                 return Ok(new { Constituencies = constituencies });
             }
             catch (Exception ex)
@@ -217,6 +217,24 @@ namespace Vue.Controllers
                 }
                 var selectConstituencies = db.Constituencies.Where(x => x.Status == 1 && x.RegionId == RegionId).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
                 return Ok(new { Constituencies = selectConstituencies });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
+        [HttpGet("GetConstituency/{constituencyId}")]
+        public IActionResult GetConstituencyBasedOn([FromRoute] long? constituencyId)
+        {
+            try
+            {
+                if (constituencyId == null)
+                {
+                    return BadRequest("الرجاء إختيار المنطقة");
+                }
+                var selectConstituency = db.Constituencies.Where(x => x.ConstituencyId == constituencyId && x.Status == 1 ).Select(obj => new { RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
+                return Ok(new { Constituency = selectConstituency });
             }
             catch (Exception ex)
             {

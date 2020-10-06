@@ -1,4 +1,5 @@
 ﻿import AddConstituency from './AddConstituency/AddConstituency.vue'
+import UpdateConstituency from './UpdateConstituency/UpdateConstituency.vue'
 import moment from 'moment';
 
 export default {
@@ -7,7 +8,8 @@ export default {
         this.GetConstituencies(this.pageNo);  
     },
     components: {
-        'add-Constituency': AddConstituency
+        'add-Constituency': AddConstituency,
+        'update-Constituency': UpdateConstituency
     },
     data() {
          return {
@@ -16,7 +18,8 @@ export default {
             pages: 0,
             constituencies: [],
             state: 0,
-            loading: false
+            loading: false,
+            constituencyId: 0
 
         };
     },
@@ -33,6 +36,11 @@ export default {
         AddConstituencyComponent() {
             this.state = 1
         },
+        UpdateConstituencyComponent(constituencyId) {
+            this.state = 2
+            this.constituencyId = constituencyId;
+        },
+
         GetConstituencies(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {

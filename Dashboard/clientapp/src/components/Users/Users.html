@@ -1,0 +1,147 @@
+﻿
+    <div class="Regions">
+        <div class="content" style="background-color:lightgray">
+            <div class="panel-header">
+            </div>
+            <div class="row DataSet" style="height:100%">
+                <add-Region v-if="state==1" class="zoomIn"></add-Region>
+                <div class="col-md-12 zoomIn">
+                    <div>
+
+
+
+                        <div class="content" style="direction:rtl;text-align:right" >
+                            <add-Users v-if="state==1"></add-Users>
+                            <edit-Users v-if="state==2"></edit-Users>
+                            <div class="row" v-if="state==0">
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-md-12"> <h4 class="card-title"> عرض بيانات المستخدمين </h4></div>
+
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row" v-if="users==0">
+
+                                                <div class="col-md-10">
+                                                    <div class="form-group">
+                                                        <br /><br />
+                                                        <el-alert style="font-size: 35px;" title="عفــوا! لاتوجد بيانات للمستخدمين"
+                                                                  type="info">
+                                                        </el-alert>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <div class="table-responsive" v-if="users!=0">
+                                                <table class="table table-shopping">
+                                                    <thead>
+                                                        <tr class="text-primary">
+                                                            <th style="font-size: 1.063rem;">بطاقة التعريف</th>
+                                                            <th style="font-size: 1.063rem;">الإسم</th>
+                                                            <th style="font-size: 1.063rem;">إسم الدخول</th>
+                                                            <th style="font-size: 1.063rem;">رقم الهاتف</th>
+                                                            <th style="font-size: 1.063rem;">البريد الإلكتروني</th>
+                                                            <th class="text-right" style="font-size: 1.063rem;">الإعدادات</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="item,index in users">
+                                                            <td>
+                                                                <div class="img-container">
+                                                                    <a :href="'http://localhost:5000/Api/Admin/User/' + item.userId + '/image'"><img :src="'http://localhost:5000/Api/Admin/User/' + item.userId + '/image'" /></a>
+                                                                </div>
+                                                            </td>
+                                                            <td class="td-name ">
+                                                                <a href="#jacket">{{item.name }}</a>
+                                                                <br>
+                                                                <small v-if="item.userType==1">مدير</small>
+                                                                <small v-if="item.userType==2">مستخدم</small>
+                                                            </td>
+                                                            <td>
+                                                                {{item.loginName}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.phone}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.email}}
+                                                            </td>
+                                                            <td class="td-actions text-right">
+                                                                <!--<button type="button" rel="tooltip" class="btn btn-info btn-link" data-original-title="إيقاف المستخدم" title="إيقاف المستخدم">
+                                                <i class="material-icons">lock</i>
+                                                <div class="ripple-container"></div>
+                                            </button>-->
+                                                                <button v-if="item.state==2 || item.state==0" type="button" rel="tooltip" @click.prevent="ActivateUser(item.userId)" class="btn btn-success btn-link" data-original-title="تفعيل الحساب" title="تفعيل الحساب">
+                                                                    <i class="fa fa-unlock"></i>
+                                                                </button>
+                                                                <button v-if="item.state==1" type="button" rel="tooltip" @click.prevent="DeactivateUser(item.userId)" class="btn btn-success btn-link" data-original-title="ايقاف" title="ايقاف">
+                                                                    <i class="fa fa-lock"></i>
+                                                                </button>
+                                                                <button type="button" rel="tooltip" @click.prevent="EditUser(item)" class="btn btn-info btn-link" 
+                                                                       title="تعديل بيانات المستخدم">
+                                                                    <i class="fa fa-user-edit"></i>
+                                                                </button>
+                                                                <button type="button" rel="tooltip" @click.prevent="delteUser(item.userId)" class="btn btn-danger btn-link" title="حدف المستخدم">
+                                                                    <i class="fa fa-trash-alt"></i>
+                                                                </button>
+                                                            </td>
+
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <hr />
+
+                                            <div class="row" v-if="users!=0">
+                                                <div class="col-sm-12 col-md-7">
+                                                    <div class="disabled-sorting"
+                                                         id="datatable_info"
+                                                         aria-live="polite"
+                                                         role="status">
+
+                                                        <el-pagination background
+                                                                       layout="prev, pager, next"
+                                                                       :current-page="pageNo"
+                                                                       :page-size="pageSize"
+                                                                       :total="pages"
+                                                                       aria-controls="datatables"
+                                                                       @current-change="getUser($event)">
+                                                        </el-pagination>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-5" style="text-align: left;">
+                                                    <div class="dataTables_info" id="datatables_info" role="status" aria-live="polite">Showing {{pageNo}} to {{pageSize}} of {{pages}} entries</div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+    

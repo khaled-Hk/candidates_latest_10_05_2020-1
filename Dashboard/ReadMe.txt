@@ -14,3 +14,35 @@ Scaffold-DbContext "Server=DESKTOP-4AI87L8\SQLEXPRESS;Database=Candidates;Truste
 Add External Models
 
 https://www.learnentityframeworkcore.com/walkthroughs/existing-database
+
+
+
+style="background-color: #f96332;"
+
+
+<div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-12"> <h4 class="card-title"> تغير كلمة المرور </h4></div>
+
+                                        </div>
+                                    </div>
+
+<div class="Regions">
+        <div class="content" style="background-color:lightgray">
+            <div class="panel-header">
+            </div>
+            <div class="row DataSet" style="height:100%">
+                <add-Region v-if="state==1" class="zoomIn"></add-Region>
+                <div class="col-md-12 zoomIn">
+                    <div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>

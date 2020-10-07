@@ -14,6 +14,16 @@ import Profiles from './components/Profiles/Profiles.vue';
 import Regions from './components/Regions/Regions.vue';
 import Branches from './components/Administration/Branches/Branches.vue';
 import DataService from './Shared/DataService';
+
+
+//////////////User Component////////////////////
+import Users from './components/Users/Users.vue';
+import AddUsers from './components/Users/AddUsers/AddUsers.vue';
+import EditUsersProfile from './components/Users/EditUsersProfile/EditUsersProfile.vue';
+import ChangePassword from './components/Users/ChangePassword/ChangePassword.vue';
+//////////////////////////t////////////////////
+
+
 //import messages from './i18n';
 
 
@@ -45,7 +55,13 @@ const router = new VueRouter({
         { path: '/', component: Home },
         { path: '/Profiles', component: Profiles },
         { path: '/Regions', component: Regions },
-        { path : '/Administration/Branches', component: Branches }
+        { path : '/Administration/Branches', component: Branches },
+
+
+        { path: '/Users', component: Users },
+        { path: '/AddUsers', component: AddUsers },
+        { path: '/EditUsersProfile', component: EditUsersProfile },
+        { path: '/ChangePassword', component: ChangePassword },  
     ]
 
 });

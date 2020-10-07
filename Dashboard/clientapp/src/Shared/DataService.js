@@ -40,6 +40,54 @@ export default {
 
 
 
+
+    // ************************ User Info **************************
+    CheckLoginStatus() {
+        return axios.post('/security/checkloginstatus');
+    },
+
+    getUser(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/User/getUser?pageNo=${pageNo}&pagesize=${pageSize}`);
+    },
+
+    AddUser(User) {
+        return axios.post('/Api/Admin/User/AddUser', User);
+    },
+
+    EditUser(User) {
+        return axios.post('/Api/Admin/User/EditUser', User);
+    },
+
+    DeactivateUser(UserId) {
+        return axios.post( `/Api/Admin/User/${UserId}/Deactivate`);
+    },
+
+    ActivateUser(UserId) {
+        return axios.post(`/Api/Admin/User/${UserId}/Activate`);
+    },
+
+    delteUser(UserId) {
+        return axios.post(`/Api/Admin/User/${UserId}/delteUser`);
+    },
+
+    UploadImage(obj) {
+        return axios.post( '/Api/Admin/User/UploadImage', obj);
+    },
+
+    EditUsersProfile(User) {
+        return axios.post('/Api/Admin/User/EditUsersProfile', User);
+    },
+
+    ChangePassword(userPassword) {
+        return axios.post(`/Security/ChangePassword`, userPassword);
+    },
+
+
+
+
+
+
+
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Companies/${CompanyId}/delete`);

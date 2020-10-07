@@ -23,7 +23,9 @@ namespace Models
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public long? ProfileId { get; set; }
+        public long? ConstituencDetailId { get; set; }
 
+        public virtual ConstituencyDetails ConstituencDetail { get; set; }
         public virtual Offices Office { get; set; }
         public virtual Profile Profile { get; set; }
         public virtual ICollection<Stations> Stations { get; set; }

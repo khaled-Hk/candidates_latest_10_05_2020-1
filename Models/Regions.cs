@@ -9,7 +9,6 @@ namespace Models
         {
             Constituencies = new HashSet<Constituencies>();
             ConstituencyDetails = new HashSet<ConstituencyDetails>();
-            Offices = new HashSet<Offices>();
         }
 
         public long RegionId { get; set; }
@@ -23,6 +22,5 @@ namespace Models
 
         public virtual ICollection<Constituencies> Constituencies { get; set; }
         public virtual ICollection<ConstituencyDetails> ConstituencyDetails { get; set; }
-        public virtual ICollection<Offices> Offices { get; set; }
     }
 }

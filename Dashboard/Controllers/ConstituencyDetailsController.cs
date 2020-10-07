@@ -332,5 +332,20 @@ namespace Dashboard.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [HttpGet("GetConstituencieyDetails")]
+        public IActionResult GetConstituenciesBasedOn()
+        {
+            try
+            {
+                
+                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
+                return Ok(new { ConstituencyDetails = selectConstituencyDetails });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
     }
 }

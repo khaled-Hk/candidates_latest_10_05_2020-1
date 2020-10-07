@@ -85,6 +85,11 @@ namespace Models
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
 
+                entity.HasOne(d => d.ConstituencDetail)
+                    .WithMany(p => p.Centers)
+                    .HasForeignKey(d => d.ConstituencDetailId)
+                    .HasConstraintName("FK_Centers_ConstituencyDetails");
+
                 entity.HasOne(d => d.Office)
                     .WithMany(p => p.Centers)
                     .HasForeignKey(d => d.OfficeId)
@@ -230,11 +235,6 @@ namespace Models
                     .WithMany(p => p.Offices)
                     .HasForeignKey(d => d.ProfileId)
                     .HasConstraintName("FK_Offices_Profile");
-
-                entity.HasOne(d => d.Region)
-                    .WithMany(p => p.Offices)
-                    .HasForeignKey(d => d.RegionId)
-                    .HasConstraintName("FK_Offices_Regions");
             });
 
             modelBuilder.Entity<Profile>(entity =>

@@ -25,11 +25,11 @@ export default {
             },
             rules: {
                 ArabicName: [
-                    { required: true, message: 'الرجاء إدخال اسم المنطقة بالعربي', trigger: 'blur' },
+                    { required: true, message: 'الرجاء إدخال اسم الفرع بالعربي', trigger: 'blur' },
                     { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمنطقة', trigger: 'blur' }
                 ],
                 EnglishName: [
-                    { required: true, message: 'الرجاء إدخال اسم المنطقة بالانجليزي', trigger: 'blur' },
+                    { required: true, message: 'الرجاء إدخال اسم الفرع بالانجليزي', trigger: 'blur' },
                     { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمنطقة', trigger: 'blur' }
                 ],
                
@@ -43,10 +43,10 @@ export default {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
-                    this.$http.AddRegions(this.ruleForm)
+                    this.$http.AddBranch(this.ruleForm)
                         .then(response => {
                             this.$parent.state = 0;
-                            this.$parent.GetRegions();
+                            this.$parent.GetBranches();
                             this.$blockUI.Stop();
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',

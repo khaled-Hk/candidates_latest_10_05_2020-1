@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Models
+namespace Models.Models
 {
     public partial class CandidatesContext : DbContext
     {

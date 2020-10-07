@@ -1,4 +1,4 @@
-﻿import AddRegion from './AddRegion/AddRegion.vue';
+﻿import AddBranch from './AddBranch/AddBranch.vue';
 import moment from 'moment';
 export default {
     name: 'Branches',    
@@ -6,7 +6,7 @@ export default {
         this.GetBranches(this.pageNo);  
     },
     components: {
-        'add-Region': AddRegion,
+        'add-Branch': AddBranch,
     },
     filters: {
         moment: function (date) {
@@ -25,11 +25,10 @@ export default {
             Regions: [],
             state: 0,
             loading:false
-          
         };
     },
     methods: {
-        AddRegionComponent() {
+        AddBranchComponent() {
             this.state = 1;
         },
 
@@ -53,34 +52,33 @@ export default {
                 });
         },
 
-        //Delete(RegionId) {
-        //    this.$confirm('هل حقا تريد مسح المنطقة . متـابعة ؟', 'تـحذيـر', {
-        //        confirmButtonText: 'نـعم',
-        //        cancelButtonText: 'إلغاء',
-        //        type: 'warning',
-        //        center: true
-        //    }).then(() => {   
-        //        this.$blockUI.Start();
-        //        this.$http.DeleteRegion(RegionId)
-        //            .then(response => {
-        //                this.$blockUI.Stop();
-        //                this.$notify({
-        //                    title: 'تم المسـح بنجاح',
-        //                    dangerouslyUseHTMLString: true,
-        //                    message: '<strong>' + response.data + '</strong>',
-        //                    type: 'success'
-        //                });  
-
-        //                this.GetRegions(this.pageNo);
-        //            })
-        //            .catch((err) => {
-        //                this.$blockUI.Stop();
-        //                this.$message({
-        //                    type: 'error',
-        //                    message: err.response.data
-        //                });
-        //            });
-        //    })
-        //},
+        Delete(BranchId) {
+            this.$confirm('هل حقا تريد مسح الـفرع . متـابعة ؟', 'تـحذيـر', {
+                confirmButtonText: 'نـعم',
+                cancelButtonText: 'إلغاء',
+                type: 'warning',
+                center: true
+            }).then(() => {   
+                this.$blockUI.Start();
+                this.$http.DeleteBranche(BranchId)
+                    .then(response => {
+                        this.$blockUI.Stop();
+                        this.$notify({
+                            title: 'تم المسـح بنجاح',
+                            dangerouslyUseHTMLString: true,
+                            message: '<strong>' + response.data + '</strong>',
+                            type: 'success'
+                        });  
+                        this.GetBranches(this.pageNo);
+                    })
+                    .catch((err) => {
+                        this.$blockUI.Stop();
+                        this.$message({
+                            type: 'error',
+                            message: err.response.data
+                        });
+                    });
+            })
+        },
     }    
 }

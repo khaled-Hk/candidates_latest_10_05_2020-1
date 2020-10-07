@@ -107,7 +107,15 @@ export default {
     //    return axios.post(`/Api/Admin/Cities/${CityId}/delete`);
     //},
 
-
+    GetBranches(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+    DeleteBranche(BranchId) {
+        return axios.delete(`/Api/Admin/Branches/${BranchId}/Delete`);
+    },
+    AddBranch(Branch) {
+        return axios.post(`/Api/Admin/Branches/Add`, Branch);
+    },
 
     //Login(loginName, password, secretNo) {
     //    return axios.post(baseUrl + '/security/login', { loginName, password, secretNo });

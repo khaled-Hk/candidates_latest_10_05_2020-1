@@ -38,7 +38,7 @@
                                 <el-form-item prop="ConstituencyId">
                                     <label>المنطقة الرئيسية</label>
                                     <div class="form-group">
-                                        <el-select placeholder="إختار المنطقة الرئيسية" v-model="ruleForm.ConstituencyId" filterable :disabled="Constituencies.length == 0">
+                                        <el-select placeholder="إختار المنطقة الرئيسية" v-model="ruleForm.ConstituencyId" filterable >
                                             <el-option v-for="item in Constituencies"
                                                        :key="item.value"
                                                        :label="item.label"

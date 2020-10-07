@@ -1,48 +1,49 @@
-﻿import AddBranch from './AddBranch/AddBranch.vue';
+﻿import AddConstituencyDetails from './AddConstituencyDetails/AddConstituencyDetails.vue'
 import moment from 'moment';
+
 export default {
-    name: 'Branches',    
+    name: 'ConstituencyDetails',
     created() {
-        this.GetBranches(this.pageNo);  
+        this.GetConstituencyDetails(this.pageNo);
     },
     components: {
-        'add-Branch': AddBranch,
+        'add-constituencyDetails': AddConstituencyDetails
+    },
+    data() {
+        return {
+            pageNo: 1,
+            pageSize: 10,
+            pages: 0,
+            constituencyDetails: [],
+            state: 0,
+            loading: false
+
+        };
     },
     filters: {
         moment: function (date) {
             if (date === null) {
                 return "فارغ";
             }
-           // return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+            // return moment(date).format('MMMM Do YYYY, h:mm:ss a');
             return moment(date).format('MMMM Do YYYY');
         }
     },
-    data() {
-        return {  
-            pageNo: 1,
-            pageSize: 10,
-            pages: 0,  
-            Regions: [],
-            state: 0,
-            loading:false
-        };
-    },
     methods: {
-        AddBranchComponent() {
-            this.state = 1;
+        AddConstituencyDetailsComponent() {
+            this.state = 1
         },
-
-        GetBranches(pageNo) {
+        GetConstituencyDetails(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetBranches(this.pageNo, this.pageSize)
+            this.$http.GetConstituencyDetails()
                 .then(response => {
                     this.loading = false;
-                    this.Branches = response.data.branches;
-                    this.pages = response.data.count;
+                    this.constituencyDetails = response.data.constituencyDetails;
+                   //this.pages = response.data.count;
                 })
                 .catch((err) => {
                     this.loading = false;
@@ -51,34 +52,36 @@ export default {
                     return err;
                 });
         },
+        Delete(constituencyDetailsId) {
 
-        Delete(BranchId) {
-            this.$confirm('هل حقا تريد مسح الـفرع . متـابعة ؟', 'تـحذيـر', {
+            this.$confirm('هل حقا تريد مسح المنطقة . متـابعة ؟', 'تـحذيـر', {
                 confirmButtonText: 'نـعم',
                 cancelButtonText: 'إلغاء',
                 type: 'warning',
                 center: true
-            }).then(() => {   
+            }).then(() => {
                 this.$blockUI.Start();
-                this.$http.DeleteBranche(BranchId)
+                this.$http.DeleteConstituencyDetail(constituencyDetailsId)
                     .then(response => {
                         this.$blockUI.Stop();
                         this.$notify({
                             title: 'تم المسـح بنجاح',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong>' + response.data + '</strong>',
+                            message: '<strong>' + response.data.message + '</strong>',
                             type: 'success'
-                        });  
-                        this.GetBranches(this.pageNo);
+                        });
+
+                        this.GetConstituencyDetails(this.pageNo);
                     })
                     .catch((err) => {
                         this.$blockUI.Stop();
                         this.$message({
                             type: 'error',
-                            message: err.response.data
+                            message: err.response.data.message
                         });
                     });
             })
-        },
-    }    
+        }
+    }
+
 }

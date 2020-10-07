@@ -21,12 +21,10 @@ namespace Models
         public DateTime? ModifiedOn { get; set; }
         public short? Status { get; set; }
         public long? BranchId { get; set; }
-        public long? RegionId { get; set; }
         public long? ProfileId { get; set; }
 
         public virtual Branches Branch { get; set; }
         public virtual Profile Profile { get; set; }
-        public virtual Regions Region { get; set; }
         public virtual ICollection<Centers> Centers { get; set; }
         public virtual ICollection<Constituencies> Constituencies { get; set; }
     }

@@ -1,47 +1,56 @@
-﻿import AddBranch from './AddBranch/AddBranch.vue';
+﻿import AddConstituency from './AddConstituency/AddConstituency.vue'
+import UpdateConstituency from './UpdateConstituency/UpdateConstituency.vue'
 import moment from 'moment';
+
 export default {
-    name: 'Branches',    
+    name: 'Constituency',
     created() {
-        this.GetBranches(this.pageNo);  
+        this.GetConstituencies(this.pageNo);  
     },
     components: {
-        'add-Branch': AddBranch,
+        'add-Constituency': AddConstituency,
+        'update-Constituency': UpdateConstituency
+    },
+    data() {
+         return {
+            pageNo: 1,
+            pageSize: 10,
+            pages: 0,
+            constituencies: [],
+            state: 0,
+            loading: false,
+            constituencyId: 0
+
+        };
     },
     filters: {
         moment: function (date) {
             if (date === null) {
                 return "فارغ";
             }
-           // return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+            // return moment(date).format('MMMM Do YYYY, h:mm:ss a');
             return moment(date).format('MMMM Do YYYY');
         }
     },
-    data() {
-        return {  
-            pageNo: 1,
-            pageSize: 10,
-            pages: 0,  
-            Regions: [],
-            state: 0,
-            loading:false
-        };
-    },
     methods: {
-        AddBranchComponent() {
-            this.state = 1;
+        AddConstituencyComponent() {
+            this.state = 1
+        },
+        UpdateConstituencyComponent(constituencyId) {
+            this.state = 2
+            this.constituencyId = constituencyId;
         },
 
-        GetBranches(pageNo) {
+        GetConstituencies(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetBranches(this.pageNo, this.pageSize)
+            this.$http.GetConstituencies()
                 .then(response => {
                     this.loading = false;
-                    this.Branches = response.data.branches;
+                    this.constituencies = response.data.constituencies;
                     this.pages = response.data.count;
                 })
                 .catch((err) => {
@@ -51,34 +60,37 @@ export default {
                     return err;
                 });
         },
-
-        Delete(BranchId) {
-            this.$confirm('هل حقا تريد مسح الـفرع . متـابعة ؟', 'تـحذيـر', {
+        Delete(constituencyId)
+        {
+           
+            this.$confirm('هل حقا تريد مسح المنطقة . متـابعة ؟', 'تـحذيـر', {
                 confirmButtonText: 'نـعم',
                 cancelButtonText: 'إلغاء',
                 type: 'warning',
                 center: true
-            }).then(() => {   
+            }).then(() => {
                 this.$blockUI.Start();
-                this.$http.DeleteBranche(BranchId)
+                this.$http.DeleteConstituency(constituencyId)
                     .then(response => {
                         this.$blockUI.Stop();
                         this.$notify({
                             title: 'تم المسـح بنجاح',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong>' + response.data + '</strong>',
+                            message: '<strong>' + response.data.message + '</strong>',
                             type: 'success'
-                        });  
-                        this.GetBranches(this.pageNo);
+                        });
+
+                        this.GetConstituencies(this.pageNo);
                     })
                     .catch((err) => {
                         this.$blockUI.Stop();
                         this.$message({
                             type: 'error',
-                            message: err.response.data
+                            message: err.response.data.message
                         });
                     });
             })
-        },
-    }    
+        }
+    }
+
 }

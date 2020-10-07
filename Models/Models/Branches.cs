@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Models
+namespace Models.Models
 {
-    public partial class ConstituencyDetails
+    public partial class Branches
     {
-        public ConstituencyDetails()
+        public Branches()
         {
-            Centers = new HashSet<Centers>();
+            Offices = new HashSet<Offices>();
         }
 
-        public long ConstituencyDetailId { get; set; }
+        public long BrancheId { get; set; }
         public string ArabicName { get; set; }
         public string EnglishName { get; set; }
         public string Description { get; set; }
@@ -19,13 +19,9 @@ namespace Models
         public long? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public short? Status { get; set; }
-        public long ConstituencyId { get; set; }
-        public long? RegionId { get; set; }
         public long? ProfileId { get; set; }
 
-        public virtual Constituencies Constituency { get; set; }
         public virtual Profile Profile { get; set; }
-        public virtual Regions Region { get; set; }
-        public virtual ICollection<Centers> Centers { get; set; }
+        public virtual ICollection<Offices> Offices { get; set; }
     }
 }

@@ -36,7 +36,11 @@ export default {
     DeleteRegion(RegionId) {
         return axios.delete(`/Api/Admin/Regions/${RegionId}/Delete`);
     },
+    GetAllRegions() {
+        return axios.get(`/Api/Admin/Regions/GetRegions`);
+    },
     // ************************ Constituencies **************************
+
 
 
 
@@ -87,7 +91,34 @@ export default {
 
 
 
-
+    GetConstituencies() {
+        return axios.get(`/Api/Admin/Constituencies/GetAllConstituencies`);
+    },
+    AddConstituency(constituency) {
+        return axios.post(`/api/Admin/Constituencies/CreateConstituency`, constituency);
+    },
+    DeleteConstituency(constituencyId) {
+        return axios.delete(`/api/Admin/Constituencies/DeleteConstituency/${constituencyId}`);
+    },
+    GetConstituenciesBasedOn(RegionId) {
+        return axios.get(`/Api/Admin/Constituencies/GetConstituenciesBasedOn/${RegionId}`); 
+    },
+    GetConstituencyBasedOn(constituencyId) {
+        return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
+    },
+    UpdateConstituency(constituency) {
+        return axios.put(`/Api/Admin/Constituencies/UpdateConstituency/`, constituency);
+    },
+     // ************************ ConstituencyDetails **************************
+    AddConstituencyDetails(constituencyDetials) {
+         return axios.post(`/api/Admin/ConstituencyDetails/CreateConstituencyDetails`, constituencyDetials);
+    },
+    GetConstituencyDetails() {
+        return axios.get(`/api/Admin/ConstituencyDetails/GetAllConstituencyDetails`);
+    },
+    DeleteConstituencyDetail(constituencyId) {
+        return axios.delete(`/api/Admin/ConstituencyDetails/DeleteConstituencyDetails/${constituencyId}`);
+    },
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Companies/${CompanyId}/delete`);
@@ -127,7 +158,15 @@ export default {
     //    return axios.post(`/Api/Admin/Cities/${CityId}/delete`);
     //},
 
-
+    GetBranches(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+    DeleteBranche(BranchId) {
+        return axios.delete(`/Api/Admin/Branches/${BranchId}/Delete`);
+    },
+    AddBranch(Branch) {
+        return axios.post(`/Api/Admin/Branches/Add`, Branch);
+    },
 
     //Login(loginName, password, secretNo) {
     //    return axios.post(baseUrl + '/security/login', { loginName, password, secretNo });
@@ -245,6 +284,7 @@ export default {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.get(baseUrl + `/Admin/Packages/GetPackages?pageno=${pageNo}&pagesize=${pageSize}&SuperPackageId=${superPakcageId}`);
     //},
+    // ************************ Branches ******************************
 
 
 

@@ -1,0 +1,62 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="card-title">إضافة منطقة </h4>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn" @click.prevent="Back()">
+                        <span class="btn-label">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </span>
+                        رجـوع
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <el-form-item prop="ArabicName">
+                                    <label>اسم الفرع (عربي)</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم الفرع بالعربي" v-model="ruleForm.ArabicName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="EnglishName">
+                                    <label>اسم الفرع (انجليزي)</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم الفرع بالانجليزي" v-model="ruleForm.EnglishName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+                        <div class="">
+
+                        </div>
+
+                        <el-form-item class="AddButtonLeftSide">
+                            <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
+                            <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                        </el-form-item>
+                    </el-form>
+
+                </div>
+               
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+                <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+        </div><!-- end content-->
+    </div><!--  end card  -->
+</div> <!-- end col-md-12 -->

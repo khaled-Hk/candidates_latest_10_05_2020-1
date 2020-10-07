@@ -48,11 +48,11 @@ export default {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetConstituencyDetails()
+            this.$http.GetConstituencyDetailsPagination(this.pageNo, this.pageSize)
                 .then(response => {
                     this.loading = false;
                     this.constituencyDetails = response.data.constituencyDetails;
-                   //this.pages = response.data.count;
+                    this.pages = response.data.count;
                 })
                 .catch((err) => {
                     this.loading = false;

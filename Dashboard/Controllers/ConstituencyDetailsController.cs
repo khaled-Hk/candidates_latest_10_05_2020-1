@@ -290,6 +290,47 @@ namespace Dashboard.Controllers
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
+
+
+        }
+
+        [HttpGet("ConstituencyDetailsPagination")]
+        public IActionResult ConstituencyDetailsPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
+        {
+            try
+            {
+                IQueryable<ConstituencyDetails> ConstituencyDetailsQuery;
+                ConstituencyDetailsQuery = from p in db.ConstituencyDetails
+                                           where p.Status != 9
+                                    select p;
+
+
+                var ConstituencyDetailsCount = (from p in ConstituencyDetailsQuery
+                                           select p).Count();
+
+                var ConstituencyDetailsList = (from p in ConstituencyDetailsQuery
+                                               join mc in db.Constituencies on p.ConstituencyId equals mc.ConstituencyId
+                                          orderby p.CreatedOn descending
+                                          select new
+                                          {
+                                              p.ConstituencyDetailId,
+                                              p.ConstituencyId,
+                                              p.ArabicName,
+                                              p.EnglishName,
+                                              constituencyName = mc.ArabicName,
+                                              p.RegionId,
+                                              p.CreatedOn,
+                                              p.Status
+
+
+                                          }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+                return Ok(new { ConstituencyDetails = ConstituencyDetailsList, count = ConstituencyDetailsCount });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

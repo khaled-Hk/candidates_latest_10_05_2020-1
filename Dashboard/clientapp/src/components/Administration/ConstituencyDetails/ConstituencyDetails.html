@@ -86,7 +86,7 @@
 
                         </table>
 
-                        <div style="text-align: center;padding-bottom:11px" v-if="constituencyDetails.length!=0">
+                        <div style="text-align: center;padding-bottom:11px" v-if="constituencyDetails!=0">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination pagination-primary">
                                     <el-pagination background
@@ -94,7 +94,7 @@
                                                    :current-page="pageNo"
                                                    :page-size="pageSize"
                                                    :total="pages"
-                                                   @current-change="GetConstituencies($event)">
+                                                   @current-change="GetConstituencyDetails($event)">
                                     </el-pagination>
                                 </ul>
                             </nav>

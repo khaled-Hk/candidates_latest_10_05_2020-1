@@ -55,6 +55,9 @@ export default {
     GetConstituencyBasedOn(constituencyId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
     },
+    GetConstituencyPagination(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Constituencies/ConstituencyPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
+    },
     UpdateConstituency(constituency) {
         return axios.put(`/Api/Admin/Constituencies/UpdateConstituency/`, constituency);
     },
@@ -70,6 +73,9 @@ export default {
     },
     GetConstituencyDetailsBasedOn(constituencyDetailsId) {
         return axios.get(`/api/Admin/ConstituencyDetails/GetConstituencyDetail/${constituencyDetailsId}`);
+    },
+    GetConstituencyDetailsPagination(pageNo, pageSize) {
+        return axios.get(`/api/Admin/ConstituencyDetails/ConstituencyDetailsPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     UpdateConstituencyDetail(constituencyDetail) {
         return axios.put(`/api/Admin/ConstituencyDetails/UpdateConstituencyDetails`, constituencyDetail);

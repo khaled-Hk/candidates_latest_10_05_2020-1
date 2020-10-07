@@ -47,7 +47,7 @@ export default {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetConstituencies()
+            this.$http.GetConstituencyPagination(this.pageNo, this.pageSize)
                 .then(response => {
                     this.loading = false;
                     this.constituencies = response.data.constituencies;

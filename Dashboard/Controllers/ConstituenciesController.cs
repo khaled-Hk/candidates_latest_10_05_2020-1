@@ -243,7 +243,46 @@ namespace Vue.Controllers
             }
         }
 
+        [HttpGet("ConstituencyPagination")]
+        public IActionResult ConstituencyPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
+        {
+            try
+            {
+                IQueryable<Constituencies> ConstituencyQuery;
+                ConstituencyQuery = from p in db.Constituencies
+                                where p.Status != 9
+                                select p;
 
 
-    }
+                var ConstituenciesCount = (from p in ConstituencyQuery
+                                           select p).Count();
+
+                var ConstituenciesList = (from p in ConstituencyQuery
+                                          join r in db.Regions on p.RegionId equals r.RegionId
+                                          orderby p.CreatedOn descending
+                                  select new
+                                  {
+                                      p.ConstituencyId,
+                                      p.ArabicName,
+                                      p.EnglishName,
+                                      regionName = r.ArabicName,
+                                      p.RegionId,
+                                      p.OfficeId,
+                                      p.CreatedOn,
+                                      p.Status
+
+
+                                  }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+                return Ok(new { Constituencies = ConstituenciesList, count = ConstituenciesCount });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+
+
+        }
 }

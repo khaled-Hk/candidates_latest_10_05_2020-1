@@ -13,6 +13,13 @@
     },
   
     methods: {
+
+        href(url) {
+            this.$router.push(url);
+        },
+
+
+
         //navbar-toggle toggled
         Logout() {
             window.location.href = "/Security/Login";

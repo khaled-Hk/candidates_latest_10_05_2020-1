@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-4">
-                    <h4 class="card-title">تحديث منطقة رئيسية</h4>
+                    <h4 class="card-title">تحديث منطقة فرعية</h4>
                 </div>
                 <div class="col-md-6">
                 </div>
@@ -24,7 +24,7 @@
                                 <el-form-item prop="RegionId">
                                     <label>المنطقة</label>
                                     <div class="form-group">
-                                        <el-select placeholder="إختار المطقة" v-model="ruleForm.RegionId" filterable>
+                                        <el-select placeholder="إختار المنطقة" v-model="ruleForm.RegionId" filterable>
                                             <el-option v-for="item in regions"
                                                        :key="item.value"
                                                        :label="item.label"

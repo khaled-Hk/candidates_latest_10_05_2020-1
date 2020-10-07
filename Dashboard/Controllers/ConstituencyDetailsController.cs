@@ -181,6 +181,8 @@ namespace Dashboard.Controllers
                 }
 
                 constituencyDetail.Status = 9;
+                constituencyDetail.ModifiedOn = DateTime.Now ;
+
                 db.ConstituencyDetails.Update(constituencyDetail);
                 db.SaveChanges();
 
@@ -264,6 +266,27 @@ namespace Dashboard.Controllers
                 return Ok(new { ConstituencyDetails });
             }
             catch(Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
+        [HttpGet("GetConstituencyDetail/{constituencyDetailId}")]
+        public IActionResult GetConstituencyBasedOn([FromRoute] long? constituencyDetailId)
+        {
+            try
+            {
+                if (constituencyDetailId == null)
+                {
+                    return BadRequest("الرجاء إختيار المنطقة الفرعية");
+                }
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
+
+                if (selectConstituencyDetail == null)
+                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
+                return Ok(new { ConstituencyDetail = selectConstituencyDetail });
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }

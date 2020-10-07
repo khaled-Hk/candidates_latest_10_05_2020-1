@@ -68,6 +68,13 @@ export default {
     DeleteConstituencyDetail(constituencyId) {
         return axios.delete(`/api/Admin/ConstituencyDetails/DeleteConstituencyDetails/${constituencyId}`);
     },
+    GetConstituencyDetailsBasedOn(constituencyDetailsId) {
+        return axios.get(`/api/Admin/ConstituencyDetails/GetConstituencyDetail/${constituencyDetailsId}`);
+    },
+    UpdateConstituencyDetail(constituencyDetail) {
+        return axios.put(`/api/Admin/ConstituencyDetails/UpdateConstituencyDetails`, constituencyDetail);
+    },
+    
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Companies/${CompanyId}/delete`);

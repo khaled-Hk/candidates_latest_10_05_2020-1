@@ -124,6 +124,7 @@ namespace Vue.Controllers
                 }
 
                 constituency.Status = 9;
+                constituency.ModifiedOn = DateTime.Now;
                 db.Constituencies.Update(constituency);
                 db.SaveChanges();
 

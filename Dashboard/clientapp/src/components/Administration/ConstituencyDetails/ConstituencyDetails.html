@@ -4,6 +4,7 @@
         </div>
         <div class="row DataSet" style="height:100%">
             <add-constituencyDetails v-if="state==1" class="zoomIn"></add-constituencyDetails>
+            <update-constituencyDetails v-if="state==2" class="zoomIn"></update-constituencyDetails>
             <div class="col-md-12 zoomIn" v-if="state==0">
                 <div class="card cardRTL">
                     <div class="card-header">
@@ -48,6 +49,9 @@
                                     <td>{{R.createdOn | moment}}</td>
                                     <td class="text-left">
 
+                                        <a href="#" title="تعديل بيانات المنطقة" @click.prevent="UpdateConstituencyDetailsComponent(R.constituencyDetailId)">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
                                         <a href="#" title="مسح المنطقة" @click.prevent="Delete(R.constituencyDetailId)">
                                             <i class="fa fa-user-slash"></i>
                                         </a>

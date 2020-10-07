@@ -129,5 +129,19 @@ namespace Dashboard.Controllers
             }
         }
 
+        [HttpGet("GetRegions")]
+        public IActionResult GetRegions()
+        {
+            try
+            {
+                var regions = db.Regions.Where(x => x.Status != 9).Select(s => new { value = s.RegionId, label = s.ArabicName});
+                return Ok(regions);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
     }
 }

@@ -13,6 +13,8 @@ import Home from './components/Home/Home.vue';
 import Profiles from './components/Profiles/Profiles.vue';
 import Regions from './components/Regions/Regions.vue';
 import Branches from './components/Administration/Branches/Branches.vue';
+import Constituency from './components/Administration/Constituency/Constituency.vue';
+import ConstituencyDetails from './components/Administration/ConstituencyDetails/ConstituencyDetails.vue';
 import DataService from './Shared/DataService';
 //import messages from './i18n';
 
@@ -45,7 +47,9 @@ const router = new VueRouter({
         { path: '/', component: Home },
         { path: '/Profiles', component: Profiles },
         { path: '/Regions', component: Regions },
-        { path : '/Administration/Branches', component: Branches }
+        { path: '/Administration/Branches', component: Branches },
+        { path: '/Administration/Constituency', component: Constituency },
+        { path: '/Administration/Subconstituency', component: ConstituencyDetails }
     ]
 
 });

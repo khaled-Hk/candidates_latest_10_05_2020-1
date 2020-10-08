@@ -26,7 +26,8 @@ export default {
                 OfficeId: null,
                 Description: null,
                 Longitude: 0.0,
-                Latitude:0.0
+                Latitude: 0.0,
+                Stations:[]
             },
             rules: {
 
@@ -92,7 +93,22 @@ export default {
 
 
         },
-
+        addStation(index) {
+            let station = this.ruleForm.Stations[index]
+           
+            if (station) {
+                station.lastRow = false
+            }
+               
+            this.ruleForm.Stations.push({ ArabicName: null, EnglishName: null, Description: null, lastRow:true});
+        },
+        removeStations()
+        {
+            this.ruleForm.Stations = []
+        },
+        deleteStation(index) {
+            this.ruleForm.Stations.splice(index,1)
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },

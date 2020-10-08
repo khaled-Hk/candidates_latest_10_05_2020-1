@@ -133,6 +133,8 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالانجليزي" });
                 }
 
+                
+
                 var userId = this.help.GetCurrentUser(HttpContext);
 
                 if (userId <= 0)
@@ -156,8 +158,28 @@ namespace Dashboard.Controllers
                     Status = 1
 
                 };
-
                 db.Centers.Add(newCenter);
+                db.SaveChanges();
+                if (center.Stations.Count > 0)
+                {
+                    Stations stations;
+                    foreach (var station in center.Stations)
+                    {
+                        stations = new Stations
+                        {
+                            ArabicName = station.ArabicName,
+                            EnglishName = station.EnglishName,
+                            Description = station.Description,
+                            CenterId = newCenter.CenterId,
+                            CreatedBy = userId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+
+                        db.Stations.Add(stations);
+                    }
+
+                }
                 db.SaveChanges();
 
 

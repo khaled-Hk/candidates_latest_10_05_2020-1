@@ -19,7 +19,6 @@ https://www.learnentityframeworkcore.com/walkthroughs/existing-database
 
 style="background-color: #f96332;"
 
-
 <div class="card-header">
                                         <div class="row">
                                             <div class="col-md-12"> <h4 class="card-title"> تغير كلمة المرور </h4></div>
@@ -27,7 +26,7 @@ style="background-color: #f96332;"
                                         </div>
                                     </div>
 
-<div class="Regions">
+<div>
         <div class="content" style="background-color:lightgray">
             <div class="panel-header">
             </div>

@@ -50,8 +50,6 @@ namespace Dashboard
             });
 
             services.AddDbContext<CandidatesContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Candidate")));
-         
-          
 
             services.AddCors(options =>
             {
@@ -66,8 +64,7 @@ namespace Dashboard
                       .RequireAuthenticatedUser()
                       .Build();
 
-            //  services.AddAuthentication(OAuthValidationDefaults.AuthenticationScheme)
-
+            //services.AddAuthentication(OAuthValidationDefaults.AuthenticationScheme)
 
             services.AddAuthentication(o =>
             {
@@ -228,9 +225,17 @@ namespace Dashboard
             //    return next(context);
             //});
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+                // 2. Setup fallback to index.html for all app-routes
+                endpoints.MapFallbackToFile(@"/clientapp/{*path:nonfile}", @"clientapp/dist/index.html");
             });
 
 

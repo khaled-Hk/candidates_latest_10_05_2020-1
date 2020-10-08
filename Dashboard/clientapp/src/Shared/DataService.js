@@ -40,6 +40,57 @@ export default {
         return axios.get(`/Api/Admin/Regions/GetRegions`);
     },
     // ************************ Constituencies **************************
+
+
+
+
+
+    // ************************ User Info **************************
+    CheckLoginStatus() {
+        return axios.post('/security/checkloginstatus');
+    },
+
+    getUser(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/User/getUser?pageNo=${pageNo}&pagesize=${pageSize}`);
+    },
+
+    AddUser(User) {
+        return axios.post('/Api/Admin/User/AddUser', User);
+    },
+
+    EditUser(User) {
+        return axios.post('/Api/Admin/User/EditUser', User);
+    },
+
+    DeactivateUser(UserId) {
+        return axios.post( `/Api/Admin/User/${UserId}/Deactivate`);
+    },
+
+    ActivateUser(UserId) {
+        return axios.post(`/Api/Admin/User/${UserId}/Activate`);
+    },
+
+    delteUser(UserId) {
+        return axios.post(`/Api/Admin/User/${UserId}/delteUser`);
+    },
+
+    UploadImage(obj) {
+        return axios.post( '/Api/Admin/User/UploadImage', obj);
+    },
+
+    EditUsersProfile(User) {
+        return axios.post('/Api/Admin/User/EditUsersProfile', User);
+    },
+
+    ChangePassword(userPassword) {
+        return axios.post(`/Security/ChangePassword`, userPassword);
+    },
+
+
+
+
+
+
     GetConstituencies() {
         return axios.get(`/Api/Admin/Constituencies/GetAllConstituencies`);
     },

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" class="perfect-scrollbar-on">
+<html lang="en" >
 <head>
     <!--<base href="/home/" />-->
     <meta charset="utf-8" />
@@ -21,17 +21,18 @@
 </head>
 
 <body class="rtl sidebar-mini rtl-active">
- 
+
     <div id="app"></div>
     <!--<h1>client</h1>-->
     <!--   Core JS Files   -->
-    <script src="<%= BASE_URL %>assets/js/core/jquery.min.js"></script>
-    <script src="<%= BASE_URL %>assets/js/core/popper.min.js"></script>
-    <script src="<%= BASE_URL %>assets/js/core/bootstrap.min.js"></script>
-    <script src="<%= BASE_URL %>assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <script type="text/javascript" src="<%= BASE_URL %>assets/js/core/jquery.min.js"></script>
+    <script type="text/javascript" src="<%= BASE_URL %>assets/js/core/popper.min.js"></script>
+    <script type="text/javascript" src="<%= BASE_URL %>assets/js/core/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<%= BASE_URL %>assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="<%= BASE_URL %>assets/js/plugins/moment.min.js"></script>
     <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
     <script src="<%= BASE_URL %>assets/js/plugins/bootstrap-switch.js"></script>
+    <!--<script src="<%= BASE_URL %>assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>-->
     <!--  Plugin for Sweet Alert -->
     <script src="<%= BASE_URL %>assets/js/plugins/sweetalert2.min.js"></script>
     <!-- Forms Validations Plugin -->
@@ -60,6 +61,11 @@
     <!--  Notifications Plugin    -->
     <script src="<%= BASE_URL %>assets/js/plugins/bootstrap-notify.js"></script>
     <script src="<%= BASE_URL %>assets/demo/demo.js"></script>
+    <script>
+        $(document).ready(function () {
+            demo.checkFullPageBackgroundImage();
+        });
+    </script>
     <script src="https://kit.fontawesome.com/22b65f53f3.js" crossorigin="anonymous"></script>
     <!--<script src="<%= BASE_URL %>element-ui/lib/index.js"></script>-->
 </body>

@@ -95,18 +95,14 @@ export default {
 
 
         },
-        GetAllConstituencies() {
 
+        GetAllConstituencies() {
             this.$blockUI.Start();
             this.ruleForm.ConstituencyId = '';
             this.$http.GetConstituenciesBasedOn(this.ruleForm.RegionId)
                 .then(response => {
-
                     this.$blockUI.Stop();
                     this.Constituencies = response.data.constituencies;
-                   
-                   
-
                 })
                 .catch((err) => {
                     this.$blockUI.Stop();
@@ -117,9 +113,8 @@ export default {
                         message: err.response.data.message
                     });
                 });
-
-
         },
+
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },

@@ -142,7 +142,15 @@ export default {
     //    return axios.post(`/Api/Admin/Cities/${CityId}/delete`);
     //},
 
-
+    GetBranches(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+    DeleteBranche(BranchId) {
+        return axios.delete(`/Api/Admin/Branches/${BranchId}/Delete`);
+    },
+    AddBranch(Branch) {
+        return axios.post(`/Api/Admin/Branches/Add`, Branch);
+    },
 
     //Login(loginName, password, secretNo) {
     //    return axios.post(baseUrl + '/security/login', { loginName, password, secretNo });
@@ -260,6 +268,7 @@ export default {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.get(baseUrl + `/Admin/Packages/GetPackages?pageno=${pageNo}&pagesize=${pageSize}&SuperPackageId=${superPakcageId}`);
     //},
+    // ************************ Branches ******************************
 
 
 

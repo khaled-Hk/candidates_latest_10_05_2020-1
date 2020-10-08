@@ -55,6 +55,9 @@ export default {
     GetConstituencyBasedOn(constituencyId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
     },
+    GetAConstituencyBasedOn(regionId) {
+        return axios.get(`/Api/Admin/Constituencies/GetAConstituency/${regionId}`);
+    },
     GetConstituencyPagination(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Constituencies/ConstituencyPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
@@ -73,6 +76,9 @@ export default {
     },
     GetConstituencyDetailsBasedOn(constituencyDetailsId) {
         return axios.get(`/api/Admin/ConstituencyDetails/GetConstituencyDetail/${constituencyDetailsId}`);
+    },
+    GetAllConstituencyDetailsBasedOn(constituencyId) {
+        return axios.get(`/api/Admin/ConstituencyDetails/GetConstituencyDetails/${constituencyId}`);
     },
     GetConstituencyDetailsPagination(pageNo, pageSize) {
         return axios.get(`/api/Admin/ConstituencyDetails/ConstituencyDetailsPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
@@ -97,11 +103,16 @@ export default {
     GetAllCenters() {
         return axios.get(`/Api/Admin/Centers/GetCenters`);
     },
+    GetCentersBasedOn(constituencyDetialId) {
+        return axios.get(`/Api/Admin/Centers/GetCentersBasedOn/${constituencyDetialId}`);
+    },
     UpdateCenter(center) {
         return axios.put(`/api/Admin/Centers/UpdateCenter`, center);
     },
-    
-    
+    // ************************ Stations **************************
+    GetStations(centerId, pageNo, pageSize) {
+        return axios.get(`/api/Admin/Stations/GetStations?centerId=${centerId}&pageNo=${pageNo}&pageSize=${pageSize}`);
+    },
     
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');

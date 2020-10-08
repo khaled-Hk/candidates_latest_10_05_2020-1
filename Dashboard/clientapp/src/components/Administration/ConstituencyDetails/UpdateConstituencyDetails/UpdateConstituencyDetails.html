@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-4">
-                    <h4 class="card-title">تحديث منطقة رئيسية</h4>
+                    <h4 class="card-title">تحديث دائرة فرعية</h4>
                 </div>
                 <div class="col-md-6">
                 </div>
@@ -37,9 +37,9 @@
                                 </div>
                                 <div class="col-md-3">
                                     <el-form-item prop="ConstituencyId">
-                                        <label>المنطقة الرئيسية</label>
+                                        <label>الدائرة الرئيسية</label>
                                         <div class="form-group">
-                                            <el-select placeholder="إختار المنطقة الرئيسية" v-model="ruleForm.ConstituencyId" filterable>
+                                            <el-select placeholder="إختار الدائرة الرئيسية" v-model="ruleForm.ConstituencyId" filterable>
                                                 <el-option v-for="item in Constituencies"
                                                            :key="item.value"
                                                            :label="item.label"
@@ -51,17 +51,17 @@
                                 </div>
                                 <div class="col-md-3">
                                     <el-form-item prop="ArabicName">
-                                        <label>اسم المنطقة الفرعية(عربي)</label>
+                                        <label>اسم الدائرة الفرعية(عربي)</label>
                                         <div class="form-group">
-                                            <el-input placeholder="إدخل إسم المنطقة الفرعية بالعربي" v-model="ruleForm.ArabicName"></el-input>
+                                            <el-input placeholder="إدخل إسم الدائرة الفرعية بالعربي" v-model="ruleForm.ArabicName"></el-input>
                                         </div>
                                     </el-form-item>
                                 </div>
                                 <div class="col-md-3">
                                     <el-form-item prop="EnglishName">
-                                        <label>اسم المنطقة الفرعية(انجليزي)</label>
+                                        <label>اسم الدائرة الفرعية(انجليزي)</label>
                                         <div class="form-group">
-                                            <el-input placeholder="إدخل إسم المنطقة الفرعية بالانجليزي" v-model="ruleForm.EnglishName"></el-input>
+                                            <el-input placeholder="إدخل إسم الدائرة الفرعية بالانجليزي" v-model="ruleForm.EnglishName"></el-input>
                                         </div>
                                     </el-form-item>
                                 </div>

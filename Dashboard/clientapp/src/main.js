@@ -16,6 +16,7 @@ import Branches from './components/Administration/Branches/Branches.vue';
 import Constituency from './components/Administration/Constituency/Constituency.vue';
 import ConstituencyDetails from './components/Administration/ConstituencyDetails/ConstituencyDetails.vue';
 import Centers from './components/Administration/Centers/Centers.vue'
+import Stations from './components/Administration/Stations/Stations.vue'
 import DataService from './Shared/DataService';
 //import messages from './i18n';
 
@@ -51,7 +52,8 @@ const router = new VueRouter({
         { path: '/Administration/Branches', component: Branches },
         { path: '/Administration/Constituency', component: Constituency },
         { path: '/Administration/Subconstituency', component: ConstituencyDetails },
-        { path: '/Administration/Centers', component: Centers }
+        { path: '/Administration/Centers', component: Centers },
+        { path: '/Administration/Stations', component: Stations }
     ]
 
 });

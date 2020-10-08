@@ -287,6 +287,29 @@ namespace Dashboard.Controllers
             }
         }
 
+        [HttpGet("GetCentersBasedOn/{constituencyDetailId}")]
+        public IActionResult GetCentersBasedOn([FromRoute] long? constituencyDetailId)
+        {
+            try
+            {
+                if (constituencyDetailId == null)
+                {
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
+                }
+                var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
+
+                if (selectedCenters.Count == 0)
+                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها" });
+                return Ok(new { Centers = selectedCenters });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+
+
+        }
+
         [HttpGet("GetCenters")]
         public IActionResult GetCenters()
         {

@@ -1,12 +1,12 @@
-﻿import AddRegion from './AddRegion/AddRegion.vue';
+﻿import AddBranch from './AddBranch/AddBranch.vue';
 import moment from 'moment';
 export default {
     name: 'Branches',    
     created() {
-        this.GetRegions(this.pageNo);  
+        this.GetBranches(this.pageNo);  
     },
     components: {
-        'add-Region': AddRegion,
+        'add-Branch': AddBranch,
     },
     filters: {
         moment: function (date) {
@@ -25,23 +25,23 @@ export default {
             Regions: [],
             state: 0,
             loading:false
-          
         };
     },
     methods: {
-        AddRegionComponent() {
+        AddBranchComponent() {
             this.state = 1;
         },
-        GetRegions(pageNo) {
+
+        GetBranches(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetRegions(this.pageNo, this.pageSize)
+            this.$http.GetBranches(this.pageNo, this.pageSize)
                 .then(response => {
                     this.loading = false;
-                    this.Regions = response.data.regions;
+                    this.Branches = response.data.branches;
                     this.pages = response.data.count;
                 })
                 .catch((err) => {
@@ -52,15 +52,15 @@ export default {
                 });
         },
 
-        Delete(RegionId) {
-            this.$confirm('هل حقا تريد مسح المنطقة . متـابعة ؟', 'تـحذيـر', {
+        Delete(BranchId) {
+            this.$confirm('هل حقا تريد مسح الـفرع . متـابعة ؟', 'تـحذيـر', {
                 confirmButtonText: 'نـعم',
                 cancelButtonText: 'إلغاء',
                 type: 'warning',
                 center: true
             }).then(() => {   
                 this.$blockUI.Start();
-                this.$http.DeleteRegion(RegionId)
+                this.$http.DeleteBranche(BranchId)
                     .then(response => {
                         this.$blockUI.Stop();
                         this.$notify({
@@ -69,8 +69,7 @@ export default {
                             message: '<strong>' + response.data + '</strong>',
                             type: 'success'
                         });  
-
-                        this.GetRegions(this.pageNo);
+                        this.GetBranches(this.pageNo);
                     })
                     .catch((err) => {
                         this.$blockUI.Stop();

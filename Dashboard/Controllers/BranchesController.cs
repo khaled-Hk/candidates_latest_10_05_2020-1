@@ -85,7 +85,7 @@ namespace Vue.Controllers
                 db.Branches.Add(BrancheData);
                 db.SaveChanges();
 
-                return Ok("لـقد تم تسجيل الـفروع بنـجاح");
+                return Ok("لـقد تم تسجيل الـفرع بنـجاح");
             }
             catch (Exception e)
             {

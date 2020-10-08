@@ -23,11 +23,7 @@ namespace Dashboard.Controllers
         }
 
         // GET: api/ConstituencyDetails
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ConstituencyDetails>>> GetConstituencyDetails()
-        {
-            return await db.ConstituencyDetails.ToListAsync();
-        }
+     
 
         // GET: api/ConstituencyDetails/5
         [HttpGet("{id}")]
@@ -162,6 +158,7 @@ namespace Dashboard.Controllers
             return db.ConstituencyDetails.Any(e => e.ConstituencyDetailId == id);
         }
 
+
         [HttpDelete("DeleteConstituencyDetails/{ConstituencyDetailsId}")]
         public IActionResult DeleteConstituency([FromRoute] long? ConstituencyDetailsId)
         {
@@ -261,11 +258,11 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(s => new {s.ConstituencyDetailId, s.ArabicName, s.EnglishName, s.ConstituencyId, s.CreatedOn}).ToList();
-                var ConstituencyDetails = (from cd in selectConstituencyDetails join c in db.Constituencies on cd.ConstituencyId equals c.ConstituencyId select new { cd.ConstituencyDetailId, cd.ArabicName, cd.EnglishName, constituencyName = c.ArabicName , cd.CreatedOn }).ToList();
-                return Ok(new { ConstituencyDetails });
+
+                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
+                return Ok(new { ConstituencyDetails = selectConstituencyDetails });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
@@ -333,19 +330,6 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpGet("GetConstituencieyDetails")]
-        public IActionResult GetConstituenciesBasedOn()
-        {
-            try
-            {
-                
-                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
-                return Ok(new { ConstituencyDetails = selectConstituencyDetails });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
-            }
-        }
+        
     }
 }

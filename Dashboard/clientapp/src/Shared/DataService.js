@@ -81,6 +81,28 @@ export default {
         return axios.put(`/api/Admin/ConstituencyDetails/UpdateConstituencyDetails`, constituencyDetail);
     },
     
+    // ************************ Centers **************************
+    AddCenter(center) {
+        return axios.post(`/api/Admin/Centers/CreateCenter`, center);
+    },
+    GetCentersPagination(pageNo, pageSize) {
+        return axios.get(`/api/Admin/Centers/CenterPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
+    },
+    DeleteCenter(centerId) {
+        return axios.delete(`/api/Admin/Centers/DeleteCenter/${centerId}`);
+    },
+    GetCenter(centerId) {
+        return axios.get(`/api/Admin/Centers/GetCenter/${centerId}`);
+    },
+    GetAllCenters() {
+        return axios.get(`/Api/Admin/Centers/GetCenters`);
+    },
+    UpdateCenter(center) {
+        return axios.put(`/api/Admin/Centers/UpdateCenter`, center);
+    },
+    
+    
+    
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Companies/${CompanyId}/delete`);

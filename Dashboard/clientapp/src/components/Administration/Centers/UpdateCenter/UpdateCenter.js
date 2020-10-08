@@ -1,8 +1,9 @@
 ﻿import moment from 'moment';
 export default {
-    name: 'AddConstituency',
+    name: 'UpdateCenter',
     created() {
-        this.GetAllConstituencyDetails()
+        this.GetConstituencyDetails();
+        this.GetCenter();
     },
     components: {
 
@@ -18,20 +19,22 @@ export default {
     },
     data() {
         return {
+            state: 0,
             constituencyDetails: [],
             ruleForm: {
                 ArabicName: '',
                 EnglishName: '',
                 ConstituencDetailId: null,
+                CenterId:null,
                 OfficeId: null,
                 Description: null,
                 Longitude: 0.0,
-                Latitude:0.0
+                Latitude: 0.0
             },
             rules: {
 
-                ConstituencDetailId: [
-                    { required: true, message: 'الرجاء إختيار المنطقة الفرعية', trigger: 'blur' }
+                RegionId: [
+                    { required: true, message: 'الرجاء إختيار المنطقة', trigger: 'blur' }
                 ],
                 ArabicName: [
                     { required: true, message: 'الرجاء إدخال اسم المنطقة بالعربي', trigger: 'blur' },
@@ -52,10 +55,11 @@ export default {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
-                    this.$http.AddCenter(this.ruleForm)
+                    this.$http.UpdateCenter(this.ruleForm)
                         .then(response => {
-                           // this.$parent.GetConstituencies();
+                            this.$parent.GetCenters(this.$parent.pageNo);
                             this.$parent.state = 0;
+                            // this.$parent.GetRegions();
                             this.$blockUI.Stop();
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
@@ -77,22 +81,46 @@ export default {
             });
         },
 
-        GetAllConstituencyDetails() {
+        GetConstituencyDetails() {
 
             this.$blockUI.Start();
             this.$http.GetConstituencyDetails()
                 .then(response => {
 
-                    //this.$parent.GetRegions();
-
                     this.$blockUI.Stop();
                     this.constituencyDetails = response.data.constituencyDetails;
 
-                })
+                }).catch((err) => {
+                    this.$blockUI.Stop();
+                    this.$notify({
+                        title: 'حدث خطأ',
+                        dangerouslyUseHTMLString: true,
+                        type: 'error',
+                        message: err.response.data.message
+                    });
+                });
 
 
         },
+        GetCenter() {
+            this.$blockUI.Start();
+            this.$http.GetCenter(this.$parent.centerId)
+                .then(response => {
 
+                    //this.$parent.GetRegions();
+
+                    this.$blockUI.Stop();
+                    let center = response.data.center;
+                    this.ruleForm.ArabicName = center.arabicName
+                    this.ruleForm.EnglishName = center.englishName
+                    this.ruleForm.ConstituencDetailId = center.constituencyDetailId
+                    this.ruleForm.Description = center.description
+                    this.ruleForm.Longitude = center.longitude
+                    this.ruleForm.Latitude = center.latitude
+                    this.ruleForm.CenterId = this.$parent.centerId
+                })
+
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },

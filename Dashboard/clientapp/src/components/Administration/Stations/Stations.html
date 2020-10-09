@@ -3,8 +3,8 @@
         <div class="panel-header">
         </div>
         <div class="row DataSet" style="height:100%">
-            <!--<add-Center v-if="state==1" class="zoomIn"></add-Center>
-            <update-Center v-if="state==2" class="zoomIn"></update-Center>-->
+            <add-Stations v-if="state==1" class="zoomIn"></add-Stations>
+            <!--<update-Center v-if="state==2" class="zoomIn"></update-Center>-->
             <div class="col-md-12 zoomIn" v-if="state==0">
                 <div class="card cardRTL">
                     <div class="card-header">
@@ -12,7 +12,7 @@
                             <div class="col-md-2"> <h4 class="card-title">المحطات</h4></div>
                             <div class="col-md-8">
                             </div>
-                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddConstituencyComponent()">إضافة محطة</button></div>
+                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddStationComponent()">إضافة محطة</button></div>
                         </div>
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
                             <div class="row">
@@ -30,11 +30,11 @@
                                         </div>
                                     </el-form-item>
                                 </div>
-                                <div class="col-md-3"  v-show="regionId!=null">
+                                <div class="col-md-3" v-show="regionId!=null">
                                     <el-form-item>
                                         <label>الدائرة الرئيسية</label>
                                         <div class="form-group">
-                                            <el-select placeholder="إختار الدائرة الرئيسية" v-model="constituencyId" @change="GetAllConstituencyDetails"  filterable>
+                                            <el-select placeholder="إختار الدائرة الرئيسية" v-model="constituencyId" @change="GetAllConstituencyDetails" filterable>
                                                 <el-option v-for="item in constituencies"
                                                            :key="item.value"
                                                            :label="item.label"
@@ -44,7 +44,7 @@
                                         </div>
                                     </el-form-item>
                                 </div>
-                                <div class="col-md-3"  v-show="constituencyId!=null">
+                                <div class="col-md-3" v-show="constituencyId!=null">
                                     <el-form-item>
                                         <label>الدائرة الفرعية</label>
                                         <div class="form-group">
@@ -73,7 +73,7 @@
                                     </el-form-item>
                                 </div>
                             </div>
-                            </el-form>
+                        </el-form>
                         <div class="card-body" v-loading="loading">
                             <div class="toolbar">
                             </div>
@@ -88,6 +88,9 @@
                             </el-alert>
                             <el-alert title="الرجاء إختيار المركز"
                                       type="warning" v-if="centerId==null && constituencyDetailId!=null && constituencyId!=null && regionId!=null">
+                            </el-alert>
+                            <el-alert title="لا يوجد محطات في هذا المركز"
+                                      type="warning" v-if="stations == 0 && centerId!=null && constituencyDetailId!=null && constituencyId!=null && regionId!=null">
                             </el-alert>
 
 
@@ -121,13 +124,13 @@
                                             <a href="#" title="تعديل بيانات المنطقة" @click.prevent="UpdateConstituencyDetailsComponent(R.constituencyDetailId)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a href="#" title="مسح المنطقة" @click.prevent="Delete(R.constituencyDetailId)">
+                                            <a href="#" title="مسح المنطقة" @click.prevent="Delete(R.stationId)">
                                                 <i class="fa fa-user-slash"></i>
                                             </a>
 
                                         </td>
 
-                          
+
                                     </tr>
 
                                 </tbody>
@@ -151,9 +154,9 @@
 
                         </div><!-- end content-->
                     </div><!--  end card  -->
-            </div> <!-- end col-md-12 -->
-        </div> <!-- end row -->
-    </div>
+                </div> <!-- end col-md-12 -->
+            </div> <!-- end row -->
+        </div>
 
 
 </div>

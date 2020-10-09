@@ -1,4 +1,4 @@
-﻿//import AddCenter from './AddCenter/AddCenter.vue'
+﻿import AddStations from './AddStations/AddStations.vue'
 //import UpdateCenter from './UpdateCenter/UpdateCenter.vue'
 import moment from 'moment';
 
@@ -9,7 +9,7 @@ export default {
         this.GetAllRegions();
     },
     components: {
-        //'add-Center': AddCenter,
+        'add-Stations': AddStations,
         //'update-Center': UpdateCenter
     },
     data() {
@@ -42,8 +42,32 @@ export default {
         }
     },
     methods: {
-        AddConstituencyComponent() {
-            this.state = 1
+        AddStationComponent() {
+
+            if (this.regionId == null) {
+                this.$message({
+                    type: 'warning',
+                    message: 'الرجاء إختيار المنطقة'
+                });
+            } else if (this.constituencyId == null) {
+                this.$message({
+                    type: 'warning',
+                    message: 'الرجاء إختيار الدائرة الرئيسية'
+                });
+            } else if (this.constituencyDetailId == null) {
+                this.$message({
+                    type: 'warning',
+                    message: 'الرجاء إختيار الدائرة الفرعية'
+                });
+            } else if (this.centerId == null) {
+                this.$message({
+                    type: 'warning',
+                    message: 'الرجاء إختيار المركز'
+                });
+            } else {
+                this.state = 1
+            }
+          
         },
         UpdateCenterComponent(centerId) {
             this.state = 2
@@ -56,6 +80,7 @@ export default {
             this.constituencyId = null;
             this.constituencyDetailId = null;
             this.centerId = null;
+            this.centers = []
             this.$http.GetAllRegions()
                 .then(response => {
                    
@@ -75,7 +100,7 @@ export default {
             this.constituencyId = null;
             this.constituencyDetailId = null;
             this.centerId = null;
-
+            this.centers = []
             this.$http.GetAConstituencyBasedOn(this.regionId)
                 .then(response => {
                     this.$blockUI.Stop();
@@ -93,6 +118,7 @@ export default {
         GetAllConstituencyDetails() {
             this.constituencyDetailId = null;
             this.centerId = null;
+            this.centers = []
 
             this.$blockUI.Start();
             this.$http.GetAllConstituencyDetailsBasedOn(this.constituencyId)
@@ -113,6 +139,7 @@ export default {
         GetCenters() {
             this.$blockUI.Start();
             this.centerId = null;
+            
             this.$http.GetCentersBasedOn(this.constituencyDetailId)
                 .then(response => {
                     this.$blockUI.Stop();
@@ -148,17 +175,18 @@ export default {
            
         },
         
-        Delete(centerId) {
+        Delete(stationId) {
 
-            this.$confirm('هل حقا تريد مسح المركز . متـابعة ؟', 'تـحذيـر', {
+            this.$confirm('هل حقا تريد مسح المحطة . متـابعة ؟', 'تـحذيـر', {
                 confirmButtonText: 'نـعم',
                 cancelButtonText: 'إلغاء',
                 type: 'warning',
                 center: true
             }).then(() => {
                 this.$blockUI.Start();
-                this.$http.DeleteCenter(centerId)
+                this.$http.DeleteStation(stationId)
                     .then(response => {
+                        this.GetStations(this.pageNo)
                         this.$blockUI.Stop();
                         this.$notify({
                             title: 'تم المسـح بنجاح',

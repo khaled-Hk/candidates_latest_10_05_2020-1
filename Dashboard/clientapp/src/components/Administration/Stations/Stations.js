@@ -1,15 +1,16 @@
 ﻿import AddStations from './AddStations/AddStations.vue'
-//import UpdateCenter from './UpdateCenter/UpdateCenter.vue'
+import UpdateStation from './UpdateStations/UpdateStations.vue'
 import moment from 'moment';
 
 export default {
-    name: 'Centers',
+    name: 'Stations',
     created() {
         //this.GetCenters(this.pageNo);
         this.GetAllRegions();
     },
     components: {
         'add-Stations': AddStations,
+        'update-Station': UpdateStation
         //'update-Center': UpdateCenter
     },
     data() {
@@ -69,9 +70,9 @@ export default {
             }
           
         },
-        UpdateCenterComponent(centerId) {
+        UpdateStationComponent(stationId) {
             this.state = 2
-            this.centerId = centerId;
+            this.stationId = stationId;
 
         },
         GetAllRegions() {

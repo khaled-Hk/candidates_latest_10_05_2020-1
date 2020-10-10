@@ -4,7 +4,7 @@
         </div>
         <div class="row DataSet" style="height:100%">
             <add-Stations v-if="state==1" class="zoomIn"></add-Stations>
-            <!--<update-Center v-if="state==2" class="zoomIn"></update-Center>-->
+            <update-Station v-if="state==2" class="zoomIn"></update-Station>
             <div class="col-md-12 zoomIn" v-if="state==0">
                 <div class="card cardRTL">
                     <div class="card-header">
@@ -121,7 +121,7 @@
                                         <td>{{R.createdOn | moment}}</td>
                                         <td class="text-left">
 
-                                            <a href="#" title="تعديل بيانات المنطقة" @click.prevent="UpdateConstituencyDetailsComponent(R.constituencyDetailId)">
+                                            <a href="#" title="تعديل بيانات المنطقة" @click.prevent="UpdateStationComponent(R.stationId)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
                                             <a href="#" title="مسح المنطقة" @click.prevent="Delete(R.stationId)">

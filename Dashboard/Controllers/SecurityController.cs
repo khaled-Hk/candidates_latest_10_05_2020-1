@@ -299,57 +299,57 @@ namespace Dashboard.Controllers
         }
 
 
-        //[HttpPost]
-        //public IActionResult ChangePassword([FromBody] userPassword loginUser)
-        //{
-        //    try
-        //    {
-        //        var userId = this.help.GetCurrentUser(HttpContext);
-        //        if (loginUser.Password != null)
-        //        {
-        //            var User = (from p in db.Users
-        //                        where p.UserId == userId && p.Status != 9
-        //                        select p).SingleOrDefault();
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword([FromBody] userPassword loginUser)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+                if (loginUser.Password != null)
+                {
+                    var User = db.Users.Where(x => x.Id == userId && x.State != 9).SingleOrDefault();
+                    
 
-        //            if (Security.VerifyHash(loginUser.Password, User.Password, HashAlgorithms.SHA512))
-        //            {
+                    if (Security.VerifyHash(loginUser.Password, User.Password, HashAlgorithms.SHA512))
+                    {
 
-        //                User.Password = Security.ComputeHash(loginUser.NewPassword, HashAlgorithms.SHA512, null);
-        //                User.ModifiedBy = userId;
-        //                User.ModifiedOn = DateTime.Now;
-        //                db.SaveChanges();
+                        User.Password = Security.ComputeHash(loginUser.NewPassword, HashAlgorithms.SHA512, null);
+                        User.ModifiedBy = userId;
+                        User.ModifiedOn = DateTime.Now;
+                        db.SaveChanges();
 
 
-        //            }
-        //            else
-        //            {
-        //                return BadRequest("الرجاء التاكد من كلمة المرور");
-        //            }
-        //        }
+                    }
+                    else
+                    {
+                        return BadRequest("الرجاء التاكد من كلمة المرور");
+                    }
+                }
 
-        //        else
-        //        {
-        //            var User = (from p in db.Users
-        //                        where p.UserId == loginUser.UserId && p.Status != 9
-        //                        select p).SingleOrDefault();
-        //            if (User == null)
-        //            {
-        //                return BadRequest("خطأ بيانات المستخدم غير موجودة");
-        //            }
-        //            User.Password = Security.ComputeHash(loginUser.NewPassword, HashAlgorithms.SHA512, null);
-        //            User.ModifiedBy = userId;
-        //            User.ModifiedOn = DateTime.Now;
-        //            db.SaveChanges();
+                else
+                {
+                    var User = db.Users.Where(x => x.Id == loginUser.UserId && x.State != 9).SingleOrDefault();
+                    
+                    if (User == null)
+                    {
+                        return BadRequest("خطأ بيانات المستخدم غير موجودة");
+                    }
+                    User.Password = Security.ComputeHash(loginUser.NewPassword, HashAlgorithms.SHA512, null);
+                    User.ModifiedBy = userId;
+                    User.ModifiedOn = DateTime.Now;
+                    db.SaveChanges();
 
-        //        }
-        //        return Ok("تمت عمليه تعديل بنجاح");
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500, "error while logout");
-        //    }
+                }
+                return Ok("تمت عمليه تعديل بنجاح");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "error while logout");
+            }
 
-        //}
+        }
+
+
         //[HttpGet]
 
         //public IActionResult GetUserImage(long userId)

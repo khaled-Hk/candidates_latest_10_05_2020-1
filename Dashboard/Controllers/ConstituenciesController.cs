@@ -243,6 +243,24 @@ namespace Vue.Controllers
             }
         }
 
+        [HttpGet("GetAConstituency/{regionId}")]
+        public IActionResult GetAConstituencyBasedOn([FromRoute] long? regionId)
+        {
+            try
+            {
+                if (regionId == null)
+                {
+                    return BadRequest("الرجاء إختيار المنطقة");
+                }
+                var selectConstituency = db.Constituencies.Where(x => x.RegionId == regionId && x.Status == 1).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
+                return Ok(new { Constituency = selectConstituency });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
         [HttpGet("ConstituencyPagination")]
         public IActionResult ConstituencyPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
         {

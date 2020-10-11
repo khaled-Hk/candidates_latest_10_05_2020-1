@@ -10,6 +10,8 @@ Scaffold-DbContext "Server= 192.168.100.205;Database=Candidate;User Id=sa;passwo
 
 Scaffold-DbContext "Server=DESKTOP-4AI87L8\SQLEXPRESS;Database=Candidates;Trusted_Connection=True;;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
 
+Scaffold-DbContext "Server=DESKTOP-4AI87L8\SQLEXPRESS;Database=Candidates;Trusted_Connection=True;;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "" -F
+
 
 Add External Models
 

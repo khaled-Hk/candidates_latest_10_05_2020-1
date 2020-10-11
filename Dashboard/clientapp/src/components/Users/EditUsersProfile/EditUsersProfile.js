@@ -4,16 +4,21 @@ export default {
     name: 'EditUsersProfile',    
     created() {
         
-        // this.CheckLoginStatus();
+         this.CheckLoginStatus();
         //debugger
         //this.loginDetails = this.decrypt(sessionStorage.getItem('currentUser'));
-        this.loginDetails = JSON.parse(sessionStorage.getItem('currentUser'));
-        this.ruleForm.FullName = this.loginDetails.fullName;
-        this.ruleForm.Phone = this.loginDetails.phone;
-        this.ruleForm.LoginName = this.loginDetails.loginName;
-        this.ruleForm.Email = this.loginDetails.email;
-        this.ruleForm.Gender = this.loginDetails.gender;
-        this.ruleForm.DateOfBirth = this.loginDetails.dateOfBirth;
+        
+        //this.loginDetails = JSON.parse(sessionStorage.getItem('currentUser'));
+        //if (this.loginDetails != null) {
+        //    this.ruleForm.FullName = this.loginDetails.fullName;
+        //    this.ruleForm.Phone = this.loginDetails.phone;
+        //    this.ruleForm.LoginName = this.loginDetails.loginName;
+        //    this.ruleForm.Email = this.loginDetails.email;
+        //    this.ruleForm.Gender = this.loginDetails.gender;
+        //    this.ruleForm.DateOfBirth = this.loginDetails.dateOfBirth;
+        //} else {
+        //    window.location.href = '/Security/Login';
+        //}
     },
     data() {  
        
@@ -111,7 +116,7 @@ export default {
     methods: {
         CheckLoginStatus() {
             try {
-                this.loginDetails = this.decrypt(sessionStorage.getItem('currentUser'), sessionStorage.getItem('SECRET_KEY'));
+                this.loginDetails = JSON.parse(sessionStorage.getItem('currentUser'));
                 //this.loginDetails = this.decrypt(sessionStorage.getItem('currentUser'), sessionStorage.getItem('SECRET_KEY'));
                 if (this.loginDetails != null) {
                     this.ruleForm.FullName = this.loginDetails.fullName;

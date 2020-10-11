@@ -13,6 +13,7 @@ namespace Models
         public long ChairDetailId { get; set; }
         public int? GeneralChairs { get; set; }
         public int? PrivateChairs { get; set; }
+        public int? RelativeChairs { get; set; }
         public long? ChairId { get; set; }
         public long CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }

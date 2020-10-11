@@ -1,8 +1,9 @@
 ﻿import moment from 'moment';
 export default {
-    name: 'AddConstituency',
+    name: 'UpdateStations',
     created() {
-        this.GetAllConstituencyDetails()
+
+        this.GetStation();
     },
     components: {
 
@@ -18,29 +19,24 @@ export default {
     },
     data() {
         return {
-            constituencyDetails: [],
+            state: 0,
             ruleForm: {
                 ArabicName: '',
                 EnglishName: '',
-                ConstituencDetailId: null,
-                OfficeId: null,
-                Description: null,
-                Longitude: 0.0,
-                Latitude: 0.0,
-                Stations:[]
+                Description: '',
+                //CenterId: null,
+                StationId: null
             },
             rules: {
 
-                ConstituencDetailId: [
-                    { required: true, message: 'الرجاء إختيار المنطقة الفرعية', trigger: 'blur' }
-                ],
+
                 ArabicName: [
-                    { required: true, message: 'الرجاء إدخال اسم المنطقة بالعربي', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمنطقة', trigger: 'blur' }
+                    { required: true, message: 'الرجاء إدخال اسم المحطة بالعربي', trigger: 'blur' },
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمحطة', trigger: 'blur' }
                 ],
                 EnglishName: [
-                    { required: true, message: 'الرجاء إدخال اسم المنطقة بالانجليزي', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمنطقة', trigger: 'blur' }
+                    { required: true, message: 'الرجاء إدخال اسم المحطة بالانجليزي', trigger: 'blur' },
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمحطة', trigger: 'blur' }
                 ],
 
             }
@@ -49,13 +45,15 @@ export default {
     methods: {
 
         submitForm(formName) {
+
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
-                    this.$http.AddCenter(this.ruleForm)
+                    
+                    this.$http.UpdateStation(this.ruleForm)
                         .then(response => {
-                           // this.$parent.GetConstituencies();
+                            this.$parent.GetStations(this.$parent.pageNo);
                             this.$parent.state = 0;
                             this.$blockUI.Stop();
                             this.$notify({
@@ -77,38 +75,22 @@ export default {
                 }
             });
         },
-
-        GetAllConstituencyDetails() {
-
+        GetStation() {
             this.$blockUI.Start();
-            this.$http.GetConstituencyDetails()
+            this.ruleForm.StationId = this.$parent.stationId;
+            this.$http.GetStationBasedOn(this.ruleForm.StationId)
                 .then(response => {
 
-                    //this.$parent.GetRegions();
 
                     this.$blockUI.Stop();
-                    this.constituencyDetails = response.data.constituencyDetails;
-
+                    let station = response.data.station;
+                    this.ruleForm.ArabicName = station.arabicName
+                    this.ruleForm.EnglishName = station.englishName
+                    this.ruleForm.Description = station.description
                 })
 
+        },
 
-        },
-        addStation(index) {
-            let station = this.ruleForm.Stations[index]
-           
-            if (station) {
-                station.lastRow = false
-            }
-               
-            this.ruleForm.Stations.push({ ArabicName: null, EnglishName: null, Description: null, lastRow:true});
-        },
-        removeStations()
-        {
-            this.ruleForm.Stations = []
-        },
-        deleteStation(index) {
-            this.ruleForm.Stations.splice(index,1)
-        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },

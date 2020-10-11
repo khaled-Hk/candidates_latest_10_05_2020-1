@@ -269,19 +269,42 @@ namespace Dashboard.Controllers
         }
 
         [HttpGet("GetConstituencyDetail/{constituencyDetailId}")]
-        public IActionResult GetConstituencyBasedOn([FromRoute] long? constituencyDetailId)
+        public IActionResult GetConstituencyDetailBasedOn([FromRoute] long? constituencyDetailId)
         {
             try
             {
                 if (constituencyDetailId == null)
                 {
-                    return BadRequest("الرجاء إختيار المنطقة الفرعية");
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
                 var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
 
                 if (selectConstituencyDetail == null)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
                 return Ok(new { ConstituencyDetail = selectConstituencyDetail });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+
+
+        }
+
+        [HttpGet("GetConstituencyDetails/{constituencyId}")]
+        public IActionResult GetConstituencyDetailsBasedOn([FromRoute] long? constituencyId)
+        {
+            try
+            {
+                if (constituencyId == null)
+                {
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
+                }
+                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
+
+                if (selectedConstituencyDetails.Count == 0)
+                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها" });
+                return Ok(new { ConstituencyDetails = selectedConstituencyDetails });
             }
             catch (Exception ex)
             {

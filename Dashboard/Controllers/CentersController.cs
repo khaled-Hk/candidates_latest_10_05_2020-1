@@ -133,6 +133,8 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالانجليزي" });
                 }
 
+                
+
                 var userId = this.help.GetCurrentUser(HttpContext);
 
                 if (userId <= 0)
@@ -156,8 +158,28 @@ namespace Dashboard.Controllers
                     Status = 1
 
                 };
-
                 db.Centers.Add(newCenter);
+                db.SaveChanges();
+                if (center.Stations.Count > 0)
+                {
+                    Stations stations;
+                    foreach (var station in center.Stations)
+                    {
+                        stations = new Stations
+                        {
+                            ArabicName = station.ArabicName,
+                            EnglishName = station.EnglishName,
+                            Description = station.Description,
+                            CenterId = newCenter.CenterId,
+                            CreatedBy = userId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+
+                        db.Stations.Add(stations);
+                    }
+
+                }
                 db.SaveChanges();
 
 
@@ -263,6 +285,29 @@ namespace Dashboard.Controllers
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
+        }
+
+        [HttpGet("GetCentersBasedOn/{constituencyDetailId}")]
+        public IActionResult GetCentersBasedOn([FromRoute] long? constituencyDetailId)
+        {
+            try
+            {
+                if (constituencyDetailId == null)
+                {
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
+                }
+                var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
+
+                if (selectedCenters.Count == 0)
+                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها" });
+                return Ok(new { Centers = selectedCenters });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+
+
         }
 
         [HttpGet("GetCenters")]

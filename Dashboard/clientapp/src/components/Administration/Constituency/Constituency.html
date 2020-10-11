@@ -9,24 +9,24 @@
                 <div class="card cardRTL">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-2"> <h4 class="card-title">المـناطق الرئيسية</h4></div>
+                            <div class="col-md-2"> <h4 class="card-title">الدوائر الرئيسية</h4></div>
                             <div class="col-md-8">
                             </div>
-                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddConstituencyComponent()">إضافة منطقة رئيسية</button></div>
+                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddConstituencyComponent()">إضافة دائرة رئيسية</button></div>
                         </div>
                     </div>
                     <div class="card-body" v-loading="loading">
                         <div class="toolbar">
                         </div>
-                        <el-alert title="لاتــوجد بيانات للـمناطق الرئيسة"
+                        <el-alert title="لاتــوجد بيانات لدوائر الرئيسة"
                                   type="warning" v-if="constituencies.length==0">
                         </el-alert>
 
                         <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="constituencies.length!=0">
                             <thead>
                                 <tr>
-                                    <th>اسم المنطقة (عربي)</th>
-                                    <th>اسم المنطقة (انجليزي)</th>
+                                    <th>اسم الدائرة (عربي)</th>
+                                    <th>اسم الدائرة (انجليزي)</th>
                                     <th>المنطقة</th>
                                     <th>تاريخ الانشاء</th>
                                     <th class="disabled-sorting text-right">العمليات</th>
@@ -34,8 +34,8 @@
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>اسم المنطقة (عربي)</th>
-                                    <th>اسم المنطقة (انجليزي)</th>
+                                    <th>اسم ادائرة (عربي)</th>
+                                    <th>اسم ادائرة (انجليزي)</th>
                                     <th>المنطقة</th>
                                     <th>تاريخ الانشاء</th>
                                     <th class="disabled-sorting text-right">العمليات</th>

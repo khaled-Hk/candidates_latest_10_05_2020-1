@@ -16,12 +16,16 @@ namespace Models
         }
 
         public virtual DbSet<Branches> Branches { get; set; }
+        public virtual DbSet<CandidateAttachments> CandidateAttachments { get; set; }
+        public virtual DbSet<CandidateContacts> CandidateContacts { get; set; }
+        public virtual DbSet<Candidates> Candidates { get; set; }
         public virtual DbSet<Centers> Centers { get; set; }
         public virtual DbSet<ChairDetails> ChairDetails { get; set; }
         public virtual DbSet<Chairs> Chairs { get; set; }
         public virtual DbSet<Constituencies> Constituencies { get; set; }
         public virtual DbSet<ConstituencyDetailChairs> ConstituencyDetailChairs { get; set; }
         public virtual DbSet<ConstituencyDetails> ConstituencyDetails { get; set; }
+        public virtual DbSet<Endorsements> Endorsements { get; set; }
         public virtual DbSet<Offices> Offices { get; set; }
         public virtual DbSet<Profile> Profile { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
@@ -59,6 +63,96 @@ namespace Models
                     .WithMany(p => p.Branches)
                     .HasForeignKey(d => d.ProfileId)
                     .HasConstraintName("FK_Branches_Profile");
+            });
+
+            modelBuilder.Entity<CandidateAttachments>(entity =>
+            {
+                entity.HasKey(e => e.CandidateAttachmentId);
+
+                entity.Property(e => e.CandidateAttachmentId).ValueGeneratedNever();
+
+                entity.Property(e => e.AbsenceOfPrecedents)
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.BirthDateCertificate)
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FamilyPaper)
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nidcertificate)
+                    .HasColumnName("NIDCertificate")
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PaymentReceipt)
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Candidate)
+                    .WithMany(p => p.CandidateAttachments)
+                    .HasForeignKey(d => d.CandidateId)
+                    .HasConstraintName("FK_CandidateAttachments_Candidates");
+            });
+
+            modelBuilder.Entity<CandidateContacts>(entity =>
+            {
+                entity.HasKey(e => e.CandidateContactId);
+
+                entity.Property(e => e.Object)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ObjectType).HasComment(@"1- نقال
+2- تلفون ارضي
+3- ايميل");
+            });
+
+            modelBuilder.Entity<Candidates>(entity =>
+            {
+                entity.HasKey(e => e.CandidateId);
+
+                entity.Property(e => e.BirthDate).HasColumnType("datetime");
+
+                entity.Property(e => e.CompetitionType).HasComment(@"1- عام 
+2- خاص
+");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FatherName).HasMaxLength(100);
+
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+
+                entity.Property(e => e.GrandFatherName).HasMaxLength(100);
+
+                entity.Property(e => e.HomePhone)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MotherName).HasMaxLength(100);
+
+                entity.Property(e => e.Nid)
+                    .HasColumnName("NID")
+                    .HasMaxLength(12)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Password).HasMaxLength(250);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Qualification).HasMaxLength(200);
+
+                entity.Property(e => e.SurName).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Centers>(entity =>
@@ -208,6 +302,18 @@ namespace Models
                     .WithMany(p => p.ConstituencyDetails)
                     .HasForeignKey(d => d.RegionId)
                     .HasConstraintName("FK_ConstituencyDetails_Regions");
+            });
+
+            modelBuilder.Entity<Endorsements>(entity =>
+            {
+                entity.HasKey(e => e.EndorsementId);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Nid)
+                    .HasColumnName("NID")
+                    .HasMaxLength(13)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Offices>(entity =>

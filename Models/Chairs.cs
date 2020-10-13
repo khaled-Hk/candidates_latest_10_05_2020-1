@@ -13,6 +13,7 @@ namespace Models
         public long ChairId { get; set; }
         public int? GeneralChairs { get; set; }
         public int? PrivateChairs { get; set; }
+        public long? RelativeChairs { get; set; }
         public int? GeneralChairRemaining { get; set; }
         public int? PrivateChairRemaining { get; set; }
         public long? ConstituencyId { get; set; }

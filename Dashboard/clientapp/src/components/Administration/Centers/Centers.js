@@ -1,25 +1,25 @@
-﻿import AddConstituencyDetails from './AddConstituencyDetails/AddConstituencyDetails.vue'
-import UpdateConstituencyDetails from './UpdateConstituencyDetails/UpdateConstituencyDetails.vue'
+﻿import AddCenter from './AddCenter/AddCenter.vue'
+import UpdateCenter from './UpdateCenter/UpdateCenter.vue'
 import moment from 'moment';
 
 export default {
-    name: 'ConstituencyDetails',
+    name: 'Centers',
     created() {
-        this.GetConstituencyDetails(this.pageNo);
+        this.GetCenters(this.pageNo);
     },
     components: {
-        'add-constituencyDetails': AddConstituencyDetails,
-        'update-constituencyDetails': UpdateConstituencyDetails
+        'add-Center': AddCenter,
+        'update-Center':UpdateCenter
     },
     data() {
         return {
             pageNo: 1,
             pageSize: 10,
             pages: 0,
-            constituencyDetails: [],
+            centers: [],
             state: 0,
             loading: false,
-            constituencyDetailId:null
+            centerId: 0
 
         };
     },
@@ -33,25 +33,25 @@ export default {
         }
     },
     methods: {
-        AddConstituencyDetailsComponent() {
+        AddConstituencyComponent() {
             this.state = 1
         },
-
-        UpdateConstituencyDetailsComponent(constituencyDetailId) {
+        UpdateCenterComponent(centerId) {
             this.state = 2
-            
-            this.constituencyDetailId = constituencyDetailId;
+            this.centerId = centerId;
+           
         },
-        GetConstituencyDetails(pageNo) {
+
+        GetCenters(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetConstituencyDetailsPagination(this.pageNo, this.pageSize)
+            this.$http.GetCentersPagination(this.pageNo, this.pageSize)
                 .then(response => {
                     this.loading = false;
-                    this.constituencyDetails = response.data.constituencyDetails;
+                    this.centers = response.data.centers;
                     this.pages = response.data.count;
                 })
                 .catch((err) => {
@@ -61,16 +61,16 @@ export default {
                     return err;
                 });
         },
-        Delete(constituencyDetailsId) {
-
-            this.$confirm('هل حقا تريد مسح المنطقة . متـابعة ؟', 'تـحذيـر', {
+        Delete(centerId) {
+          
+            this.$confirm('هل حقا تريد مسح المركز . متـابعة ؟', 'تـحذيـر', {
                 confirmButtonText: 'نـعم',
                 cancelButtonText: 'إلغاء',
                 type: 'warning',
                 center: true
             }).then(() => {
                 this.$blockUI.Start();
-                this.$http.DeleteConstituencyDetail(constituencyDetailsId)
+                this.$http.DeleteCenter(centerId)
                     .then(response => {
                         this.$blockUI.Stop();
                         this.$notify({
@@ -80,7 +80,7 @@ export default {
                             type: 'success'
                         });
 
-                        this.GetConstituencyDetails(this.pageNo);
+                        this.GetCenters(this.pageNo);
                     })
                     .catch((err) => {
                         this.$blockUI.Stop();

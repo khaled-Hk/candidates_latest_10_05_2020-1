@@ -1,7 +1,6 @@
 ﻿@import "css/Layout.css";
 @import "css/AppHeader.css";
 @import "css/Profiles.css";
-
 @import "https://fonts.googleapis.com/css?family=Montserrat:400,700,200";
 @import "https://use.fontawesome.com/releases/v5.7.1/css/all.css";
 @import "assets/css/bootstrap.min.css";
@@ -12,6 +11,9 @@
 
 body {
     font-family: 'DroidArabicKufiRegular';
+}
+.ps {
+    height: 400px;
 }
 
 .btn {

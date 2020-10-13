@@ -124,6 +124,7 @@ namespace Vue.Controllers
                 }
 
                 constituency.Status = 9;
+                constituency.ModifiedOn = DateTime.Now;
                 db.Constituencies.Update(constituency);
                 db.SaveChanges();
 
@@ -242,7 +243,64 @@ namespace Vue.Controllers
             }
         }
 
+        [HttpGet("GetAConstituency/{regionId}")]
+        public IActionResult GetAConstituencyBasedOn([FromRoute] long? regionId)
+        {
+            try
+            {
+                if (regionId == null)
+                {
+                    return BadRequest("الرجاء إختيار المنطقة");
+                }
+                var selectConstituency = db.Constituencies.Where(x => x.RegionId == regionId && x.Status == 1).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
+                return Ok(new { Constituency = selectConstituency });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
+        [HttpGet("ConstituencyPagination")]
+        public IActionResult ConstituencyPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
+        {
+            try
+            {
+                IQueryable<Constituencies> ConstituencyQuery;
+                ConstituencyQuery = from p in db.Constituencies
+                                where p.Status != 9
+                                select p;
 
 
-    }
+                var ConstituenciesCount = (from p in ConstituencyQuery
+                                           select p).Count();
+
+                var ConstituenciesList = (from p in ConstituencyQuery
+                                          join r in db.Regions on p.RegionId equals r.RegionId
+                                          orderby p.CreatedOn descending
+                                  select new
+                                  {
+                                      p.ConstituencyId,
+                                      p.ArabicName,
+                                      p.EnglishName,
+                                      regionName = r.ArabicName,
+                                      p.RegionId,
+                                      p.OfficeId,
+                                      p.CreatedOn,
+                                      p.Status
+
+
+                                  }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+                return Ok(new { Constituencies = ConstituenciesList, count = ConstituenciesCount });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+
+
+        }
 }

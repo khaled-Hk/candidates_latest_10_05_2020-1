@@ -23,11 +23,7 @@ namespace Dashboard.Controllers
         }
 
         // GET: api/ConstituencyDetails
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ConstituencyDetails>>> GetConstituencyDetails()
-        {
-            return await db.ConstituencyDetails.ToListAsync();
-        }
+     
 
         // GET: api/ConstituencyDetails/5
         [HttpGet("{id}")]
@@ -162,6 +158,7 @@ namespace Dashboard.Controllers
             return db.ConstituencyDetails.Any(e => e.ConstituencyDetailId == id);
         }
 
+
         [HttpDelete("DeleteConstituencyDetails/{ConstituencyDetailsId}")]
         public IActionResult DeleteConstituency([FromRoute] long? ConstituencyDetailsId)
         {
@@ -181,6 +178,8 @@ namespace Dashboard.Controllers
                 }
 
                 constituencyDetail.Status = 9;
+                constituencyDetail.ModifiedOn = DateTime.Now ;
+
                 db.ConstituencyDetails.Update(constituencyDetail);
                 db.SaveChanges();
 
@@ -259,14 +258,101 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(s => new {s.ConstituencyDetailId, s.ArabicName, s.EnglishName, s.ConstituencyId, s.CreatedOn}).ToList();
-                var ConstituencyDetails = (from cd in selectConstituencyDetails join c in db.Constituencies on cd.ConstituencyId equals c.ConstituencyId select new { cd.ConstituencyDetailId, cd.ArabicName, cd.EnglishName, constituencyName = c.ArabicName , cd.CreatedOn }).ToList();
-                return Ok(new { ConstituencyDetails });
+
+                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
+                return Ok(new { ConstituencyDetails = selectConstituencyDetails });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }
+
+        [HttpGet("GetConstituencyDetail/{constituencyDetailId}")]
+        public IActionResult GetConstituencyDetailBasedOn([FromRoute] long? constituencyDetailId)
+        {
+            try
+            {
+                if (constituencyDetailId == null)
+                {
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
+                }
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
+
+                if (selectConstituencyDetail == null)
+                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
+                return Ok(new { ConstituencyDetail = selectConstituencyDetail });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+
+
+        }
+
+        [HttpGet("GetConstituencyDetails/{constituencyId}")]
+        public IActionResult GetConstituencyDetailsBasedOn([FromRoute] long? constituencyId)
+        {
+            try
+            {
+                if (constituencyId == null)
+                {
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
+                }
+                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
+
+                if (selectedConstituencyDetails.Count == 0)
+                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها" });
+                return Ok(new { ConstituencyDetails = selectedConstituencyDetails });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+
+
+        }
+
+        [HttpGet("ConstituencyDetailsPagination")]
+        public IActionResult ConstituencyDetailsPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
+        {
+            try
+            {
+                IQueryable<ConstituencyDetails> ConstituencyDetailsQuery;
+                ConstituencyDetailsQuery = from p in db.ConstituencyDetails
+                                           where p.Status != 9
+                                    select p;
+
+
+                var ConstituencyDetailsCount = (from p in ConstituencyDetailsQuery
+                                           select p).Count();
+
+                var ConstituencyDetailsList = (from p in ConstituencyDetailsQuery
+                                               join mc in db.Constituencies on p.ConstituencyId equals mc.ConstituencyId
+                                          orderby p.CreatedOn descending
+                                          select new
+                                          {
+                                              p.ConstituencyDetailId,
+                                              p.ConstituencyId,
+                                              p.ArabicName,
+                                              p.EnglishName,
+                                              constituencyName = mc.ArabicName,
+                                              p.RegionId,
+                                              p.CreatedOn,
+                                              p.Status
+
+
+                                          }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+                return Ok(new { ConstituencyDetails = ConstituencyDetailsList, count = ConstituencyDetailsCount });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        
     }
 }

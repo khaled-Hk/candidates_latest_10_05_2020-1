@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-4">
-                    <h4 class="card-title">تحديث منطقة رئيسية</h4>
+                    <h4 class="card-title">تحديث الدائرة الرئيسية</h4>
                 </div>
                 <div class="col-md-6">
                 </div>
@@ -24,7 +24,7 @@
                                 <el-form-item prop="RegionId">
                                     <label>المنطقة</label>
                                     <div class="form-group">
-                                        <el-select placeholder="إختار المطقة" v-model="ruleForm.RegionId" filterable>
+                                        <el-select placeholder="إختار المنطقة" v-model="ruleForm.RegionId" filterable>
                                             <el-option v-for="item in regions"
                                                        :key="item.value"
                                                        :label="item.label"
@@ -36,17 +36,17 @@
                             </div>
                             <div class="col-md-4">
                                 <el-form-item prop="ArabicName">
-                                    <label>اسم المنطقة الرئيسية(عربي)</label>
+                                    <label>اسم الدائرة الرئيسية(عربي)</label>
                                     <div class="form-group">
-                                        <el-input placeholder="إدخل إسم المنطقة الرئيسية بالعربي" v-model="ruleForm.ArabicName"></el-input>
+                                        <el-input placeholder="إدخل إسم الدائرة الرئيسية بالعربي" v-model="ruleForm.ArabicName"></el-input>
                                     </div>
                                 </el-form-item>
                             </div>
                             <div class="col-md-4">
                                 <el-form-item prop="EnglishName">
-                                    <label>اسم المنطقة الرئيسية(انجليزي)</label>
+                                    <label>اسم الدائرة الرئيسية(انجليزي)</label>
                                     <div class="form-group">
-                                        <el-input placeholder="إدخل إسم المنطقة الرئيسية بالانجليزي" v-model="ruleForm.EnglishName"></el-input>
+                                        <el-input placeholder="إدخل إسم الدائرة الرئيسية بالانجليزي" v-model="ruleForm.EnglishName"></el-input>
                                     </div>
                                 </el-form-item>
                             </div>

@@ -17,6 +17,7 @@ import Constituency from './components/Administration/Constituency/Constituency.
 import ConstituencyDetails from './components/Administration/ConstituencyDetails/ConstituencyDetails.vue';
 import Centers from './components/Administration/Centers/Centers.vue'
 import Stations from './components/Administration/Stations/Stations.vue';
+import Candidates from './components/Candidates/Candidates.vue'
 import DataService from './Shared/DataService';
 
 
@@ -70,7 +71,8 @@ const router = new VueRouter({
         { path: '/Administration/Constituency', component: Constituency },
         { path: '/Administration/Subconstituency', component: ConstituencyDetails },
         { path: '/Administration/Centers', component: Centers },
-        { path: '/Administration/Stations', component: Stations }
+        { path: '/Administration/Stations', component: Stations },
+        { path: '/Administration/Candidates', component: Candidates }
     ]
 
 });

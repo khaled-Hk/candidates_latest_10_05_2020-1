@@ -39,7 +39,7 @@ export default {
     GetAllRegions() {
         return axios.get(`/Api/Admin/Regions/GetRegions`);
     },
-    // ************************ Constituencies **************************
+   
 
 
 
@@ -89,7 +89,7 @@ export default {
 
 
 
-
+     // ************************ Constituencies **************************
 
     GetConstituencies() {
         return axios.get(`/Api/Admin/Constituencies/GetAllConstituencies`);
@@ -176,6 +176,24 @@ export default {
     UpdateStation(station) {
         return axios.put(`/api/Admin/Stations/UpdateStation`, station);
     },
+    // ************************ Candidates **************************
+    RegisterCandidateLevelOne(nationalId) {
+       
+        return axios.get(`/api/Admin/Candidates/NationalId/${nationalId}`);
+    },
+    RegisterCandidateContact(object) {
+
+        return axios.post(`/api/Admin/Candidates/SendVerifyCode`, object);
+    },
+    VerifyPhone(object) {
+        return axios.post(`/api/Admin/Candidates/VerifyPhone`, object);
+        
+    },
+    UploadCandidateData(object) {
+        return axios.post(`/api/Admin/Candidates/CandidateData`, object);
+
+    },
+
     
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
@@ -215,7 +233,7 @@ export default {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Cities/${CityId}/delete`);
     //},
-
+    
     GetBranches(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },

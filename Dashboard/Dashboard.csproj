@@ -14,7 +14,6 @@
     <Compile Remove="clientapp\src\components\Countries\**" />
     <Compile Remove="clientapp\src\components\Courses\**" />
     <Compile Remove="clientapp\src\components\HelloWorld\**" />
-    <Compile Remove="Models\**" />
     <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="clientapp - Copy\**" />
     <Content Remove="clientapp\dist\Web\**" />
@@ -24,7 +23,6 @@
     <Content Remove="clientapp\src\components\Countries\**" />
     <Content Remove="clientapp\src\components\Courses\**" />
     <Content Remove="clientapp\src\components\HelloWorld\**" />
-    <Content Remove="Models\**" />
     <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="clientapp - Copy\**" />
     <EmbeddedResource Remove="clientapp\dist\Web\**" />
@@ -34,7 +32,6 @@
     <EmbeddedResource Remove="clientapp\src\components\Countries\**" />
     <EmbeddedResource Remove="clientapp\src\components\Courses\**" />
     <EmbeddedResource Remove="clientapp\src\components\HelloWorld\**" />
-    <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="clientapp - Copy\**" />
     <None Remove="clientapp\dist\Web\**" />
@@ -44,7 +41,6 @@
     <None Remove="clientapp\src\components\Countries\**" />
     <None Remove="clientapp\src\components\Courses\**" />
     <None Remove="clientapp\src\components\HelloWorld\**" />
-    <None Remove="Models\**" />
     <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 

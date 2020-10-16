@@ -1,11 +1,18 @@
-﻿import moment from 'moment';
+﻿import CandidateData from './CandidateData/CandidateData.vue'
+import NationalNumberForm from './NationalNumberForm/NationalNumberForm.vue'
+import PhoneForm from './PhoneForm/PhoneForm.vue'
+import CandidateDocuments from './CandidateDocuments/CandidateDocuments.vue'
+import moment from 'moment';
 export default {
-    name: 'AddCandidates',
+    name: 'Candidates',
     created() {
-        this.GetAllRegions();
+        
     },
     components: {
-
+        'candidates-data': CandidateData,
+        'NationalNumberForm': NationalNumberForm,
+        'PhoneForm': PhoneForm,
+        'CandidateDocuments': CandidateDocuments
     },
     filters: {
         moment: function (date) {
@@ -18,140 +25,51 @@ export default {
     },
     data() {
         return {
-            constituencyDetails: [],
-            ruleForm: {
-                Nid:null,
-                FirstName: null,
-                FatherName: '',
-                GrandFatherName: null,
-                SurName: null,
-                MotherName: null,
-                Gender: null,
-                HomePhone: null,
-                BirthDate: null,
-                Email: null,
-                Qualification: null,
-                ConstituencyId: null,
-                RegionId: null,
-                SubConstituencyId: null,
-                CompetitionType:null,
-               
-            },
-            constituencies: [],
-            regions: [],
-            subConstituencies: [],
-            rules: {
-
-                ConstituencDetailId: [
-                    { required: true, message: 'الرجاء إختيار المنطقة الفرعية', trigger: 'blur' }
-                ],
-                ArabicName: [
-                    { required: true, message: 'الرجاء إدخال اسم المنطقة بالعربي', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمنطقة', trigger: 'blur' }
-                ],
-                EnglishName: [
-                    { required: true, message: 'الرجاء إدخال اسم المنطقة بالانجليزي', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للمنطقة', trigger: 'blur' }
-                ],
-
-            }
+            level: 0,
+            Nid: 0,
+            Phone:'',
+          
         };
     },
     methods: {
 
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    //AddProfiles
-                    this.$blockUI.Start();
-                    this.ruleForm.Nid = this.$parent.Nid;
-                    this.$http.UploadCandidateData(this.ruleForm)
-                        .then(response => {
-                            // this.$parent.GetConstituencies();
-                          
-                            this.$parent.level = response.data.level
-                            this.$blockUI.Stop();
-                            this.$notify({
-                                title: 'تمت الاضافة بنجاح',
-                                dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
-                                type: 'success'
-                            });
-                        })
-                        .catch((err) => {
-                            this.$blockUI.Stop();
-                            this.$notify({
-                                title: 'خطأ بعملية الاضافة',
-                                dangerouslyUseHTMLString: true,
-                                type: 'error',
-                                message: err.response.data.message
-                            });
-                        });
-                }
-            });
-        },
-        GetAllRegions() {
-            this.$blockUI.Start();
-            this.ruleForm.RegionId = null;
-            this.ruleForm.ConstituencyId = null;
-            this.ruleForm.SubConstituencyId = null
-          
-            this.$http.GetAllRegions()
-                .then(response => {
-
-                    this.regions = response.data;
-                    this.$blockUI.Stop();
-                })
-                .catch((err) => {
-                    //  this.loading = false;
-                    //this.$blockUI.Stop();
-                    this.$blockUI.Stop();
-                    return err;
-                });
-        },
-
-        GetConstituencies() {
-            this.$blockUI.Start();
-            
-            this.ruleForm.ConstituencyId = null;
-            this.ruleForm.SubConstituencyId = null
-            
-            this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
-                .then(response => {
-                    this.$blockUI.Stop();
-                    this.constituencies = response.data.constituency;
-
-
-                })
-                .catch((err) => {
-                    //  this.loading = false;
-                    //this.$blockUI.Stop();
-                    this.$blockUI.Stop();
-                    return err;
-                });
-        },
-        GetAllConstituencyDetails() {
-          
-            this.ruleForm.SubConstituencyId = null
-
-            this.$blockUI.Start();
-            this.$http.GetAllConstituencyDetailsBasedOn(this.ruleForm.ConstituencyId)
-                .then(response => {
-                    this.$blockUI.Stop();
-                    this.subConstituencies = response.data.constituencyDetails;
-
-
-                })
-                .catch((err) => {
-                    //  this.loading = false;
-                    //this.$blockUI.Stop();
-                    this.$blockUI.Stop();
-                    return err;
-                });
-        },
        
+
+        GetAllConstituencyDetails() {
+
+            this.$blockUI.Start();
+            this.$http.GetConstituencyDetails()
+                .then(response => {
+
+                    //this.$parent.GetRegions();
+
+                    this.$blockUI.Stop();
+                    this.constituencyDetails = response.data.constituencyDetails;
+
+                })
+
+
+        },
+        addStation(index) {
+            let station = this.ruleForm.Stations[index]
+
+            if (station) {
+                station.lastRow = false
+            }
+
+            this.ruleForm.Stations.push({ ArabicName: null, EnglishName: null, Description: null, lastRow: true });
+        },
+        removeStations() {
+            this.ruleForm.Stations = []
+        },
+        deleteStation(index) {
+            this.ruleForm.Stations.splice(index, 1)
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        Back() {
+            this.$parent.state = 0;
         }
 
 

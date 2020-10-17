@@ -177,6 +177,9 @@ export default {
         return axios.put(`/api/Admin/Stations/UpdateStation`, station);
     },
     // ************************ Candidates **************************
+    GetCandidate(CandidateId) {
+        return axios.get(`/api/Admin/Candidates/GetCandidate/${CandidateId}`);
+    },
     GetCandidates(pageNo, pageSize) {
         return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
@@ -200,7 +203,9 @@ export default {
         return axios.post(`/api/Admin/Candidates/UploadDocuments`, object);
 
     },
-
+    UpdateCandidate(candidate) {
+        return axios.put(`/api/Admin/Candidates/UpdateCandidate`, candidate);
+    },
     
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');

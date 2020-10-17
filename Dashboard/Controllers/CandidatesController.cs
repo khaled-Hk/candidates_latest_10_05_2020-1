@@ -26,8 +26,36 @@ namespace Dashboard.Controllers
             help = new Helper();
         }
 
+        [HttpGet("GetCandidate/{CandidateId}")]
+        public IActionResult GetCandidate([FromRoute]long? CandidateId)
+        {
+            try
+            {
+                if (CandidateId == null)
+                {
+                    return BadRequest(new { message = "حدث خطأ في إستقبال البيانات الرجاء إعادة الادخال" });
+                }
+
+                var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId).Select(s => new { s.FirstName, s.FatherName, s.GrandFatherName, s.SurName, s.MotherName, s.BirthDate, s.CompetitionType, s.ConstituencyId, s.SubConstituencyId, s.Email, s.Gender, s.Qualification, s.HomePhone, s.CandidateId }).FirstOrDefault();
+
+                if (candidate == null)
+                {
+                    return BadRequest(new { message = "لا يوجد ناخب مسجل " });
+                }
+
+                return Ok(new { candidate });
+
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+            
+        }
+
+
         [HttpGet("GetCandidates")]
-        public IActionResult Get([FromQuery]int pageNo, [FromQuery]int pageSize)
+        public IActionResult GetCandidates([FromQuery]int pageNo, [FromQuery]int pageSize)
         {
             try
             {
@@ -332,6 +360,133 @@ namespace Dashboard.Controllers
                 }
 
                 return Ok(new {level = candidate.Levels, message = "تم تسجيل بيانات المرشح بنجاح" }) ;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
+        [HttpPut("UpdateCandidate")]
+        public IActionResult UpdateCandidate([FromBody] Candidates candidates)
+        {
+            try
+            {
+
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (candidates == null)
+                {
+                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                }
+
+                var candidate = db.Candidates.Where(x => x.CandidateId == candidates.CandidateId).FirstOrDefault();
+
+                if (candidate == null)
+                {
+
+                    return BadRequest(new { message = string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", candidates.Nid) });
+
+                }
+
+                if (string.IsNullOrEmpty(candidates.FirstName) || string.IsNullOrWhiteSpace(candidates.FirstName))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال اسم الأول" });
+                }
+
+                if (string.IsNullOrEmpty(candidates.FatherName) || string.IsNullOrWhiteSpace(candidates.FatherName))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال اسم الأب" });
+                }
+
+                if (string.IsNullOrEmpty(candidates.GrandFatherName) || string.IsNullOrWhiteSpace(candidates.GrandFatherName))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال اسم الجد" });
+                }
+
+                if (string.IsNullOrEmpty(candidates.SurName) || string.IsNullOrWhiteSpace(candidates.SurName))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال القب" });
+                }
+
+                if (string.IsNullOrEmpty(candidates.MotherName) || string.IsNullOrWhiteSpace(candidates.MotherName))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال إسم الأم الثلاثي" });
+                }
+
+
+
+                if (candidates.Gender != 1 && candidates.Gender != 2)
+                {
+                    return BadRequest(new { message = "الرجاء إختيار الجنس" });
+                }
+
+
+
+                if (candidates.ConstituencyId == 0 || candidates.ConstituencyId == null)
+                {
+                    return BadRequest(new { message = "الرجاء إختيار الدائرة الرئيسية" });
+                }
+
+                if (candidates.SubConstituencyId == 0 || candidates.SubConstituencyId == null)
+                {
+                    return BadRequest(new { message = "الرجاء إختيار الدائرة الفرعية" });
+                }
+
+
+                if (string.IsNullOrEmpty(candidates.Email) || string.IsNullOrWhiteSpace(candidates.Email))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني" });
+                }
+
+                if (!IsItValidEmail(candidates.Email))
+                {
+                    return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني بشكل صحيح" });
+                }
+
+
+
+
+                candidate.FirstName = candidates.FirstName;
+                candidate.FatherName = candidates.FatherName;
+                candidate.GrandFatherName = candidates.GrandFatherName;
+                candidate.SurName = candidates.SurName;
+                candidate.MotherName = candidates.MotherName;
+                candidate.Gender = candidates.Gender;
+                candidate.BirthDate = candidates.BirthDate;
+                candidate.HomePhone = candidates.HomePhone;
+                candidate.Email = candidates.Email;
+                candidate.Qualification = candidates.Qualification;
+                candidate.ConstituencyId = candidates.ConstituencyId;
+                candidate.SubConstituencyId = candidates.SubConstituencyId;
+                candidate.CompetitionType = candidates.CompetitionType;
+                candidate.Levels = 3;
+                
+
+                db.Candidates.Update(candidate);
+                db.SaveChanges();
+
+
+                bool IsItValidEmail(string emailaddress)
+                {
+                    try
+                    {
+                        var email = new MailAddress(emailaddress);
+
+                        return true;
+                    }
+                    catch (FormatException)
+                    {
+                        return false;
+                    }
+                }
+
+                return Ok(new { level = candidate.Levels, message = "تم تحديث المرشح بنجاح" });
             }
             catch (Exception ex)
             {

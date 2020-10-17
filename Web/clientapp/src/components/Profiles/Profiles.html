@@ -1,0 +1,98 @@
+﻿<div class="Profiles">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
+        </div>
+        <div class="row DataSet" style="height:100%">
+            <add-Profile v-if="state==1" class="zoomIn"></add-Profile>
+            <div class="col-md-12 zoomIn" v-if="state==0" >
+                <div class="card cardRTL">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-2"> <h4 class="card-title">المـلف الإنتخابي </h4></div>
+                            <div class="col-md-8">
+                             </div>
+                               <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddProfileComponent()">إضافة ملف إنتخابي</button></div>
+                            </div>
+                        </div>
+                    <div class="card-body" v-loading="loading">
+                        <div class="toolbar">
+                        </div>
+                        <el-alert title="لاتــوجد بيانات لملف الإنتخابات"
+                                  type="warning" v-if="Profiles==0">
+                        </el-alert>
+
+                        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Profiles!=0">
+                            <thead>
+                                <tr>
+                                    <th>الملف النتخابي</th>
+                                    <th>معلومات</th>
+                                    <th>نوع الانتخابات</th>
+                                    <th>تاريخ البداية</th>
+                                    <th>تاريخ النهاية</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>الملف النتخابي</th>
+                                    <th>معلومات</th>
+                                    <th>نوع الانتخابات</th>
+                                    <th>تاريخ البداية</th>
+                                    <th>تاريخ النهاية</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr v-for="P in Profiles">
+                                    <td>{{P.name}}</td>
+                                    <td>{{P.description}}</td>
+                                    <td>
+                                        <span v-if="P.profileType==1">الانتخابات الرئيسية</span>
+                                        <span v-if="P.profileType==2">انتخابات النواب</span>
+                                        <span v-if="P.profileType==3">انتخابات التشريعية</span>
+                                        <span v-if="P.profileType==4">الإستفتئات</span>
+                                    </td>
+                                    <td>{{P.startDate | moment}}</td>
+                                    <td>{{P.endDate | moment}}</td>
+                                    <td class="text-right">
+                                        <a href="#" v-if="P.isActivate==1" @click.prevent="Deactivate(P.profileId)" title="إلغاء تفعيل الملف الانتخابي">
+                                            <i class="fas fa-lightbulb fa-On"></i>
+                                        </a>
+                                        <a href="#" v-if="P.isActivate==0" @click.prevent="Activate(P.profileId)" title="تفعيل الملف الانتخابي">
+                                            <i class="fas fa-lightbulb fa-off"></i>
+                                        </a>        
+                                        <a href="#" v-if="P.status==2" @click.prevent="PlayProfile(P.profileId)" title="تشغيل الملف الانتخابي">
+                                            <i class="fas fa-play-circle"></i>
+                                        </a>
+                                        <a href="#" v-if="P.status==1" @click.prevent="PauseProfile(P.profileId)" title="إيقاف الملف الانتخابي">
+                                            <i class="fas fa-pause-circle"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                        <div style="text-align: center;padding-bottom:11px" v-if="Profiles!=0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-primary">
+                                    <el-pagination background
+                                                   layout="prev, pager, next"
+                                                   :current-page="pageNo"
+                                                   :page-size="pageSize"
+                                                   :total="pages"
+                                                   @current-change="GetProfiles($event)">
+                                    </el-pagination>
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div><!-- end content-->
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+
+</div>

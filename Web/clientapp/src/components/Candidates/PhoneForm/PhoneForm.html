@@ -1,0 +1,100 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <ul class="nav nav-pills nav-pills-primary" role="tablist">
+                         <li class="nav-item" style="cursor: context-menu">
+                             <a class="nav-link" disabled>
+                                 الرقم الوطني
+                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="" role="tablist" aria-expanded="true">
+                                جهات الإتصال
+                            </a>
+                        </li>
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                بيانات الناخب
+                            </a>
+                        </li>
+
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                وثائق الناخب
+                            </a>
+                        </li>
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                إكمال العملية
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+        <div class="card-header">
+         
+            <div class="row" v-if="!ruleForm.isVerifyCodeSent">
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <el-form-item prop="Phone">
+                                    <label>رقم الهاتف</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="رقم الهاتف" v-model="ruleForm.Phone"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-3">
+                                <el-form-item>
+                                    <br />
+                                    <button class="btn-primary btn" @click.prevent="submitForm('ruleForm')">تسجيل</button>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+                    </el-form>
+
+                </div>
+
+            </div>
+
+            <div class="row" v-if="ruleForm.isVerifyCodeSent">
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <el-form-item prop="VerifyCode">
+                                    <label>رمز التفعيل</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="رمز التفعيل" v-model="ruleForm.VerifyCode"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-3">
+                                <el-form-item>
+                                    <br />
+                                    <button class="btn-primary btn" @click.prevent="submitVerifyCode('ruleForm')">تسجيل</button>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+                    </el-form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+
+            </div>
+        </div>
+    </div>
+</div>

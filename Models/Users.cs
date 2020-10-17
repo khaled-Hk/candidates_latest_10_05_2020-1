@@ -18,10 +18,10 @@ namespace Models
         public DateTime? LastLoginOn { get; set; }
         public short? Gender { get; set; }
         public short? UserType { get; set; }
+        public short? Status { get; set; }
         public long? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public long? ModifiedBy { get; set; }
-        public short? State { get; set; }
     }
 }

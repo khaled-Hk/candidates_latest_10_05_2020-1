@@ -259,12 +259,14 @@ namespace Dashboard
                    {
                        if (env.IsDevelopment())
                            spa.Options.SourcePath = "ClientApp";
+
                        else
                            spa.Options.SourcePath = "dist";
 
                        if (env.IsDevelopment())
                        {
-                           spa.UseVueCli(npmScript: "serve",port : 7001);
+                           spa.UseVueCli(npmScript: "serve", port: 8080);
+                           // spa.UseVueCli(npmScript: "serve",port : 7001);
                        }
 
                    });

@@ -82,9 +82,9 @@ export default {
                     this.users = response.data.users;
                     this.pages = response.data.count;
                 })
-                .catch((err) => {
+                .catch(() => {
                     this.$blockUI.Stop();
-                    console.error(err);
+                   // console.error(err);
                     this.pages = 0;
                 });
 
@@ -111,7 +111,7 @@ export default {
 
 
                 this.$http.DeactivateUser(UserId)
-                    .then(response => {
+                    .then(() => {
                         if (this.users.lenght === 1) {
                             this.pageNo--;
                             if (this.pageNo <= 0) {
@@ -143,7 +143,7 @@ export default {
 
 
                 this.$http.ActivateUser(UserId)
-                    .then(response => {
+                    .then(() => {
                         if (this.users.lenght === 1) {
                             this.pageNo--;
                             if (this.pageNo <= 0) {
@@ -176,7 +176,7 @@ export default {
 
 
                 this.$http.delteUser(UserId)
-                    .then(response => {
+                    .then(() => {
                         if (this.users.lenght === 1) {
                             this.pageNo--;
                             if (this.pageNo <= 0) {

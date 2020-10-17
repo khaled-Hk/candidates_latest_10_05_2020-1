@@ -22,7 +22,6 @@ namespace Models
         public string Phone { get; set; }
         public string HomePhone { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public string Qualification { get; set; }
         public long? ProfileId { get; set; }
         public long? OfficeId { get; set; }
@@ -30,6 +29,8 @@ namespace Models
         public long? SubConstituencyId { get; set; }
         public short? Levels { get; set; }
         public short? CompetitionType { get; set; }
+        public long? EntityId { get; set; }
+        public short? Status { get; set; }
         public DateTime? CreatedOn { get; set; }
         public long? CreatedBy { get; set; }
 

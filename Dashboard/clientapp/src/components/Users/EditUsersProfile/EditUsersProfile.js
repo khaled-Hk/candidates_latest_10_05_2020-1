@@ -23,7 +23,7 @@ export default {
     data() {  
        
         return {
-
+            loginDetails: null,
             ruleForm: {
 
                 LoginName: '',

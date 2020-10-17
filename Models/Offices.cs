@@ -15,13 +15,13 @@ namespace Models
         public string ArabicName { get; set; }
         public string EnglishName { get; set; }
         public string Description { get; set; }
+        public long? BranchId { get; set; }
+        public long? ProfileId { get; set; }
+        public short? Status { get; set; }
         public long CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public long? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
-        public short? Status { get; set; }
-        public long? BranchId { get; set; }
-        public long? ProfileId { get; set; }
 
         public virtual Branches Branch { get; set; }
         public virtual Profile Profile { get; set; }

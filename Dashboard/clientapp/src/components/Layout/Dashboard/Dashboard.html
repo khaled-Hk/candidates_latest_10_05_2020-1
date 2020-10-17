@@ -1,4 +1,5 @@
-﻿<div class="sidebar" data-color="orange">
+﻿
+<div class="sidebar" data-color="orange" >
     <!--
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
@@ -16,10 +17,11 @@
             </button>
         </div>
     </div>
-    <div class="sidebar-wrapper" id="sidebar-wrapper" dir="rtl">
+    <div class="sidebar-wrapper" id="sidebar-wrapper" dir="rtl" style="overflow-y: auto!important;">
         <div class="user">
             <div class="photo">
-                <img src="/img/james.jpg" />
+                <!--<img src="/img/james.jpg" />-->
+                <img :src="'/Api/Admin/User/' + loginDetails.userId + '/image'" />
             </div>
             <div class="info">
                 <a data-toggle="collapse" href="#collapseExample" class="collapsed">

@@ -14,11 +14,11 @@ namespace Models
         public long RegionId { get; set; }
         public string ArabicName { get; set; }
         public string EnglishName { get; set; }
+        public short? Status { get; set; }
         public long CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public long? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
-        public short? Status { get; set; }
 
         public virtual ICollection<Constituencies> Constituencies { get; set; }
         public virtual ICollection<ConstituencyDetails> ConstituencyDetails { get; set; }

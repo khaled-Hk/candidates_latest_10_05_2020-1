@@ -1,0 +1,154 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="card-title">إضافة مركز</h4>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn" @click.prevent="Back()">
+                        <span class="btn-label">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </span>
+                        رجـوع
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <el-form-item prop="ConstituencDetailId">
+                                    <label>المنطقة الفرعية</label>
+                                    <div class="form-group">
+                                        <el-select placeholder="إختار المنطقة الفرعية" v-model="ruleForm.ConstituencDetailId" filterable>
+                                            <el-option v-for="item in constituencyDetails"
+                                                       :key="item.value"
+                                                       :label="item.label"
+                                                       :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="OfficeId">
+                                    <label>المكتب الإنتخابي</label>
+                                    <div class="form-group">
+                                        <el-select placeholder="إختار المكتب" v-model="ruleForm.OfficeId" filterable>
+                                            <el-option v-for="item in constituencyDetails"
+                                                       :key="item.value"
+                                                       :label="item.label"
+                                                       :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <el-form-item prop="ArabicName">
+                                    <label>اسم المركز(عربي)</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم المركز بالعربي" v-model="ruleForm.ArabicName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="EnglishName">
+                                    <label>اسم المركز(انجليزي)</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم المركز بالانجليزي" v-model="ruleForm.EnglishName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <el-form-item prop="Longitude">
+                                    <label>خط الطول</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل خط الطول" v-model="ruleForm.Longitude"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="Latitude">
+                                    <label>خط العرض</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل خط العرض" v-model="ruleForm.Latitude"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <el-form-item prop="Description">
+                                    <label>الوصف</label>
+                                    <div class="form-group">
+                                        <el-input type="textarea" placeholder="الوصف" v-model="ruleForm.Description"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <div class="row" v-for="(item, index) in ruleForm.Stations">
+                            <div class="col-md-3">
+                                <el-form-item prop="ArabicName">
+                                    <label>اسم المحطة (عربي)</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم المحطة بالعربي" v-model="item.ArabicName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-3">
+                                <el-form-item prop="EnglishName">
+                                    <label>اسم المحطة (انجليزي)</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم المحطة بالانجليزي" v-model="item.EnglishName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="Description">
+                                    <label>الوصف</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="الوصف" v-model="item.Description"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-2">
+                                <br /><br />
+                                <button class="btn btn-default btn-sm" @click.prevent="addStation(index)" v-if="item.lastRow">+</button>
+                                <button class="btn btn-danger btn-sm" @click.prevent="deleteStation(index)" v-else>-</button>
+                            </div>
+                        </div>
+
+                        <el-form-item class="AddButtonLeftSide">
+                            <button class="btn btn-primary" @click.prevent="addStation()" v-show="ruleForm.Stations==0">إضافة محطات</button>
+                            <button class="btn btn-danger" @click.prevent="removeStations()" v-show="ruleForm.Stations!=0">إلغاء محطات</button>
+                            <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
+                            <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                        </el-form-item>
+                    </el-form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+                <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+        </div><!-- end content-->
+    </div><!--  end card  -->
+</div> <!-- end col-md-12 -->

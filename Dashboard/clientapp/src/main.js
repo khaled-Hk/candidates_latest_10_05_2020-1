@@ -17,7 +17,7 @@ import Constituency from './components/Administration/Constituency/Constituency.
 import ConstituencyDetails from './components/Administration/ConstituencyDetails/ConstituencyDetails.vue';
 import Centers from './components/Administration/Centers/Centers.vue'
 import Stations from './components/Administration/Stations/Stations.vue';
-import Candidates from './components/Candidates/Candidates.vue'
+import Candidates from './components/Candidates/Candidates.vue';
 import DataService from './Shared/DataService';
 
 

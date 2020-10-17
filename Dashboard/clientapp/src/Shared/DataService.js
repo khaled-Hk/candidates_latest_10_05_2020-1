@@ -177,6 +177,9 @@ export default {
         return axios.put(`/api/Admin/Stations/UpdateStation`, station);
     },
     // ************************ Candidates **************************
+    GetCandidates(pageNo, pageSize) {
+        return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}`);
+    },
     RegisterCandidateLevelOne(nationalId) {
        
         return axios.get(`/api/Admin/Candidates/NationalId/${nationalId}`);
@@ -191,6 +194,10 @@ export default {
     },
     UploadCandidateData(object) {
         return axios.post(`/api/Admin/Candidates/CandidateData`, object);
+
+    },
+    UploadFiles(object) {
+        return axios.post(`/api/Admin/Candidates/UploadDocuments`, object);
 
     },
 

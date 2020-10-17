@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
 
+using System.IO;
+
 namespace Dashboard.Controllers
 {
     [Route("api/Admin/[controller]")]
@@ -23,6 +25,41 @@ namespace Dashboard.Controllers
             db = context;
             help = new Helper();
         }
+
+        [HttpGet("GetCandidates")]
+        public IActionResult Get([FromQuery]int pageNo, [FromQuery]int pageSize)
+        {
+            try
+            {
+                IQueryable<Candidates> CandidatesQuery;
+                CandidatesQuery = from p in db.Candidates
+                                      select p;
+
+                var CandidatesCount = (from p in CandidatesQuery
+                                           select p).Count();
+
+                var CandidatesList = (from p in CandidatesQuery
+                                        join sc in db.ConstituencyDetails on p.SubConstituencyId equals sc.ConstituencyDetailId
+                                        orderby p.CreatedOn descending
+                                        select new
+                                        {
+                                            p.CandidateId,
+                                            p.Levels,
+                                            Name = string.Format("{0} {1} {2} {3}",p.FirstName, p.FatherName, p.GrandFatherName, p.SurName),
+                                            subconstituencyName = sc.ArabicName,
+                                            p.Nid,
+                                            p.CreatedOn
+
+                                        }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+                return Ok(new { Candidates = CandidatesList, count = CandidatesCount });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
 
         [HttpGet("NationalId/{NationalId}")]
         public IActionResult GetNationalIdBasedOn([FromRoute] string nationalId)
@@ -109,8 +146,8 @@ namespace Dashboard.Controllers
                 }
 
 
-               return Ok(new { isVerifyCodeSent = true, message = "الرجاء إدخال رمز التحقق" });
-                
+                return Ok(new { isVerifyCodeSent = true, message = "الرجاء إدخال رمز التحقق" });
+
 
 
             }
@@ -123,10 +160,16 @@ namespace Dashboard.Controllers
         public class Verification
         {
             public int? VerifyCode { get; set; }
-            public string Nid  { get; set; }
-            public string Phone { get; set;}
+            public string Nid { get; set; }
+            public string Phone { get; set; }
         }
 
+        public class File{
+            public string Nid { get; set; }
+            public IFormFile[] fileList { get; set; }
+        }
+
+        
         [HttpPost("VerifyPhone")]
         public IActionResult VerifyPhone([FromBody] Verification obj)
         {
@@ -292,6 +335,48 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
+        [HttpPost("UploadDocuments")]
+        public IActionResult UploadDocuments([FromBody]File file)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (file == null)
+                {
+                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                }
+                var candidate = db.Candidates.Where(x => x.Nid == file.Nid).FirstOrDefault();
+
+
+                var path = Environment.CurrentDirectory;
+                var fullPath = Directory.CreateDirectory(path+"/Documents/"+candidate.CandidateId);
+
+                if(file.fileList.Length > 0)
+                {
+                    using(FileStream fileStream = System.IO.File.Create(fullPath+"/"+file.fileList[0].FileName))
+                    {
+                        file.fileList[0].CopyTo(fileStream);
+                        fileStream.Flush();
+                    }
+                }
+
+               
+
+                return Ok(new { path });
+            }
+            catch (Exception ex)
+            {
+               
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }

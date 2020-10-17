@@ -1,18 +1,12 @@
 ﻿import AddCandidates from './AddCandidates/AddCandidates.vue'
-import NationalNumberForm from './NationalNumberForm/NationalNumberForm.vue'
-import PhoneForm from './PhoneForm/PhoneForm.vue'
-import CandidateDocuments from './CandidateDocuments/CandidateDocuments.vue'
 import moment from 'moment';
 export default {
     name: 'Candidates',
     created() {
-        
+        this.GetCandidates(this.pageNo);
     },
     components: {
         'add-Candidates': AddCandidates,
-        'NationalNumberForm': NationalNumberForm,
-        'PhoneForm': PhoneForm,
-        'CandidateDocuments': CandidateDocuments
     },
     filters: {
         moment: function (date) {
@@ -25,9 +19,11 @@ export default {
     },
     data() {
         return {
-            level: 0,
-            Nid: 0,
-            Phone:'',
+            state: 0,
+            pageNo: 1,
+            pageSize: 10,
+            pages: 0,
+            candidates:[]
           
         };
     },
@@ -50,26 +46,32 @@ export default {
 
 
         },
-        addStation(index) {
-            let station = this.ruleForm.Stations[index]
-
-            if (station) {
-                station.lastRow = false
+        GetCandidates(pageNo) {
+            this.pageNo = pageNo;
+            if (this.pageNo === undefined) {
+                this.pageNo = 1;
             }
+            this.loading = true;
+            this.$http.GetCandidates(this.pageNo, this.pageSize)
+                .then(response => {
+                    this.loading = false;
+                    this.candidates = response.data.candidates;
+                    this.pages = response.data.count;
+                })
+                .catch((err) => {
+                    this.loading = false;
+                    //this.$blockUI.Stop();
+                    this.pages = 0;
+                    return err;
+                });
 
-            this.ruleForm.Stations.push({ ArabicName: null, EnglishName: null, Description: null, lastRow: true });
         },
-        removeStations() {
-            this.ruleForm.Stations = []
+        AddCandidatesComponent() {
+            this.state = 1
         },
-        deleteStation(index) {
-            this.ruleForm.Stations.splice(index, 1)
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        },
-        Back() {
-            this.$parent.state = 0;
+        UpdateCandidatesComponent(candidateId) {
+
+            candidateId
         }
 
 

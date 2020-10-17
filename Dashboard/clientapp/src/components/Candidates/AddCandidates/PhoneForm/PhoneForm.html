@@ -42,7 +42,10 @@
                 <div class="col-md-12">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-8">
                                 <el-form-item prop="Phone">
                                     <label>رقم الهاتف</label>
                                     <div class="form-group">
@@ -50,13 +53,19 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                            <div class="col-md-3">
+
+                            <div class="col-md-2">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"></div>
+                            <div class="col-md-2">
                                 <el-form-item>
-                                    <br />
                                     <button class="btn-primary btn" @click.prevent="submitForm('ruleForm')">تسجيل</button>
                                 </el-form-item>
                             </div>
-
+                            <div class="col-md-5"></div>
                         </div>
                     </el-form>
 
@@ -68,7 +77,10 @@
                 <div class="col-md-12">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-8">
                                 <el-form-item prop="VerifyCode">
                                     <label>رمز التفعيل</label>
                                     <div class="form-group">
@@ -76,13 +88,19 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                            <div class="col-md-3">
-                                <el-form-item>
-                                    <br />
-                                    <button class="btn-primary btn" @click.prevent="submitVerifyCode('ruleForm')">تسجيل</button>
-                                </el-form-item>
+                            <div class="col-md-2">
+
                             </div>
 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5"></div>
+                            <div class="col-md-2">
+                                <el-form-item>
+                                    <button class="btn-primary btn" @click.prevent="submitVerifyCode('ruleForm')">تحقق من الرمز</button>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-5"></div>
                         </div>
                     </el-form>
 
@@ -90,11 +108,6 @@
 
             </div>
 
-        </div>
-        <div class="card-body">
-            <div class="toolbar">
-
-            </div>
         </div>
     </div>
 </div>

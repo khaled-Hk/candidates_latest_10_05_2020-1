@@ -1,0 +1,91 @@
+﻿<div class="Profiles">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
+        </div>
+        <div class="row DataSet" style="height:100%">
+            <add-Profile v-if="state==1" class="zoomIn"></add-Profile>
+            <div class="col-md-12 zoomIn" v-if="state==0" >
+                <div class="card cardRTL">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-2"> <h4 class="card-title">بيانات المكاتب  </h4></div>
+                            <div class="col-md-8">
+                            </div>
+                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="Add()">إضافة مكتب</button></div>
+                        </div>
+                        </div>
+                    <div class="card-body" v-loading="loading">
+                        <div class="toolbar">
+                        </div>
+                        <el-alert title="لاتــوجد بيانات للمكاتب"
+                                  type="warning" v-if="Office==0">
+                        </el-alert>
+
+                        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Office!=0">
+                            <thead>
+                                <tr>
+                                    <th>اسم المكتب</th>
+                                    <th>اسم المكتب الانجليزي</th>
+                                    <th>الفرع</th>
+                                    <th>وصف المكتب</th>
+                                    <th>تاريخ البداية</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </thead>
+                            <!--<tfoot>
+                                <tr>
+                                    <th>الملف النتخابي</th>
+                                    <th>معلومات</th>
+                                    <th>نوع الانتخابات</th>
+                                    <th>تاريخ البداية</th>
+                                    <th>تاريخ النهاية</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </tfoot>-->
+                            <tbody>
+                                <tr v-for="P in Office">
+                                    <td>{{P.arabicName}}</td>
+                                    <td>{{P.englishName}}</td>
+                                    <td>{{P.branchName}}</td>
+                                    <td>{{P.description}}</td>
+                                    <td>{{P.createdOn | moment}}</td>
+                                    <td class="text-right">
+                                        <!--<a href="#"  
+                                           @click.prevent="Deactivate(P.profileId)" 
+                                           title="تعديل بيانات المكتب">
+                                            <i class="fas fa-edit fa-On"></i>
+                                        </a>--> 
+                                        <a href="#"  
+                                           @click.prevent="deleteOffice(P.officeId)" 
+                                           title="حدف المكتب">
+                                            <i class="fas fa-trash-alt "></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                        <div style="text-align: center;padding-bottom:11px" v-if="Office!=0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-primary">
+                                    <el-pagination background
+                                                   layout="prev, pager, next"
+                                                   :current-page="pageNo"
+                                                   :page-size="pageSize"
+                                                   :total="pages"
+                                                   @current-change="GetOffice($event)">
+                                    </el-pagination>
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div><!-- end content-->
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+
+</div>

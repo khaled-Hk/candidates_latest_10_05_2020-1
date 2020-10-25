@@ -61,12 +61,19 @@
                 </a>
             </li>
 
-            <li>
+            <!--<li>
                 <a href="#" @click.prevent="href('/Regions')">
                     <i class="now-ui-icons design_app"></i>
                     <p>الـمناطق</p>
                 </a>
-            </li>
+            </li>-->
+            
+            <!--<li>
+                <a href="#" @click.prevent="href('/Offices')">
+                    <i class="now-ui-icons business_bank"></i>
+                    <p>المكاتب</p>
+                </a>
+            </li>-->
           
             <li>
                 <a data-toggle="collapse" href="#pagesExamples">
@@ -107,6 +114,12 @@
                                 <span class="sidebar-normal">المحطات</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Chairs')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">المقاغد</span>
+                            </a>
+                        </li>
 
                     </ul>
                 </div>
@@ -121,12 +134,17 @@
                 <div class="collapse " id="componentsExamples">
                     <ul class="nav">
                         <li>
+                            <a href="#" @click.prevent="href('/Administration/Offices')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal"> المكاتب  </span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="#" @click.prevent="href('/Administration/Branches')">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal"> الـفروع  </span>
                             </a>
                         </li>
-
                         <li>
                             <a href="#" @click.prevent="href('/Administration/Subconstituency')">
                                 <span class="sidebar-mini-icon">ا</span>
@@ -145,6 +163,7 @@
                                 <span class="sidebar-normal">المحطات</span>
                             </a>
                         </li>
+                        
                     </ul>
                 </div>
             </li>

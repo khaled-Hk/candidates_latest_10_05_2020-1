@@ -11,6 +11,9 @@ export default {
     GetProfiles(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Profile/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
+    GetAllProfiles() {
+        return axios.get(`/Api/Admin/Profile/GetAllProfiles`);
+    },
     AddProfiles(Profile) {
         return axios.post(`/Api/Admin/Profile/Add`, Profile);
     },
@@ -87,7 +90,33 @@ export default {
     },
 
 
+    // ************************ Offices Info **************************
+    GetOffice(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Offices/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
 
+    deleteOffice(id) {
+        return axios.post(`/Api/Admin/Offices/${id}/deleteOffice`);
+    },
+
+    AddOffice(Office) {
+        return axios.post(`/Api/Admin/Offices/Add`, Office);
+    },
+
+     
+
+    // ************************ Chairs Info **************************
+    GetChairs(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Chairs/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+
+    deleteChairs(id) {
+        return axios.post(`/Api/Admin/Chairs/${id}/delete`);
+    },
+
+    AddChairs(form) {
+        return axios.post(`/Api/Admin/Chairs/Add`, form);
+    },
 
 
 
@@ -218,6 +247,9 @@ export default {
 
     GetBranches(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+    GetAllBranches() {
+        return axios.get(`/Api/Admin/Branches/GetAllBranches`);
     },
     DeleteBranche(BranchId) {
         return axios.delete(`/Api/Admin/Branches/${BranchId}/Delete`);

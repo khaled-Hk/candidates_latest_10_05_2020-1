@@ -53,6 +53,23 @@ namespace Vue.Controllers
             }
         }
 
+        [HttpGet("GetAllBranches")]
+        public IActionResult GetAllBranches()
+        {
+            try
+            {
+                return Ok(new { Branches = db.Branches.Where(x=>x.Status!=9).OrderByDescending(x=>x.CreatedOn).Select(p=> new {
+                    p.BrancheId,
+                    p.ArabicName,
+                    p.EnglishName,
+                }).ToList() });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         [HttpPost("Add")]
         public IActionResult AddBranches([FromBody] Branches BrancheData)
         {

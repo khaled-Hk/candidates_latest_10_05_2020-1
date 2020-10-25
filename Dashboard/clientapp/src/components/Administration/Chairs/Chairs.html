@@ -1,0 +1,79 @@
+﻿<div class="Profiles">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
+        </div>
+        <div class="row DataSet" style="height:100%">
+            <add v-if="state==1" class="zoomIn"></add>
+            <div class="col-md-12 zoomIn" v-if="state==0" >
+                <div class="card cardRTL">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-2"> <h4 class="card-title">بيانات المقاعد  </h4></div>
+                            <div class="col-md-8">
+                            </div>
+                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="Add()">إضافة مقعد</button></div>
+                        </div>
+                        </div>
+                    <div class="card-body" v-loading="loading">
+                        <div class="toolbar">
+                        </div>
+                        <el-alert title="لاتــوجد بيانات للمقاعد"
+                                  type="warning" v-if="Chairs==0">
+                        </el-alert>
+
+                        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Chairs!=0">
+                            <thead>
+                                <tr>
+                                    <th>الدائرة الرئيسية </th>
+                                    <th>ع/المقاعد العامة</th>
+                                    <th>المتبقي</th>
+                                    <th>ع/المقاعد الخاصة</th>
+                                    <th>المتبقي</th>
+                                    <th>تاريخ الإدراج</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="P in Chairs">
+                                    <td>{{P.constituency}}</td>
+                                    <td>{{P.generalChairs}}</td>
+                                    <td>{{P.privateChairs}}</td>
+                                    <td>{{P.generalChairRemaining}}</td>
+                                    <td>{{P.privateChairRemaining}}</td>
+                                    <td>{{P.createdOn | moment}}</td>
+                                    <td class="text-right">
+
+                                        <a href="#"
+                                           @click.prevent="deleteChair(1)"
+                                           title="حدف المكتب">
+                                            <i class="fas fa-trash-alt "></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                        <div style="text-align: center;padding-bottom:11px" v-if="Chairs!=0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-primary">
+                                    <el-pagination background
+                                                   layout="prev, pager, next"
+                                                   :current-page="pageNo"
+                                                   :page-size="pageSize"
+                                                   :total="pages"
+                                                   @current-change="GetChairs($event)">
+                                    </el-pagination>
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div><!-- end content-->
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+
+</div>

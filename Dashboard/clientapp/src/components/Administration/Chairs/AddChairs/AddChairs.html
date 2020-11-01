@@ -21,7 +21,6 @@
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
                         <div class="row">
 
-                            {{ruleForm}}
                             <div class="col-md-6">
                                 <el-form-item prop="RegionId">
                                     <label>المنطقة</label>
@@ -53,7 +52,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <el-form-item prop="GeneralChairs">
                                     <label>عدد المقاعد العامة</label>
                                     <div class="form-group">
@@ -61,11 +60,19 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <el-form-item prop="PrivateChairs">
                                     <label>عدد المقاعد الخاصة</label>
                                     <div class="form-group">
                                         <el-input placeholder="ادخل عدد المقاعد الخاصة" v-model="ruleForm.PrivateChairs"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="RelativeChairs">
+                                    <label>عدد المقاعد النسبية</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="ادخل عدد المقاعد النسبية" v-model="ruleForm.RelativeChairs"></el-input>
                                     </div>
                                 </el-form-item>
                             </div>

@@ -42,7 +42,7 @@ export default {
     GetAllRegions() {
         return axios.get(`/Api/Admin/Regions/GetRegions`);
     },
-    // ************************ Constituencies **************************
+   
 
 
 
@@ -110,15 +110,27 @@ export default {
         return axios.get(`/Api/Admin/Chairs/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
 
+    GetChairsDetails(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Chairs/GetChairsDetails?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+
     deleteChairs(id) {
         return axios.post(`/Api/Admin/Chairs/${id}/delete`);
+    },
+
+    deleteChairsDetails(id) {
+        return axios.post(`/Api/Admin/Chairs/${id}/deleteChairsDetails`);
     },
 
     AddChairs(form) {
         return axios.post(`/Api/Admin/Chairs/Add`, form);
     },
 
+    AddChairsDetails(form) {
+        return axios.post(`/Api/Admin/Chairs/AddChairsDetails`, form);
+    },
 
+     // ************************ Constituencies **************************
 
     GetConstituencies() {
         return axios.get(`/Api/Admin/Constituencies/GetAllConstituencies`);
@@ -131,6 +143,10 @@ export default {
     },
     GetConstituenciesBasedOn(RegionId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituenciesBasedOn/${RegionId}`); 
+    },
+
+    GetConstituenciesDetalsChairs(ConstituencyId) {
+        return axios.get(`/Api/Admin/Constituencies/GetConstituenciesDetalsChairs/${ConstituencyId}`); 
     },
     GetConstituencyBasedOn(constituencyId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
@@ -205,6 +221,31 @@ export default {
     UpdateStation(station) {
         return axios.put(`/api/Admin/Stations/UpdateStation`, station);
     },
+    // ************************ Candidates **************************
+    GetCandidates(pageNo, pageSize) {
+        return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}`);
+    },
+    RegisterCandidateLevelOne(nationalId) {
+       
+        return axios.get(`/api/Admin/Candidates/NationalId/${nationalId}`);
+    },
+    RegisterCandidateContact(object) {
+
+        return axios.post(`/api/Admin/Candidates/SendVerifyCode`, object);
+    },
+    VerifyPhone(object) {
+        return axios.post(`/api/Admin/Candidates/VerifyPhone`, object);
+        
+    },
+    UploadCandidateData(object) {
+        return axios.post(`/api/Admin/Candidates/CandidateData`, object);
+
+    },
+    UploadFiles(object) {
+        return axios.post(`/api/Admin/Candidates/UploadDocuments`, object);
+
+    },
+
     
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
@@ -244,7 +285,7 @@ export default {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Cities/${CityId}/delete`);
     //},
-
+    
     GetBranches(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },

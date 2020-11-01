@@ -1,4 +1,5 @@
-﻿<div class="sidebar" data-color="orange">
+﻿
+<div class="sidebar" data-color="orange" >
     <!--
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
@@ -16,10 +17,11 @@
             </button>
         </div>
     </div>
-    <div class="sidebar-wrapper" id="sidebar-wrapper" dir="rtl">
+    <div class="sidebar-wrapper" id="sidebar-wrapper" dir="rtl" style="overflow-y: auto!important;">
         <div class="user">
             <div class="photo">
-                <img src="/img/james.jpg" />
+                <!--<img src="/img/james.jpg" />-->
+                <img :src="'/Api/Admin/User/' + loginDetails.userId + '/image'" />
             </div>
             <div class="info">
                 <a data-toggle="collapse" href="#collapseExample" class="collapsed">
@@ -61,20 +63,13 @@
                 </a>
             </li>
 
-            <!--<li>
+            <li>
                 <a href="#" @click.prevent="href('/Regions')">
                     <i class="now-ui-icons design_app"></i>
                     <p>الـمناطق</p>
                 </a>
-            </li>-->
-            
-            <!--<li>
-                <a href="#" @click.prevent="href('/Offices')">
-                    <i class="now-ui-icons business_bank"></i>
-                    <p>المكاتب</p>
-                </a>
-            </li>-->
-          
+            </li>
+
             <li>
                 <a data-toggle="collapse" href="#pagesExamples">
                     <i class="now-ui-icons design_image"></i>
@@ -117,12 +112,30 @@
                         <li>
                             <a href="#" @click.prevent="href('/Administration/Chairs')">
                                 <span class="sidebar-mini-icon">ا</span>
-                                <span class="sidebar-normal">المقاغد</span>
+                                <span class="sidebar-normal">المقاعد</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Chairs/ChairDetails')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">توزيع المقاعد</span>
                             </a>
                         </li>
 
+
                     </ul>
                 </div>
+            </li>
+           
+            <li>
+                <a href="#" @click.prevent="href('/Administration/Candidates')">
+                    <i class="now-ui-icons education_atom"></i>
+                    <p>
+                      تسجيل الناخبين
+                    </p>
+                </a>
+                
+
             </li>
             <li>
                 <a data-toggle="collapse" href="#componentsExamples">
@@ -134,17 +147,12 @@
                 <div class="collapse " id="componentsExamples">
                     <ul class="nav">
                         <li>
-                            <a href="#" @click.prevent="href('/Administration/Offices')">
-                                <span class="sidebar-mini-icon">ا</span>
-                                <span class="sidebar-normal"> المكاتب  </span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="#" @click.prevent="href('/Administration/Branches')">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal"> الـفروع  </span>
                             </a>
                         </li>
+
                         <li>
                             <a href="#" @click.prevent="href('/Administration/Subconstituency')">
                                 <span class="sidebar-mini-icon">ا</span>
@@ -163,7 +171,13 @@
                                 <span class="sidebar-normal">المحطات</span>
                             </a>
                         </li>
-                        
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Offices')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">المكاتب</span>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </li>

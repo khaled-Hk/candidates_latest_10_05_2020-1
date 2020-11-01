@@ -225,6 +225,43 @@ namespace Vue.Controllers
             }
         }
 
+        [HttpGet("GetConstituenciesDetalsChairs/{ConstituencyId}")]
+        public IActionResult GetConstituenciesDetalsChairs([FromRoute] long? ConstituencyId)
+        {
+            try
+            {
+                if (ConstituencyId == null)
+                {
+                    return BadRequest("الرجاء إختيار الدائرة الرئيسية");
+                }
+
+
+                var ConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status != 9
+                    && x.ConstituencyId == ConstituencyId)
+                    .Select(obj => new{
+                        value = obj.ConstituencyId,
+                        label = obj.ArabicName
+                    }).ToList();
+
+                var ChairsDetails = db.Chairs.Where(x => x.Status != 9
+                    && x.ConstituencyId == ConstituencyId)
+                    .Select(obj => new {
+                        obj.ChairId,
+                        obj.GeneralChairRemaining,
+                        obj.PrivateChairRemaining,
+                        obj.RelativeChairRemaining,
+                    }).FirstOrDefault();
+
+
+
+                return Ok(new { ConstituencyDetails = ConstituencyDetails, ChairsDetails= ChairsDetails });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
         [HttpGet("GetConstituency/{constituencyId}")]
         public IActionResult GetConstituencyBasedOn([FromRoute] long? constituencyId)
         {

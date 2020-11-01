@@ -29,7 +29,9 @@
                                     <th>المتبقي</th>
                                     <th>ع/المقاعد الخاصة</th>
                                     <th>المتبقي</th>
-                                    <th>تاريخ الإدراج</th>
+                                    <th>ع/المقاعد النسبية</th>
+                                    <th>المتبقي</th>
+                                    <th>ت/الإدراج</th>
                                     <th class="disabled-sorting text-right">العمليات</th>
                                 </tr>
                             </thead>
@@ -37,14 +39,16 @@
                                 <tr v-for="P in Chairs">
                                     <td>{{P.constituency}}</td>
                                     <td>{{P.generalChairs}}</td>
-                                    <td>{{P.privateChairs}}</td>
                                     <td>{{P.generalChairRemaining}}</td>
+                                    <td>{{P.privateChairs}}</td>
                                     <td>{{P.privateChairRemaining}}</td>
+                                    <td>{{P.relativeChairs}}</td>
+                                    <td>{{P.relativeChairRemaining}}</td>
                                     <td>{{P.createdOn | moment}}</td>
                                     <td class="text-right">
 
                                         <a href="#"
-                                           @click.prevent="deleteChair(1)"
+                                           @click.prevent="deleteChair(P.ChairId)"
                                            title="حدف المكتب">
                                             <i class="fas fa-trash-alt "></i>
                                         </a>

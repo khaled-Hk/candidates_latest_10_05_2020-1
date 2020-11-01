@@ -30,6 +30,7 @@ export default {
                 ConstituencyId:'',
                 GeneralChairs: '',
                 PrivateChairs: '',
+                RelativeChairs: '',
             },
             rules: {
                 ConstituencyId: [
@@ -41,6 +42,10 @@ export default {
                 ],
                 PrivateChairs: [
                     { required: true, message: 'الرجاء إدخال عدد المقاعد الخاصة', trigger: 'blur' },
+                    { required: true, pattern: /^[0-9]*$/, message: 'الرجاء إدخال ارقام فقط', trigger: 'blur' }
+                ],
+                RelativeChairs: [
+                    { required: true, message: 'الرجاء إدخال عدد المقاعد النسبية', trigger: 'blur' },
                     { required: true, pattern: /^[0-9]*$/, message: 'الرجاء إدخال ارقام فقط', trigger: 'blur' }
                 ],
             }

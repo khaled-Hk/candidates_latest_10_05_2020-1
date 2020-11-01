@@ -1,0 +1,195 @@
+﻿<div class="sidebar" data-color="orange">
+    <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+    <div class="logo">
+        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+            CT
+        </a>
+        <a href="/" class="simple-text logo-normal">
+            منظومة المرشحين
+        </a>
+        <div class="navbar-minimize">
+            <button @click.prevent="OpenMenuByToggle()" id="minimizeSidebar" class="btn btn-outline-white btn-icon btn-round">
+                <i class="now-ui-icons text_align-center visible-on-sidebar-regular"></i>
+                <i class="now-ui-icons design_bullet-list-67 visible-on-sidebar-mini"></i>
+            </button>
+        </div>
+    </div>
+    <div class="sidebar-wrapper" id="sidebar-wrapper" dir="rtl">
+        <div class="user">
+            <div class="photo">
+                <img src="/img/james.jpg" />
+            </div>
+            <div class="info">
+                <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <span>
+                        عـبدالله الامير
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <div class="clearfix"></div>
+                <div class="collapse" id="collapseExample">
+                    <ul class="nav">
+                        <li>
+                            <a href="#" @click.prevent="href('/EditUsersProfile')">
+                                <span class="sidebar-mini-icon">MP</span>
+                                <span class="sidebar-normal">الصفحة الشخصية</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/ChangePassword')">
+                                <span class="sidebar-mini-icon">CP</span>
+                                <span class="sidebar-normal">تغير كلمة المرور</span>
+                            </a>
+                        </li>
+                        <!--<li>
+                        <a href="#">
+                            <span class="sidebar-mini-icon">S</span>
+                            <span class="sidebar-normal">Settings</span>
+                        </a>
+                    </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav Dashboard">
+            <li class="active">
+                <a href="#" @click.prevent="href('/')">
+                    <i class="now-ui-icons design_app"></i>
+                    <p>الرئيـسية</p>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" @click.prevent="href('/Regions')">
+                    <i class="now-ui-icons design_app"></i>
+                    <p>الـمناطق</p>
+                </a>
+            </li>
+
+            <li>
+                <a data-toggle="collapse" href="#pagesExamples">
+                    <i class="now-ui-icons design_image"></i>
+                    <p>
+                        ضـبط القانون <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse " id="pagesExamples">
+                    <ul class="nav">
+                        <li>
+                            <a href="#" @click.prevent="href('/Profiles')">
+                                <span class="sidebar-mini-icon">م</span>
+                                <span class="sidebar-normal"> ملف الإنتخابات  </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Constituency')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal"> الدوائر الرئيسية</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Subconstituency')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">الدوائر الفرعية</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Centers')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">المراكز</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Stations')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">المحطات</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </li>
+           
+            <li>
+                <a href="#" @click.prevent="href('/Administration/Candidates')">
+                    <i class="now-ui-icons education_atom"></i>
+                    <p>
+                      تسجيل الناخبين
+                    </p>
+                </a>
+                
+
+            </li>
+            <li>
+                <a data-toggle="collapse" href="#componentsExamples">
+                    <i class="now-ui-icons education_atom"></i>
+                    <p>
+                        ضبط الإدارة <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse " id="componentsExamples">
+                    <ul class="nav">
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Branches')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal"> الـفروع  </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Subconstituency')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">الدوائر الفرعية</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Centers')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">المراكز</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Administration/Stations')">
+                                <span class="sidebar-mini-icon">ا</span>
+                                <span class="sidebar-normal">المحطات</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
+            <li>
+                <a data-toggle="collapse" href="#Users">
+                    <i class="now-ui-icons users_single-02"></i>
+                    <p>
+                        إدارة المستخدمين <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse " id="Users">
+                    <ul class="nav">
+                        <li>
+                            <a href="#" @click.prevent="href('/AddUsers')">
+                                <span class="sidebar-mini-icon">AU </span>
+                                <span class="sidebar-normal"> إضافة مستخدم  </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click.prevent="href('/Users')">
+                                <span class="sidebar-mini-icon">VU</span>
+                                <span class="sidebar-normal"> عرض المستخدمين  </span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <!--<div class="ps__rail-x" style="width: 80px; left: 0px; bottom: -67px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div>
+        <div class="ps__rail-y" style="top: 67px; height: 654px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 61px; height: 592px;"></div></div>
+        <div class="ps__thumb-y" tabindex="0" style="top: 61px; height: 592px;"></div>-->
+    </div>
+</div>

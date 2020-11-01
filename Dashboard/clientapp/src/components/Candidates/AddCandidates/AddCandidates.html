@@ -1,0 +1,8 @@
+﻿<div class="container">
+   <!-- <br /><br /><br />-->
+    <NationalNumberForm v-if="level==0"></NationalNumberForm>
+    <PhoneForm v-if="level==1"></PhoneForm>
+    <candidates-data v-if="level==2"></candidates-data>
+    <CandidateDocuments v-if="level==3"></CandidateDocuments>
+
+</div>

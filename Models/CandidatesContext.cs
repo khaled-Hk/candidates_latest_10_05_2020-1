@@ -18,6 +18,7 @@ namespace Models
         public virtual DbSet<Branches> Branches { get; set; }
         public virtual DbSet<CandidateAttachments> CandidateAttachments { get; set; }
         public virtual DbSet<CandidateContacts> CandidateContacts { get; set; }
+        public virtual DbSet<CandidateUsers> CandidateUsers { get; set; }
         public virtual DbSet<Candidates> Candidates { get; set; }
         public virtual DbSet<Centers> Centers { get; set; }
         public virtual DbSet<ChairDetails> ChairDetails { get; set; }
@@ -26,18 +27,20 @@ namespace Models
         public virtual DbSet<ConstituencyDetailChairs> ConstituencyDetailChairs { get; set; }
         public virtual DbSet<ConstituencyDetails> ConstituencyDetails { get; set; }
         public virtual DbSet<Endorsements> Endorsements { get; set; }
+        public virtual DbSet<Entities> Entities { get; set; }
+        public virtual DbSet<EntityAttachments> EntityAttachments { get; set; }
         public virtual DbSet<Offices> Offices { get; set; }
         public virtual DbSet<Profile> Profile { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Stations> Stations { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-4AI87L8\\SQLEXPRESS;Database=Candidates;Trusted_Connection=True;;MultipleActiveResultSets=true;");
+                optionsBuilder.UseSqlServer("server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;");
             }
         }
 
@@ -79,6 +82,8 @@ namespace Models
                     .HasMaxLength(300)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
                 entity.Property(e => e.FamilyPaper)
                     .HasMaxLength(300)
                     .IsUnicode(false);
@@ -102,6 +107,8 @@ namespace Models
             {
                 entity.HasKey(e => e.CandidateContactId);
 
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
                 entity.Property(e => e.Object)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -109,6 +116,47 @@ namespace Models
                 entity.Property(e => e.ObjectType).HasComment(@"1- نقال
 2- تلفون ارضي
 3- ايميل");
+            });
+
+            modelBuilder.Entity<CandidateUsers>(entity =>
+            {
+                entity.HasKey(e => e.CandidateUserId);
+
+                entity.Property(e => e.BirthDate).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.LastLoginOn).HasColumnType("datetime");
+
+                entity.Property(e => e.LoginName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LoginTryAttemptDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Password).HasMaxLength(250);
+
+                entity.Property(e => e.Phone).HasMaxLength(25);
+
+                entity.Property(e => e.Status)
+                    .HasDefaultValueSql("((0))")
+                    .HasComment(@"1-active
+2-not active
+3-stopped
+4-admin
+9-delete
+");
+
+                entity.Property(e => e.UserType)
+                    .HasDefaultValueSql("((2))")
+                    .HasComment(@"1- مندوب 
+2- ممثل");
             });
 
             modelBuilder.Entity<Candidates>(entity =>
@@ -127,6 +175,9 @@ namespace Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EntityId).HasComment(@"1- if null is candidate
+2- if not null is entity");
+
                 entity.Property(e => e.FatherName).HasMaxLength(100);
 
                 entity.Property(e => e.FirstName).HasMaxLength(100);
@@ -143,8 +194,6 @@ namespace Models
                     .HasColumnName("NID")
                     .HasMaxLength(12)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Password).HasMaxLength(250);
 
                 entity.Property(e => e.Phone)
                     .HasMaxLength(20)
@@ -316,6 +365,44 @@ namespace Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Entities>(entity =>
+            {
+                entity.HasKey(e => e.EntityId);
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Descriptions).HasMaxLength(500);
+
+                entity.Property(e => e.Email).HasMaxLength(250);
+
+                entity.Property(e => e.Logo).HasColumnName("logo");
+
+                entity.Property(e => e.Name).HasMaxLength(300);
+
+                entity.Property(e => e.Owner).HasMaxLength(250);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<EntityAttachments>(entity =>
+            {
+                entity.HasKey(e => e.EntityAttachmentId);
+
+                entity.Property(e => e.CampaignAccountNumber).HasMaxLength(300);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.LegalAgreementPoliticalEntity).HasMaxLength(300);
+
+                entity.Property(e => e.NameHeadEntity).HasMaxLength(300);
+
+                entity.Property(e => e.PoliticalEntitySymbol).HasMaxLength(300);
+            });
+
             modelBuilder.Entity<Offices>(entity =>
             {
                 entity.HasKey(e => e.OfficeId);
@@ -417,7 +504,7 @@ namespace Models
 
                 entity.Property(e => e.Phone).HasMaxLength(25);
 
-                entity.Property(e => e.State)
+                entity.Property(e => e.Status)
                     .HasDefaultValueSql("((0))")
                     .HasComment(@"1-active
 2-not active

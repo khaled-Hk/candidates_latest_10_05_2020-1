@@ -74,10 +74,10 @@
                 return;
             }
 
-            debugger
+          
             
             this.$http.ChangePassword(this.form)
-                .then(response => {
+                .then(() => {
                     this.form.NewPassword = '';
                     this.ConfimPassword = '';
                     this.form.Password = '';

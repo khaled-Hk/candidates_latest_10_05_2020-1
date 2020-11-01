@@ -1,0 +1,80 @@
+﻿<div class="Regions">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
+        </div>
+        <div class="row DataSet" style="height:100%">
+            <add-Region v-if="state==1" class="zoomIn"></add-Region>
+            <div class="col-md-12 zoomIn" v-if="state==0" >
+                <div class="card cardRTL">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-2"> <h4 class="card-title">المـناطق </h4></div>
+                            <div class="col-md-8">
+                             </div>
+                               <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddRegionComponent()">إضافة المناطق</button></div>
+                            </div>
+                        </div>
+                    <div class="card-body" v-loading="loading">
+                        <div class="toolbar">
+                        </div>
+                        <el-alert title="لاتــوجد بيانات للـمناطق"
+                                  type="warning" v-if="Regions==0">
+                        </el-alert>
+
+                        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Regions!=0">
+                            <thead>
+                                <tr>
+                                    <th>اسم المنطقة (عربي)</th>
+                                    <th>اسم المنطقة (انجليزي)</th>
+                                    <th>تاريخ الانشاء</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>اسم المنطقة (عربي)</th>
+                                    <th>اسم المنطقة (انجليزي)</th>
+                                    <th>تاريخ الانشاء</th>
+                                    <th class="disabled-sorting text-right">العمليات</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr v-for="R in Regions">
+                                    <td>{{R.arabicName}}</td>
+                                    <td>{{R.englishName}}</td>
+                                    <td>{{R.createdOn | moment}}</td>
+                                    <td  class="text-right">
+                                  
+                                        <a href="#"  title="مسح المنطقة" @click.prevent="Delete(R.regionId)">
+                                            <i class="fa fa-user-slash"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                        <div style="text-align: center;padding-bottom:11px" v-if="Regions!=0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination pagination-primary">
+                                    <el-pagination background
+                                                   layout="prev, pager, next"
+                                                   :current-page="pageNo"
+                                                   :page-size="pageSize"
+                                                   :total="pages"
+                                                   @current-change="GetRegions($event)">
+                                    </el-pagination>
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div><!-- end content-->
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+
+</div>

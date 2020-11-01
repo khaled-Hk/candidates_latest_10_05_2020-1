@@ -1,0 +1,13 @@
+﻿.el-alert__title {
+    font-size: 21px !important;
+    font-weight: bold !important;
+    line-height: 80px !important;
+}
+
+.Profiles .btn {
+    font-size:15px;
+}
+
+.Profiles .el-date-editor {
+    width: 100% !important;
+}

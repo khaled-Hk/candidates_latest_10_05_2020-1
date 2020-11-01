@@ -1,0 +1,163 @@
+﻿<div class="Regions">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
+        </div>
+        <div class="row DataSet" style="height:100%">
+            <add-Stations v-if="state==1" class="zoomIn"></add-Stations>
+            <update-Station v-if="state==2" class="zoomIn"></update-Station>
+            <div class="col-md-12 zoomIn" v-if="state==0">
+                <div class="card cardRTL">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-2"> <h4 class="card-title">المحطات</h4></div>
+                            <div class="col-md-8">
+                            </div>
+                            <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddStationComponent()">إضافة محطة</button></div>
+                        </div>
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <el-form-item>
+                                        <label>المنطقة</label>
+                                        <div class="form-group">
+                                            <el-select placeholder="إختار المنطقة " v-model="regionId" @change="GetConstituencies" filterable>
+                                                <el-option v-for="item in regions"
+                                                           :key="item.value"
+                                                           :label="item.label"
+                                                           :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                    </el-form-item>
+                                </div>
+                                <div class="col-md-3" v-show="regionId!=null">
+                                    <el-form-item>
+                                        <label>الدائرة الرئيسية</label>
+                                        <div class="form-group">
+                                            <el-select placeholder="إختار الدائرة الرئيسية" v-model="constituencyId" @change="GetAllConstituencyDetails" filterable>
+                                                <el-option v-for="item in constituencies"
+                                                           :key="item.value"
+                                                           :label="item.label"
+                                                           :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                    </el-form-item>
+                                </div>
+                                <div class="col-md-3" v-show="constituencyId!=null">
+                                    <el-form-item>
+                                        <label>الدائرة الفرعية</label>
+                                        <div class="form-group">
+                                            <el-select placeholder="إختار الدائرة الفرعية" v-model="constituencyDetailId" @change="GetCenters" filterable>
+                                                <el-option v-for="item in constituencyDetails"
+                                                           :key="item.value"
+                                                           :label="item.label"
+                                                           :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                    </el-form-item>
+                                </div>
+                                <div class="col-md-3" v-show="constituencyDetailId!=null">
+                                    <el-form-item>
+                                        <label>المركز</label>
+                                        <div class="form-group">
+                                            <el-select placeholder="إختار المركز" v-model="centerId" @change="GetStations(1)" filterable>
+                                                <el-option v-for="item in centers"
+                                                           :key="item.value"
+                                                           :label="item.label"
+                                                           :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                    </el-form-item>
+                                </div>
+                            </div>
+                        </el-form>
+                        <div class="card-body" v-loading="loading">
+                            <div class="toolbar">
+                            </div>
+                            <el-alert title="الرجاء إختيار المنطقة"
+                                      type="warning" v-if="regionId==null">
+                            </el-alert>
+                            <el-alert title="الرجاء إختيار الدائرة الرئيسية"
+                                      type="warning" v-if="constituencyId==null && regionId!=null">
+                            </el-alert>
+                            <el-alert title="الرجاء إختيار الدائرة الفرعية"
+                                      type="warning" v-if="constituencyDetailId==null && constituencyId!=null && regionId!=null">
+                            </el-alert>
+                            <el-alert title="الرجاء إختيار المركز"
+                                      type="warning" v-if="centerId==null && constituencyDetailId!=null && constituencyId!=null && regionId!=null">
+                            </el-alert>
+                            <el-alert title="لا يوجد محطات في هذا المركز"
+                                      type="warning" v-if="stations == 0 && centerId!=null && constituencyDetailId!=null && constituencyId!=null && regionId!=null">
+                            </el-alert>
+
+
+                            <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="stations.length!=0">
+                                <thead>
+                                    <tr>
+                                        <th>اسم الدائرة (عربي)</th>
+                                        <th>اسم الدائرة (انجليزي)</th>
+                                        <th>الدائرة الرئيسية</th>
+                                        <th>تاريخ الانشاء</th>
+                                        <th class="disabled-sorting text-right">العمليات</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>اسم الدائرة (عربي)</th>
+                                        <th>اسم الدائرة (انجليزي)</th>
+                                        <th>الدائرة الرئيسية</th>
+                                        <th>تاريخ الانشاء</th>
+                                        <th class="disabled-sorting text-right">العمليات</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr v-for="R in stations">
+                                        <td>{{R.arabicName}}</td>
+                                        <td>{{R.englishName}}</td>
+                                        <td>{{R.centerName}}</td>
+                                        <td>{{R.createdOn | moment}}</td>
+                                        <td class="text-left">
+
+                                            <a href="#" title="تعديل بيانات المنطقة" @click.prevent="UpdateStationComponent(R.stationId)">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="#" title="مسح المنطقة" @click.prevent="Delete(R.stationId)">
+                                                <i class="fa fa-user-slash"></i>
+                                            </a>
+
+                                        </td>
+
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+
+                            <div style="text-align: center;padding-bottom:11px" v-if="stations!=0">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination pagination-primary">
+                                        <el-pagination background
+                                                       layout="prev, pager, next"
+                                                       :current-page="pageNo"
+                                                       :page-size="pageSize"
+                                                       :total="pages"
+                                                       @current-change="GetCenters($event)">
+                                        </el-pagination>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div><!-- end content-->
+                    </div><!--  end card  -->
+                </div> <!-- end col-md-12 -->
+            </div> <!-- end row -->
+        </div>
+
+
+</div>
+    </div> 

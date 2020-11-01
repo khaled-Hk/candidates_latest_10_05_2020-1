@@ -89,7 +89,6 @@ namespace Dashboard.Controllers
         [HttpGet("IsLogin")]
         public async Task<IActionResult> IsLogin(string returnUrl = null)
         {
-
             bool isAuthenticated = User.Identity.IsAuthenticated;
             if (isAuthenticated)
             {
@@ -141,7 +140,7 @@ namespace Dashboard.Controllers
                 }
 
                 var cUser = (from p in db.Users
-                             where (p.Email == loginUser.Email || p.LoginName == loginUser.Email) && p.State != 9
+                             where (p.Email == loginUser.Email || p.LoginName == loginUser.Email) && p.Status != 9
                              select p).SingleOrDefault();
 
                 if (cUser == null)
@@ -155,11 +154,11 @@ namespace Dashboard.Controllers
                     return BadRequest("ليس لديك صلاحيه للدخول علي النظام");
                 }
 
-                if (cUser.State == 0)
+                if (cUser.Status == 0)
                 {
                     return BadRequest("حسابك غير مفعل");
                 }
-                if (cUser.State == 2)
+                if (cUser.Status == 2)
                 {
                     if (cUser.LoginTryAttemptDate != null)
                     {
@@ -172,7 +171,7 @@ namespace Dashboard.Controllers
                         }
                         else
                         {
-                            cUser.State = 1;
+                            cUser.Status = 1;
 
                             db.SaveChanges();
                         }
@@ -184,10 +183,10 @@ namespace Dashboard.Controllers
                 {
 
                     cUser.LoginTryAttempts++;
-                    if (cUser.LoginTryAttempts >= 5 && cUser.State == 1)
+                    if (cUser.LoginTryAttempts >= 5 && cUser.Status == 1)
                     {
                         cUser.LoginTryAttemptDate = DateTime.Now;
-                        cUser.State = 2;
+                        cUser.Status = 2;
                     }
                     db.SaveChanges();
                     return NotFound("الرجاء التاكد من البريد الالكتروني وكلمة المرور");
@@ -245,7 +244,7 @@ namespace Dashboard.Controllers
                     Email = cUser.Email,
                     //cUser.Office.OfficeName,
                     Gender = cUser.Gender,
-                    Status = cUser.State,
+                    Status = cUser.Status,
                     Phone = cUser.Phone
                 };
 
@@ -307,7 +306,7 @@ namespace Dashboard.Controllers
                 var userId = this.help.GetCurrentUser(HttpContext);
                 if (loginUser.Password != null)
                 {
-                    var User = db.Users.Where(x => x.Id == userId && x.State != 9).SingleOrDefault();
+                    var User = db.Users.Where(x => x.Id == userId && x.Status != 9).SingleOrDefault();
                     
 
                     if (Security.VerifyHash(loginUser.Password, User.Password, HashAlgorithms.SHA512))
@@ -328,7 +327,7 @@ namespace Dashboard.Controllers
 
                 else
                 {
-                    var User = db.Users.Where(x => x.Id == loginUser.UserId && x.State != 9).SingleOrDefault();
+                    var User = db.Users.Where(x => x.Id == loginUser.UserId && x.Status != 9).SingleOrDefault();
                     
                     if (User == null)
                     {

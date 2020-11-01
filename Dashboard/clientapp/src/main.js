@@ -16,9 +16,12 @@ import Branches from './components/Administration/Branches/Branches.vue';
 import Constituency from './components/Administration/Constituency/Constituency.vue';
 import ConstituencyDetails from './components/Administration/ConstituencyDetails/ConstituencyDetails.vue';
 import Centers from './components/Administration/Centers/Centers.vue'
-import Offices from './components/Administration/Offices/Offices.vue';
 import Stations from './components/Administration/Stations/Stations.vue';
 import Chairs from './components/Administration/Chairs/Chairs.vue';
+import ChairDetails from './components/Administration/Chairs/ChairDetails/ChairDetails.vue';
+import Offices from './components/Administration/Offices/Offices.vue';
+
+import Candidates from './components/Candidates/Candidates.vue';
 import DataService from './Shared/DataService';
 
 
@@ -27,13 +30,6 @@ import Users from './components/Users/Users.vue';
 import AddUsers from './components/Users/AddUsers/AddUsers.vue';
 import EditUsersProfile from './components/Users/EditUsersProfile/EditUsersProfile.vue';
 import ChangePassword from './components/Users/ChangePassword/ChangePassword.vue';
-
-
-
-
-
-
-
 //////////////////////////t////////////////////
 //import messages from './i18n';
 
@@ -80,10 +76,10 @@ const router = new VueRouter({
         { path: '/Administration/Subconstituency', component: ConstituencyDetails },
         { path: '/Administration/Centers', component: Centers },
         { path: '/Administration/Stations', component: Stations },
+        { path: '/Administration/Candidates', component: Candidates },
         { path: '/Administration/Offices', component: Offices },
         { path: '/Administration/Chairs', component: Chairs },
-
-
+        { path: '/Administration/Chairs/ChairDetails', component: ChairDetails },
     ]
 
 });

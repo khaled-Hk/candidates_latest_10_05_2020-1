@@ -11,7 +11,12 @@ export default {
     data() {
         return {
             ruleForm: {
-                fileList: [],
+                CVDocument: '',
+                NationalCertificateDocument: null,
+                FamilyCertificateDocument: null,
+                HealthCertificateDocument: null,
+                NoCriminalConvictionDocument: null,
+                AcademicDegree:'',
                 Nid:null
             }
            
@@ -28,46 +33,35 @@ export default {
     },
     methods: {
        
-        addAttachment(fieldName, fileList)
+        SelectCVDocument(e)
         {
             // this.fileList = fileList.slice(-3);
-            const formData = new FormData();
-            formData.append("Nid", this.ruleForm.Nid);
-            if (!fileList.length) return;
-            Array
-                .from(Array(fileList.length).keys())
-                .map(x => {
-                    formData.append(fieldName, fileList[x], fileList[x].name);
-                });
-            this.save(formData);
-        },
-        save(formData) {
-            this.ruleForm.Nid = this.$parent.Nid
+            var files = e.target.files;
 
-            this.$blockUI.Start();
-            this.$http.UploadFiles(formData)
-                .then(() => {
-                    // this.$parent.state = 0;
-                    this.$blockUI.Stop();
-                    //  this.$parent.level = response.data.level;
+            if (files.length <= 0) {
+                return;
+            }
 
-                    //this.$notify({
-                    //    title: 'تمت الاضافة بنجاح',
-                    //    dangerouslyUseHTMLString: true,
-                    //    message: '<strong>' + response.data.message + '</strong>',
-                    //    type: 'success'
-                    //});
-                })
-                .catch((err) => {
-                    this.$blockUI.Stop();
-                    this.$notify({
-                        title: 'خطأ بعملية الاضافة',
-                        dangerouslyUseHTMLString: true,
-                        type: 'error',
-                        message: err.response.data.message
-                    });
+            if (files[0].type !== 'application/pdf') {
+                this.$message({
+                    type: 'error',
+                    message: 'يجب ان يكون الملف من نوع  PDF'
                 });
+            }
+
+            var $this = this;
+            var reader = new FileReader();
+            reader.onload = function () {
+                $this.ruleForm.CVDocument = reader.result;
+                //$this.UploadImage();
+            };
+            reader.onerror = function () {
+                $this.ruleForm.CVDocument = null;
+            };
+            reader.readAsDataURL(files[0]);
         },
+        save() { },
+        addAttachment() { },
         submitForm(formName) {
            
             this.$refs[formName].validate((valid) => {

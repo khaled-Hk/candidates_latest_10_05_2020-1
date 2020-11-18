@@ -17,6 +17,10 @@ import Constituency from './components/Administration/Constituency/Constituency.
 import ConstituencyDetails from './components/Administration/ConstituencyDetails/ConstituencyDetails.vue';
 import Centers from './components/Administration/Centers/Centers.vue'
 import Stations from './components/Administration/Stations/Stations.vue';
+import Chairs from './components/Administration/Chairs/Chairs.vue';
+import ChairDetails from './components/Administration/Chairs/ChairDetails/ChairDetails.vue';
+import Offices from './components/Administration/Offices/Offices.vue';
+
 import Candidates from './components/Candidates/Candidates.vue';
 import DataService from './Shared/DataService';
 
@@ -72,7 +76,10 @@ const router = new VueRouter({
         { path: '/Administration/Subconstituency', component: ConstituencyDetails },
         { path: '/Administration/Centers', component: Centers },
         { path: '/Administration/Stations', component: Stations },
-        { path: '/Administration/Candidates', component: Candidates }
+        { path: '/Administration/Candidates', component: Candidates },
+        { path: '/Administration/Offices', component: Offices },
+        { path: '/Administration/Chairs', component: Chairs },
+        { path: '/Administration/Chairs/ChairDetails', component: ChairDetails },
     ]
 
 });

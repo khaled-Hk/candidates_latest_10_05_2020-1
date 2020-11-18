@@ -65,8 +65,27 @@ namespace Dashboard.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-       
-        
+
+        [HttpGet("GetAllProfiles")]
+        public IActionResult GetAllProfiles()
+        {
+            try
+            {
+                return Ok(new { Profile = db.Profile.Where(x => x.Status != 9).OrderByDescending(x => x.CreatedOn)
+                    .Select(p => new
+                    {
+                        p.Name,
+                        p.ProfileType,
+                        p.ProfileId
+                    }).ToList()});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+
         [HttpPost("Add")]
         public IActionResult AddProfile([FromBody] Profile ProfileData)
         {

@@ -1,4 +1,5 @@
 ﻿import AddCandidates from './AddCandidates/AddCandidates.vue'
+import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue'
 import moment from 'moment';
 export default {
     name: 'Candidates',
@@ -7,6 +8,7 @@ export default {
     },
     components: {
         'add-Candidates': AddCandidates,
+        'update-Candidates': UpdateCandidates
     },
     filters: {
         moment: function (date) {
@@ -23,6 +25,7 @@ export default {
             pageNo: 1,
             pageSize: 10,
             pages: 0,
+            CandidateId:null,
             candidates:[]
           
         };
@@ -31,21 +34,7 @@ export default {
 
        
 
-        GetAllConstituencyDetails() {
-
-            this.$blockUI.Start();
-            this.$http.GetConstituencyDetails()
-                .then(response => {
-
-                    //this.$parent.GetRegions();
-
-                    this.$blockUI.Stop();
-                    this.constituencyDetails = response.data.constituencyDetails;
-
-                })
-
-
-        },
+       
         GetCandidates(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
@@ -71,7 +60,8 @@ export default {
         },
         UpdateCandidatesComponent(candidateId) {
 
-            candidateId
+            this.state = 2;
+            this.CandidateId = candidateId;
         }
 
 

@@ -4,6 +4,7 @@ export default {
     created() {
         this.GetConstituencyDetails();
         this.GetCenter();
+        this.GetAllOffices();
     },
     components: {
 
@@ -21,6 +22,7 @@ export default {
         return {
             state: 0,
             constituencyDetails: [],
+            offices:[],
             ruleForm: {
                 ArabicName: '',
                 EnglishName: '',
@@ -80,7 +82,16 @@ export default {
                 }
             });
         },
+        GetAllOffices() {
+            this.$blockUI.Start();
+            this.$http.GetAllOffices()
+                .then(response => {
+                    this.$blockUI.Stop();
+                    this.offices = response.data.offices;
 
+                })
+
+        },
         GetConstituencyDetails() {
 
             this.$blockUI.Start();

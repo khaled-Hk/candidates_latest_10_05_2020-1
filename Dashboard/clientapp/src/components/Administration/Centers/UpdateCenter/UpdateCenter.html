@@ -22,10 +22,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <el-form-item prop="ConstituencDetailId">
-                                    <label>المنطقة الفرعية</label>
+                                    <label>الدائرة الفرعية</label>
                                     <div class="form-group">
-                                        <el-select placeholder="إختار المنطقة الفرعية" v-model="ruleForm.ConstituencDetailId" filterable>
-                                            <el-option v-for="item in constituencyDetails"
+                                        <el-select placeholder="إختار الدائرة الفرعية" v-model="ruleForm.ConstituencDetailId" filterable>
+                                            <el-option v-for="item in offices"
                                                        :key="item.value"
                                                        :label="item.label"
                                                        :value="item.value">

@@ -25,16 +25,16 @@ export default {
             pageNo: 1,
             pageSize: 10,
             pages: 0,
-            CandidateId:null,
-            candidates:[]
-          
+            CandidateId: null,
+            candidates: []
+
         };
     },
     methods: {
 
-       
 
-       
+
+
         GetCandidates(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {

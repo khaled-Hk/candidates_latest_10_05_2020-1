@@ -46,11 +46,11 @@ namespace Dashboard.Controllers
                 return Ok(new { candidate });
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
-            
+
         }
 
 
@@ -61,24 +61,24 @@ namespace Dashboard.Controllers
             {
                 IQueryable<Candidates> CandidatesQuery;
                 CandidatesQuery = from p in db.Candidates
-                                      select p;
+                                  select p;
 
                 var CandidatesCount = (from p in CandidatesQuery
-                                           select p).Count();
+                                       select p).Count();
 
                 var CandidatesList = (from p in CandidatesQuery
-                                        join sc in db.ConstituencyDetails on p.SubConstituencyId equals sc.ConstituencyDetailId
-                                        orderby p.CreatedOn descending
-                                        select new
-                                        {
-                                            p.CandidateId,
-                                            p.Levels,
-                                            Name = string.Format("{0} {1} {2} {3}",p.FirstName, p.FatherName, p.GrandFatherName, p.SurName),
-                                            subconstituencyName = sc.ArabicName,
-                                            p.Nid,
-                                            p.CreatedOn
+                                      join sc in db.ConstituencyDetails on p.SubConstituencyId equals sc.ConstituencyDetailId
+                                      orderby p.CreatedOn descending
+                                      select new
+                                      {
+                                          p.CandidateId,
+                                          p.Levels,
+                                          Name = string.Format("{0} {1} {2} {3}", p.FirstName, p.FatherName, p.GrandFatherName, p.SurName),
+                                          subconstituencyName = sc.ArabicName,
+                                          p.Nid,
+                                          p.CreatedOn
 
-                                        }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+                                      }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { Candidates = CandidatesList, count = CandidatesCount });
             }
@@ -192,17 +192,18 @@ namespace Dashboard.Controllers
             public string Phone { get; set; }
         }
 
-        public class File{
+        public class File
+        {
             public string Nid { get; set; }
             public IFormFile[] fileList { get; set; }
         }
 
-        
+
         [HttpPost("VerifyPhone")]
         public IActionResult VerifyPhone([FromBody] Verification obj)
         {
 
-        try
+            try
             {
                 var userId = this.help.GetCurrentUser(HttpContext);
 
@@ -211,7 +212,7 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                if(obj.VerifyCode != 1111)
+                if (obj.VerifyCode != 1111)
                 {
                     return BadRequest("رمز التحقق الذي أدخلته خطأ، أعد المحاولة");
                 }
@@ -293,14 +294,14 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "الرجاء إدخال إسم الأم الثلاثي" });
                 }
 
-                
+
 
                 if (candidates.Gender != 1 && candidates.Gender != 2)
                 {
                     return BadRequest(new { message = "الرجاء إختيار الجنس" });
                 }
 
-              
+
 
                 if (candidates.ConstituencyId == 0 || candidates.ConstituencyId == null)
                 {
@@ -359,7 +360,7 @@ namespace Dashboard.Controllers
                     }
                 }
 
-                return Ok(new {level = candidate.Levels, message = "تم تسجيل بيانات المرشح بنجاح" }) ;
+                return Ok(new { level = candidate.Levels, message = "تم تسجيل بيانات المرشح بنجاح" });
             }
             catch (Exception ex)
             {
@@ -466,7 +467,7 @@ namespace Dashboard.Controllers
                 candidate.SubConstituencyId = candidates.SubConstituencyId;
                 candidate.CompetitionType = candidates.CompetitionType;
                 candidate.Levels = 3;
-                
+
 
                 db.Candidates.Update(candidate);
                 db.SaveChanges();
@@ -514,24 +515,24 @@ namespace Dashboard.Controllers
 
 
                 var path = Environment.CurrentDirectory;
-                var fullPath = Directory.CreateDirectory(path+"/Documents/"+candidate.CandidateId);
+                var fullPath = Directory.CreateDirectory(path + "/Documents/" + candidate.CandidateId);
 
-                if(file.fileList.Length > 0)
+                if (file.fileList.Length > 0)
                 {
-                    using(FileStream fileStream = System.IO.File.Create(fullPath+"/"+file.fileList[0].FileName))
+                    using (FileStream fileStream = System.IO.File.Create(fullPath + "/" + file.fileList[0].FileName))
                     {
                         file.fileList[0].CopyTo(fileStream);
                         fileStream.Flush();
                     }
                 }
 
-               
+
 
                 return Ok(new { path });
             }
             catch (Exception ex)
             {
-               
+
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }
@@ -541,5 +542,166 @@ namespace Dashboard.Controllers
         {
             return db.Candidates.Any(e => e.CandidateId == id);
         }
+
+        public class CandidateDocument
+        {
+            public string Nid { get; set; }
+            public string BirthCertificateDocument { get; set; }
+            public string NidDocument { get; set; }
+            public string FamilyPaper{ get; set; }
+            public string AbsenceOfPrecedents{ get; set; }
+            public string PaymentReceipt{ get; set; }
+        }
+
+        [HttpPost("CandidateAttachments")]
+
+        public IActionResult AddCandidateAttachments([FromBody] CandidateDocument candidateDocument)
+        {
+            try
+            {
+                if (candidateDocument == null)
+                {
+                    return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
+                }
+
+
+                if (string.IsNullOrEmpty(candidateDocument.BirthCertificateDocument))
+                {
+                    return BadRequest("الرجاء ادخال شهادة الميلاد");
+                }
+                if (string.IsNullOrEmpty(candidateDocument.NidDocument))
+                {
+                    return BadRequest("الرجاء ادخال وئيقة الرقم الوطني");
+                }
+                if (string.IsNullOrEmpty(candidateDocument.FamilyPaper))
+                {
+                    return BadRequest("الرجاء ادخال ورقة العائلة");
+                }
+                if (string.IsNullOrEmpty(candidateDocument.AbsenceOfPrecedents))
+                {
+                    return BadRequest("الرجاء ادخال شهادة الخلو من السوابق");
+                }
+                if (string.IsNullOrEmpty(candidateDocument.PaymentReceipt))
+                {
+                    return BadRequest("الرجاء ادخال إيصال الدفع");
+                }
+
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+
+                var candidate = db.Candidates.Where(x => x.Nid == candidateDocument.Nid).SingleOrDefault();
+
+                byte[] birthCertificateDocument;
+                birthCertificateDocument = Convert.FromBase64String(candidateDocument.BirthCertificateDocument.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+
+                byte[] NidDocument;
+                NidDocument = Convert.FromBase64String(candidateDocument.NidDocument.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+
+                byte[] FamilyPaper;
+                FamilyPaper = Convert.FromBase64String(candidateDocument.FamilyPaper.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+
+                byte[] AbsenceOfPrecedents;
+                AbsenceOfPrecedents = Convert.FromBase64String(candidateDocument.AbsenceOfPrecedents.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+
+                byte[] PaymentReceipt;
+                PaymentReceipt = Convert.FromBase64String(candidateDocument.PaymentReceipt.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+
+                string subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Attachments", candidate.CandidateId.ToString());
+
+                string birthCertificateDocumentFileName = @"Section" + Guid.NewGuid() + ".pdf";
+                List<string> filesName = new List<string> {
+                    @"BirthCertificate" + Guid.NewGuid() + ".pdf",
+                    @"Nid" + Guid.NewGuid() + ".pdf",
+                    @"FamilyPaper" + Guid.NewGuid() + ".pdf",
+                    @"AbsenceOfPrecedents" + Guid.NewGuid() + ".pdf",
+                    @"PaymentReceipt" + Guid.NewGuid() + ".pdf",
+                 };
+                string birthCertificateDirectory = "/PDF/" + candidate.CandidateId.ToString() + "/" + birthCertificateDocumentFileName;
+
+                var filesDirectories = new Dictionary<string, string>
+                {
+                    { "BirthCertificate", "/Attachments/" + candidate.CandidateId.ToString() + "/" + filesName[0]},
+                    { "Nid", "/Attachments/" + candidate.CandidateId.ToString() + "/" + filesName[1]},
+                    { "FamilyPaper", "/Attachments/" + candidate.CandidateId.ToString() + "/" + filesName[2]},
+                    { "AbsenceOfPrecedents", "/Attachments/" + candidate.CandidateId.ToString() + "/" + filesName[3]},
+                    { "PaymentReceipt", "/Attachments/" + candidate.CandidateId.ToString() + "/" + filesName[4]},
+                };
+
+                bool exists = System.IO.Directory.Exists(subPath);
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(subPath);
+
+                MemoryStream [] streams = { new MemoryStream(birthCertificateDocument), new MemoryStream(NidDocument), new MemoryStream(FamilyPaper), new MemoryStream(AbsenceOfPrecedents), new MemoryStream(PaymentReceipt) };
+
+                for(var i = 0; i < streams.Length; i++)
+                {
+                    IFormFile file = new FormFile(streams[i], 0, streams[i].Length, "وثائق الناحب", filesName[i]);
+                    string fullpath = Path.Combine(subPath, file.FileName);
+                    using (var fileStream = new FileStream(fullpath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                }
+               
+                var attachments = new CandidateAttachments();
+                attachments.BirthDateCertificate = filesDirectories["BirthCertificate"];
+                attachments.Nidcertificate = filesDirectories["Nid"];
+                attachments.FamilyPaper = filesDirectories["FamilyPaper"];
+                attachments.AbsenceOfPrecedents = filesDirectories["AbsenceOfPrecedents"];
+                attachments.PaymentReceipt = filesDirectories["PaymentReceipt"];
+                attachments.CandidateId = candidate.CandidateId;
+                attachments.CreatedBy = userId;
+                attachments.CreatedOn = DateTime.Now;
+                attachments.Status = 1;
+                db.CandidateAttachments.Add(attachments);
+
+                candidate.Levels = 4;
+                db.Candidates.Update(candidate);
+                db.SaveChanges();
+                return Ok(new { message = "لقد قمت برفع الملفات بنــجاح", level = candidate.Levels});
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.InnerException.Message);
+            }
+        }
+
+         [HttpGet("CompleteRegistration/{NationalId}")]
+
+        public IActionResult CompleteRegistration([FromRoute] string NationalId)
+        {
+            try
+            {
+                var selectedCandidate = db.Candidates.Where(x => x.Nid == NationalId )
+                    .Join(
+                    db.ConstituencyDetails,
+                     candidate => candidate.CandidateId,
+                     subconstituency => subconstituency.ConstituencyDetailId,
+                     (candidate, subconstituency) => new
+                      {
+                         Nid = candidate.Nid,
+                         FirstName = candidate.FirstName,
+                         FatherName = candidate.FatherName,
+                         SurName = candidate.SurName,
+                         subconstituencyName = subconstituency.ArabicName,
+                        
+                     }
+                    )
+                    .Select( s => new { s.Nid, fullName = string.Format("{0} {1} {2}", s.FirstName, s.FatherName, s.SurName), s.subconstituencyName }).FirstOrDefault();
+                
+
+                return Ok(selectedCandidate);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.InnerException.Message);
+            }
+        }
+
     }
 }

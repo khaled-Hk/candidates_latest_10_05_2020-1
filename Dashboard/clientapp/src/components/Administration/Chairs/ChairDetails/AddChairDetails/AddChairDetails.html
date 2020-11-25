@@ -1,0 +1,129 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="card-title">حجز مقاعد لدائرة انتخابية  </h4>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn" @click.prevent="Back()">
+                        <span class="btn-label">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </span>
+                        رجـوع
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <el-form-item prop="RegionId">
+                                    <label>المنطقة</label>
+                                    <div class="form-group">
+                                        <el-select placeholder="إختار المنطقة" v-model="RegionId" filterable @change="GetAllConstituencies">
+                                            <el-option v-for="item in regions"
+                                                       :key="item.value"
+                                                       :label="item.label"
+                                                       :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="ConstituencyId">
+                                    <label>الدائرة الرئيسية</label>
+                                    <div class="form-group">
+                                        <el-select placeholder="إختار الدائرة الرئيسية" v-model="ruleForm.ConstituencyId" @change="GetConstituenciesDetalsChairs" filterable>
+                                            <el-option v-for="item in Constituencies"
+                                                       :key="item.value"
+                                                       :label="item.label"
+                                                       :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="ConstituencyDetailId">
+                                    <label>الدائرة الفرعية</label>
+                                    <div class="form-group">
+                                        <el-select placeholder="إختار الدائرة الفرعية" v-model="ruleForm.ConstituencyDetailId" filterable>
+                                            <el-option v-for="item in ConstituencyDetails"
+                                                       :key="item.value"
+                                                       :label="item.label"
+                                                       :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+
+
+                        <el-alert title="لاتوجد بيانات للمقاعد الرجاء اضافة المقاعد اولا "
+                                  type="warning" v-if="ChairsDetails==0 && ConstituencyDetails!=0">
+                        </el-alert>
+
+
+                        <div class="row" v-if="ChairsDetails!=0">
+                            <div class="col-md-4">
+                                <el-form-item prop="GeneralChairs">
+                                    <label>عدد المقاعد العامة المتاحة {{ChairsDetails.generalChairRemaining}} مقاعد</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="ادخل عدد المقاعد العامة"
+                                                  v-model="ruleForm.GeneralChairs"
+                                                  type="number"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="PrivateChairs">
+                                    <label>عدد المقاعد الخاصة المتاحة {{ChairsDetails.privateChairRemaining}} مقاعد</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="ادخل عدد المقاعد الخاصة"
+                                                  v-model="ruleForm.PrivateChairs"
+                                                  type="number"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="RelativeChairs">
+                                    <label>عدد المقاعد النسبية المتاحة {{ChairsDetails.relativeChairRemaining}} مقاعد</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="ادخل عدد المقاعد النسبية"
+                                                  v-model="ruleForm.RelativeChairs"
+                                                  type="number"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+
+                        <div class="">
+
+                        </div>
+
+                        <el-form-item class="AddButtonLeftSide">
+                            <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
+                            <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                        </el-form-item>
+                    </el-form>
+
+                </div>
+               
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+                <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+        </div><!-- end content-->
+    </div><!--  end card  -->
+</div> <!-- end col-md-12 -->

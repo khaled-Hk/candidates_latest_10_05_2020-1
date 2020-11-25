@@ -11,13 +11,15 @@ export default {
     data() {
         return {
             ruleForm: {
-                CVDocument: '',
-                NationalCertificateDocument: null,
-                FamilyCertificateDocument: null,
-                HealthCertificateDocument: null,
-                NoCriminalConvictionDocument: null,
-                AcademicDegree:'',
+                BirthCertificateDocument: null,
+                NidDocument: null,
+                FamilyPaper: null,
+                AbsenceOfPrecedents:null,
+                PaymentReceipt: null,
                 Nid:null
+            },
+            rules: {
+
             }
            
         };
@@ -33,7 +35,7 @@ export default {
     },
     methods: {
        
-        SelectCVDocument(e)
+        SelectBirthCertificateDocument(e)
         {
             // this.fileList = fileList.slice(-3);
             var files = e.target.files;
@@ -52,36 +54,135 @@ export default {
             var $this = this;
             var reader = new FileReader();
             reader.onload = function () {
-                $this.ruleForm.CVDocument = reader.result;
+                $this.ruleForm.BirthCertificateDocument = reader.result;
+                //$this.UploadImage();
+            };
+            reader.onerror = function ( ) {
+                $this.ruleForm.BirthCertificateDocument = null;
+            };
+            
+            reader.readAsDataURL(files[0]);
+           
+        },
+        SelectNidDocument(e) {
+            var files = e.target.files;
+
+            if (files.length <= 0) {
+                return;
+            }
+
+            if (files[0].type !== 'application/pdf') {
+                this.$message({
+                    type: 'error',
+                    message: 'يجب ان يكون الملف من نوع  PDF'
+                });
+            }
+
+            var $this = this;
+            var reader = new FileReader();
+            reader.onload = function () {
+                $this.ruleForm.NidDocument = reader.result;
                 //$this.UploadImage();
             };
             reader.onerror = function () {
-                $this.ruleForm.CVDocument = null;
+                $this.ruleForm.NidDocument = null;
             };
             reader.readAsDataURL(files[0]);
         },
-        save() { },
-        addAttachment() { },
+        SelectFamilyPaper(e) {
+            var files = e.target.files;
+
+            if (files.length <= 0) {
+                return;
+            }
+
+            if (files[0].type !== 'application/pdf') {
+                this.$message({
+                    type: 'error',
+                    message: 'يجب ان يكون الملف من نوع  PDF'
+                });
+            }
+
+            var $this = this;
+            var reader = new FileReader();
+            reader.onload = function () {
+                $this.ruleForm.FamilyPaper = reader.result;
+                //$this.UploadImage();
+            };
+            reader.onerror = function () {
+                $this.ruleForm.FamilyPaper = null;
+            };
+            reader.readAsDataURL(files[0]);
+        },
+        SelectAbsenceOfPrecedents(e) {
+            var files = e.target.files;
+
+            if (files.length <= 0) {
+                return;
+            }
+
+            if (files[0].type !== 'application/pdf') {
+                this.$message({
+                    type: 'error',
+                    message: 'يجب ان يكون الملف من نوع  PDF'
+                });
+            }
+
+            var $this = this;
+            var reader = new FileReader();
+            reader.onload = function () {
+                $this.ruleForm.AbsenceOfPrecedents = reader.result;
+                //$this.UploadImage();
+            };
+            reader.onerror = function () {
+                $this.ruleForm.AbsenceOfPrecedents = null;
+            };
+            reader.readAsDataURL(files[0]);
+        },
+        SelectPaymentReceipt(e) {
+            var files = e.target.files;
+
+            if (files.length <= 0) {
+                return;
+            }
+
+            if (files[0].type !== 'application/pdf') {
+                this.$message({
+                    type: 'error',
+                    message: 'يجب ان يكون الملف من نوع  PDF'
+                });
+            }
+
+            var $this = this;
+            var reader = new FileReader();
+            reader.onload = function () {
+                $this.ruleForm.PaymentReceipt = reader.result;
+              
+            };
+            reader.onerror = function () {
+                $this.ruleForm.PaymentReceipt = null;
+            };
+            reader.readAsDataURL(files[0]);
+        },
         submitForm(formName) {
-           
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     //AddProfiles
-                    this.ruleForm.Nid = this.$parent.Nid 
+                    this.ruleForm.Nid = this.$parent.Nid;
                     
                     this.$blockUI.Start();
-                    this.$http.UploadFiles(this.ruleForm)
-                        .then(() => {
+                    this.$http.UploadCandidateAttachments(this.ruleForm)
+                        .then((response) => {
                            // this.$parent.state = 0;
                             this.$blockUI.Stop();
-                          //  this.$parent.level = response.data.level;
+                            this.$parent.level = response.data.level;
                            
-                            //this.$notify({
-                            //    title: 'تمت الاضافة بنجاح',
-                            //    dangerouslyUseHTMLString: true,
-                            //    message: '<strong>' + response.data.message + '</strong>',
-                            //    type: 'success'
-                            //});
+                            this.$notify({
+                                title: 'تم الرفع بنجاح',
+                                dangerouslyusehtmlstring: true,
+                                message: '<strong>' + response.data.message + '</strong>',
+                                type: 'success'
+                            });
                         })
                         .catch((err) => {
                             this.$blockUI.Stop();

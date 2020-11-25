@@ -2,6 +2,7 @@
 import NationalNumberForm from './NationalNumberForm/NationalNumberForm.vue'
 import PhoneForm from './PhoneForm/PhoneForm.vue'
 import CandidateDocuments from './CandidateDocuments/CandidateDocuments.vue'
+import CompleteRegistration from './CompleteRegistration/CompleteRegistration.vue'
 import moment from 'moment';
 export default {
     name: 'Candidates',
@@ -12,7 +13,8 @@ export default {
         'candidates-data': CandidateData,
         'NationalNumberForm': NationalNumberForm,
         'PhoneForm': PhoneForm,
-        'CandidateDocuments': CandidateDocuments
+        'CandidateDocuments': CandidateDocuments,
+        'CompleteRegistration': CompleteRegistration
     },
     filters: {
         moment: function (date) {
@@ -50,6 +52,7 @@ export default {
 
 
         },
+       
         addStation(index) {
             let station = this.ruleForm.Stations[index]
 

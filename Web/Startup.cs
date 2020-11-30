@@ -73,16 +73,11 @@ namespace Dashboard
                 o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
             })
-            //.AddCookie(options =>
-            //{
-            //    options.AccessDeniedPath = new PathString("/Login/");
-            //    options.LoginPath = new PathString("/Login/");
-            //})
             .AddCookie(options =>
             {
-                options.LoginPath = "/Security/Login";
-                options.LogoutPath = "/Security/Login";
-                options.AccessDeniedPath = "/Security/Login";
+                options.LoginPath = "/";
+                options.LogoutPath = "/";
+                options.AccessDeniedPath = "/";
 
                // Remove the ReturnUrl GET parameter from the sign in page.
                options.Events = new CookieAuthenticationEvents()
@@ -150,9 +145,6 @@ namespace Dashboard
             //    opt.Filters.Add(new AuthorizeFilter(policy))
             //    );
 
-
-       
-
            // services.ConfigureApplicationCookie(options => options.LoginPath = "/LogIn");
         }
 
@@ -175,9 +167,6 @@ namespace Dashboard
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-
-
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -185,9 +174,6 @@ namespace Dashboard
             app.UseAuthorization();
             app.UseAuthentication();
             app.UseSpaStaticFiles();
-
-
-
 
             app.UseMvc(routes =>
             {
@@ -202,13 +188,8 @@ namespace Dashboard
 
             app.Use(next => context =>
             {
-            //if (context.Request.Path == "/")
-            //{
-                // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
                 var tokens = antiforgery.GetAndStoreTokens(context);
                     context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
-            //}
-
                 return next(context);
             });
 
@@ -230,18 +211,17 @@ namespace Dashboard
             //    endpoints.MapControllers();
             //});
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapRazorPages();
-                // 2. Setup fallback to index.html for all app-routes
-                endpoints.MapFallbackToFile(@"/clientapp/{*path:nonfile}", @"clientapp/dist/index.html");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapDefaultControllerRoute();
+            //    endpoints.MapRazorPages();
+            //    // 2. Setup fallback to index.html for all app-routes
+            //    endpoints.MapFallbackToFile(@"/clientapp/{*path:nonfile}", @"clientapp/dist/index.html");
+            //});
 
 
             app.Use(async (context, next) =>
             {
-                
                 if (!context.User.Identity.IsAuthenticated)
                 {
                     await context.ChallengeAsync();
@@ -264,20 +244,11 @@ namespace Dashboard
 
                        if (env.IsDevelopment())
                        {
-                           spa.UseVueCli(npmScript: "serve",port : 7001);
+                           spa.UseVueCli(npmScript: "serve",port : 8080);
                        }
 
                    });
 
-                   //adminApp.UseSpa(spa =>
-                   //{
-                   //    spa.Options.SourcePath = "ClientApp";
-                   //    spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
-                   //    {
-                   //        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp"))
-                   //    };
-                   //    spa.UseVueCli(npmScript: "serve");
-                   //});
                }
            );
 

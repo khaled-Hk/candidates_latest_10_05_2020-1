@@ -1,4 +1,19 @@
-﻿@import "css/Layout.css";
+﻿
+@import "assets/css/bootstrap.min.css";
+@import "assets/css/paper-kit.css?v=2.3.1";
+@import "assets/demo/demo.css";
+
+
+
+
+
+
+
+
+
+
+
+/*@import "css/Layout.css";
 @import "css/AppHeader.css";
 @import "css/Profiles.css";
 @import "https://fonts.googleapis.com/css?family=Montserrat:400,700,200";
@@ -160,5 +175,5 @@ td a {
 
 .AddButtonLeftSide{
     float:left;
-}
+}*/
 

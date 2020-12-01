@@ -175,20 +175,12 @@ namespace Dashboard
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-
-
-
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
             app.UseSpaStaticFiles();
-
-
-
-
+            app.UseHttpsRedirection();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -212,23 +204,6 @@ namespace Dashboard
                 return next(context);
             });
 
-            //app.Use(next => context =>
-            //{
-            //    string path = context.Request.Path.Value;
-            //    if (path.IndexOf("a", StringComparison.OrdinalIgnoreCase) != -1 || path.IndexOf("b", StringComparison.OrdinalIgnoreCase) != -1)
-            //    {
-            //        // The request token can be sent as a JavaScript-readable cookie,
-            //        // and Angular uses it by default.
-            //        var tokens = antiforgery.GetAndStoreTokens(context);
-            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
-            //    }
-            //    return next(context);
-            //});
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
 
             app.UseEndpoints(endpoints =>
             {
@@ -268,18 +243,7 @@ namespace Dashboard
                            spa.UseVueCli(npmScript: "serve", port: 8080);
                            // spa.UseVueCli(npmScript: "serve",port : 7001);
                        }
-
                    });
-
-                   //adminApp.UseSpa(spa =>
-                   //{
-                   //    spa.Options.SourcePath = "ClientApp";
-                   //    spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
-                   //    {
-                   //        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp"))
-                   //    };
-                   //    spa.UseVueCli(npmScript: "serve");
-                   //});
                }
            );
 

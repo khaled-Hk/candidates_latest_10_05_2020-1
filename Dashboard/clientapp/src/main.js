@@ -22,7 +22,6 @@ import ChairDetails from './components/Administration/Chairs/ChairDetails/ChairD
 import Offices from './components/Administration/Offices/Offices.vue';
 
 import Candidates from './components/Candidates/Candidates.vue';
-import Login from './Login/Login.vue';
 
 import DataService from './Shared/DataService';
 
@@ -61,14 +60,10 @@ const router = new VueRouter({
     base: __dirname,
     linkActiveClass: 'active',
     routes: [
-        { path: '/Login', component: Login },
-
-
         { path: '/', component: Home },
         { path: '/Profiles', component: Profiles },
         { path: '/Regions', component: Regions },
         { path : '/Administration/Branches', component: Branches },
-
 
         { path: '/Users', component: Users },
         { path: '/AddUsers', component: AddUsers },

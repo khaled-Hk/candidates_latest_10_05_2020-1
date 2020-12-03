@@ -2,8 +2,8 @@
     <div class="card cardRTL">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
                     <ul class="nav nav-pills nav-pills-primary" role="tablist">
 
                         <li class="nav-item" style="cursor: context-menu">
@@ -34,7 +34,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-1"></div>
             </div>
         </div>
         <div class="card-header">
@@ -46,45 +46,36 @@
                         <div class="row">
                             <br />
                             <div class="col-md-4">
-                                <el-form-item>
-                                    <label>شهادة الميلاد</label>
-                                    <div class="form-group">
-                                        <el-upload class="upload-demo"
-                                                   :auto-upload="false"
-                                                   :limit="1"
-                                                    :on-change="addAttachment"
-                                                   :file-list="ruleForm.fileList">
-                                            <el-button size="small" type="primary">قم بنقر هنا لتحميل</el-button>
-                                        </el-upload>
+                                <el-form-item prop="BirthCertificateDocument">
+                                    <div class="custom-file">
+                                        
+                                        <label>شهادة الميلاد</label>
+                                        <input multiple accept="application/pdf" @change="SelectBirthCertificateDocument($event)" type="file" placeholder="إختار ملف" />
+
                                     </div>
+                                </el-form-item>
+                                
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item>
+                                    <div class="custom-file">
+
+                                        <label>شهادة الرقم الوطني</label>
+                                        <input multiple accept="application/pdf" @change="SelectNidDocument($event)" type="file" placeholder="إختار ملف" />
+
+                                    </div>
+                                    
                                 </el-form-item>
                             </div>
                             <div class="col-md-4">
                                 <el-form-item>
-                                    <label>شهادة الرقم الوطني</label>
-                                    <div class="form-group">
-                                        <el-upload class="upload-demo"
-                                                   :auto-upload="false"
-                                                   :limit="1"
-                                                    :on-change="addAttachment"
-                                                   :file-list="ruleForm.fileList">
-                                            <el-button size="small" type="primary">قم بنقر هنا لتحميل</el-button>
-                                        </el-upload>
+                                    <div class="custom-file">
+
+                                        <label>شهادة وضع العائلة</label>
+                                        <input multiple accept="application/pdf" @change="SelectFamilyPaper($event)" type="file" placeholder="إختار ملف" />
+
                                     </div>
-                                </el-form-item>
-                            </div>
-                            <div class="col-md-4">
-                                <el-form-item >
-                                    <label>شهادة وضع العائلة</label>
-                                    <div class="form-group">
-                                        <el-upload class="upload-demo"
-                                                   :auto-upload="false"
-                                                   :limit="1"
-                                                    :on-change="addAttachment"
-                                                   :file-list="ruleForm.fileList">
-                                            <el-button size="small" type="primary">قم بنقر هنا لتحميل</el-button>
-                                        </el-upload>
-                                    </div>
+
                                 </el-form-item>
                             </div>
 
@@ -93,36 +84,28 @@
                         <div class="row">
                             <br />
                             <div class="col-md-4">
-                                <el-form-item >
-                                    <label>
-                                        شهادة خلوّ من سوابق
-                                    </label>
-                                    <div class="form-group">
-                                        <el-upload class="upload-demo"
-                                                   :auto-upload="false"
-                                                   :limit="1"
-                                                    :on-change="addAttachment"
-                                                   :on-preview="handlePreview"
-                                                   :file-list="ruleForm.fileList">
-                                            <el-button size="small" type="primary">قم بنقر هنا لتحميل</el-button>
-                                        </el-upload>
+                                <el-form-item>
+                                    <div class="custom-file">
+
+                                        <label> شهادة خلوّ من سوابق</label>
+                                        <input multiple accept="application/pdf" @change="SelectAbsenceOfPrecedents($event)" type="file" placeholder="إختار ملف" />
+
                                     </div>
+
                                 </el-form-item>
+                              
                             </div>
                             <div class="col-md-4">
-                                <el-form-item >
-                                    <label>إيصال الدفع</label>
-                                    <div class="form-group">
-                                        <el-upload class="upload-demo"
-                                                   :auto-upload="false"
-                                                   :on-preview="handlePreview"
-                                                   :limit="1"
-                                                   :on-change="addAttachment"
-                                                   :file-list="ruleForm.fileList">
-                                            <el-button size="small" type="primary">قم بنقر هنا لتحميل</el-button>
-                                        </el-upload>
+                                <el-form-item>
+                                    <div class="custom-file">
+
+                                        <label>إيصال الدفع</label>
+                                        <input multiple accept="application/pdf" @change="SelectPaymentReceipt($event)" type="file" placeholder="إختار ملف" />
+
                                     </div>
+
                                 </el-form-item>
+                                
                             </div>
                             <div class="col-md-4">
                                 <el-form-item >

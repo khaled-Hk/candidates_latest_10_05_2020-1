@@ -1,14 +1,14 @@
-﻿import AddCandidates from './AddCandidates/AddCandidates.vue'
-import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue'
+﻿//import AddCandidates from './AddCandidates/AddCandidates.vue'
+//import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue'
 import moment from 'moment';
 export default {
-    name: 'Candidates',
+    name: 'Entities',
     created() {
-        this.GetCandidates(this.pageNo);
+        this.GetEntities(this.pageNo);
     },
     components: {
-        'add-Candidates': AddCandidates,
-        'update-Candidates': UpdateCandidates
+        //'add-Candidates': AddCandidates,
+        //'update-Candidates': UpdateCandidates
     },
     filters: {
         moment: function (date) {
@@ -26,7 +26,7 @@ export default {
             pageSize: 10,
             pages: 0,
             CandidateId: null,
-            candidates: []
+            Entites: []
 
         };
     },
@@ -35,16 +35,16 @@ export default {
 
 
 
-        GetCandidates(pageNo) {
+        GetEntities(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
                 this.pageNo = 1;
             }
             this.loading = true;
-            this.$http.GetCandidates(this.pageNo, this.pageSize)
+            this.$http.GetEntities(this.pageNo, this.pageSize)
                 .then(response => {
                     this.loading = false;
-                    this.candidates = response.data.candidates;
+                    this.Entites = response.data.entites;
                     this.pages = response.data.count;
                 })
                 .catch((err) => {

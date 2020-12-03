@@ -32,6 +32,8 @@ import AddUsers from './components/Users/AddUsers/AddUsers.vue';
 import EditUsersProfile from './components/Users/EditUsersProfile/EditUsersProfile.vue';
 import ChangePassword from './components/Users/ChangePassword/ChangePassword.vue';
 //////////////////////////t////////////////////
+import Entites from './components/Entities/Entities.vue';
+
 //import messages from './i18n';
 
 
@@ -76,10 +78,13 @@ const router = new VueRouter({
         { path: '/Administration/Subconstituency', component: ConstituencyDetails },
         { path: '/Administration/Centers', component: Centers },
         { path: '/Administration/Stations', component: Stations },
-        { path: '/Administration/Candidates', component: Candidates },
         { path: '/Administration/Offices', component: Offices },
         { path: '/Administration/Chairs', component: Chairs },
         { path: '/Administration/Chairs/ChairDetails', component: ChairDetails },
+
+
+        { path: '/Candidates', component: Candidates },
+        { path: '/Entites', component: Entites}
     ]
 
 });

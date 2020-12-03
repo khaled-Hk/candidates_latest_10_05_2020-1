@@ -11,9 +11,6 @@ export default {
     GetProfiles(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Profile/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
-    GetAllProfiles() {
-        return axios.get(`/Api/Admin/Profile/GetAllProfiles`);
-    },
     AddProfiles(Profile) {
         return axios.post(`/Api/Admin/Profile/Add`, Profile);
     },
@@ -42,7 +39,9 @@ export default {
     GetAllRegions() {
         return axios.get(`/Api/Admin/Regions/GetRegions`);
     },
-   
+    GetEntities(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Entities/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
 
 
 
@@ -66,7 +65,7 @@ export default {
     },
 
     DeactivateUser(UserId) {
-        return axios.post( `/Api/Admin/User/${UserId}/Deactivate`);
+        return axios.post(`/Api/Admin/User/${UserId}/Deactivate`);
     },
 
     ActivateUser(UserId) {
@@ -78,7 +77,7 @@ export default {
     },
 
     UploadImage(obj) {
-        return axios.post( '/Api/Admin/User/UploadImage', obj);
+        return axios.post('/Api/Admin/User/UploadImage', obj);
     },
 
     EditUsersProfile(User) {
@@ -90,47 +89,9 @@ export default {
     },
 
 
-    // ************************ Offices Info **************************
-    GetOffice(pageNo, pageSize) {
-        return axios.get(`/Api/Admin/Offices/Get?pageno=${pageNo}&pagesize=${pageSize}`);
-    },
 
-    deleteOffice(id) {
-        return axios.post(`/Api/Admin/Offices/${id}/deleteOffice`);
-    },
 
-    AddOffice(Office) {
-        return axios.post(`/Api/Admin/Offices/Add`, Office);
-    },
-
-     
-
-    // ************************ Chairs Info **************************
-    GetChairs(pageNo, pageSize) {
-        return axios.get(`/Api/Admin/Chairs/Get?pageno=${pageNo}&pagesize=${pageSize}`);
-    },
-
-    GetChairsDetails(pageNo, pageSize) {
-        return axios.get(`/Api/Admin/Chairs/GetChairsDetails?pageno=${pageNo}&pagesize=${pageSize}`);
-    },
-
-    deleteChairs(id) {
-        return axios.post(`/Api/Admin/Chairs/${id}/delete`);
-    },
-
-    deleteChairsDetails(id) {
-        return axios.post(`/Api/Admin/Chairs/${id}/deleteChairsDetails`);
-    },
-
-    AddChairs(form) {
-        return axios.post(`/Api/Admin/Chairs/Add`, form);
-    },
-
-    AddChairsDetails(form) {
-        return axios.post(`/Api/Admin/Chairs/AddChairsDetails`, form);
-    },
-
-     // ************************ Constituencies **************************
+    // ************************ Constituencies **************************
 
     GetConstituencies() {
         return axios.get(`/Api/Admin/Constituencies/GetAllConstituencies`);
@@ -142,11 +103,7 @@ export default {
         return axios.delete(`/api/Admin/Constituencies/DeleteConstituency/${constituencyId}`);
     },
     GetConstituenciesBasedOn(RegionId) {
-        return axios.get(`/Api/Admin/Constituencies/GetConstituenciesBasedOn/${RegionId}`); 
-    },
-
-    GetConstituenciesDetalsChairs(ConstituencyId) {
-        return axios.get(`/Api/Admin/Constituencies/GetConstituenciesDetalsChairs/${ConstituencyId}`); 
+        return axios.get(`/Api/Admin/Constituencies/GetConstituenciesBasedOn/${RegionId}`);
     },
     GetConstituencyBasedOn(constituencyId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
@@ -160,9 +117,9 @@ export default {
     UpdateConstituency(constituency) {
         return axios.put(`/Api/Admin/Constituencies/UpdateConstituency/`, constituency);
     },
-     // ************************ ConstituencyDetails **************************
+    // ************************ ConstituencyDetails **************************
     AddConstituencyDetails(constituencyDetials) {
-         return axios.post(`/api/Admin/ConstituencyDetails/CreateConstituencyDetails`, constituencyDetials);
+        return axios.post(`/api/Admin/ConstituencyDetails/CreateConstituencyDetails`, constituencyDetials);
     },
     GetConstituencyDetails() {
         return axios.get(`/api/Admin/ConstituencyDetails/GetAllConstituencyDetails`);
@@ -182,7 +139,7 @@ export default {
     UpdateConstituencyDetail(constituencyDetail) {
         return axios.put(`/api/Admin/ConstituencyDetails/UpdateConstituencyDetails`, constituencyDetail);
     },
-    
+
     // ************************ Centers **************************
     AddCenter(center) {
         return axios.post(`/api/Admin/Centers/CreateCenter`, center);
@@ -229,7 +186,7 @@ export default {
         return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     RegisterCandidateLevelOne(nationalId) {
-       
+
         return axios.get(`/api/Admin/Candidates/NationalId/${nationalId}`);
     },
     RegisterCandidateContact(object) {
@@ -238,7 +195,7 @@ export default {
     },
     VerifyPhone(object) {
         return axios.post(`/api/Admin/Candidates/VerifyPhone`, object);
-        
+
     },
     UploadCandidateData(object) {
         return axios.post(`/api/Admin/Candidates/CandidateData`, object);
@@ -251,7 +208,13 @@ export default {
     UpdateCandidate(candidate) {
         return axios.put(`/api/Admin/Candidates/UpdateCandidate`, candidate);
     },
-    
+    UploadCandidateAttachments(candidate) {
+        return axios.post(`/api/Admin/Candidates/CandidateAttachments`, candidate);
+    },
+    GetCandidateInfo(NationalId) {
+        return axios.get(`/api/Admin/Candidates/CompleteRegistration/${NationalId}`);
+    },
+   
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Companies/${CompanyId}/delete`);
@@ -290,12 +253,9 @@ export default {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Cities/${CityId}/delete`);
     //},
-    
+
     GetBranches(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Branches/Get?pageno=${pageNo}&pagesize=${pageSize}`);
-    },
-    GetAllBranches() {
-        return axios.get(`/Api/Admin/Branches/GetAllBranches`);
     },
     DeleteBranche(BranchId) {
         return axios.delete(`/Api/Admin/Branches/${BranchId}/Delete`);
@@ -303,6 +263,11 @@ export default {
     AddBranch(Branch) {
         return axios.post(`/Api/Admin/Branches/Add`, Branch);
     },
+    //************************ Offices **************************
+
+    GetAllOffices() {
+        return axios.get(`/Api/Admin/Offices/GetAllOffices`);
+    }
 
     //Login(loginName, password, secretNo) {
     //    return axios.post(baseUrl + '/security/login', { loginName, password, secretNo });
@@ -412,7 +377,7 @@ export default {
     //    return axios.post(baseUrl + `/admin/Packages/Add`, Package);
     //},
     //EditPackage(Package) {
-        
+
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(baseUrl + `/admin/Packages/Edit`, Package);
     //},

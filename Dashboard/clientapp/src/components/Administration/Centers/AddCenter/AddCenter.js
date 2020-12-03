@@ -2,7 +2,8 @@
 export default {
     name: 'AddConstituency',
     created() {
-        this.GetAllConstituencyDetails()
+        this.GetAllConstituencyDetails();
+        this.GetAllOffices();
     },
     components: {
 
@@ -19,6 +20,7 @@ export default {
     data() {
         return {
             constituencyDetails: [],
+            offices: [],
             ruleForm: {
                 ArabicName: '',
                 EnglishName: '',
@@ -27,7 +29,8 @@ export default {
                 Description: null,
                 Longitude: 0.0,
                 Latitude: 0.0,
-                Stations:[]
+                Stations: []
+               
             },
             rules: {
 
@@ -77,14 +80,23 @@ export default {
                 }
             });
         },
+        GetAllOffices() {
+            this.$blockUI.Start();
+            this.$http.GetAllOffices()
+                .then(response => {
 
+
+                    this.$blockUI.Stop();
+                    this.offices = response.data.offices;
+
+                })
+
+        },
         GetAllConstituencyDetails() {
 
             this.$blockUI.Start();
             this.$http.GetConstituencyDetails()
                 .then(response => {
-
-                    //this.$parent.GetRegions();
 
                     this.$blockUI.Stop();
                     this.constituencyDetails = response.data.constituencyDetails;

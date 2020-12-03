@@ -68,7 +68,20 @@ namespace Dashboard.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-        
+
+        [HttpGet("GetAllOffices")]
+        public IActionResult GetOffices()
+        {
+            try
+            {
+                var offices = db.Offices.Select(s => new { label = s.ArabicName, value = s.OfficeId }).ToList();
+                return Ok(new {offices});
+            }catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpPost("{id}/deleteOffice")]
         public IActionResult deleteOffice(long id)
         {

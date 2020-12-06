@@ -186,6 +186,12 @@ export default {
     GetCandidate(CandidateId) {
         return axios.get(`/api/Admin/Candidates/GetCandidate/${CandidateId}`);
     },
+    GetCandidatesByEntityId(id) {
+        return axios.get(`/api/Admin/Candidates/GetCandidatesByEntityId/${id}`);
+    },
+    AddCandidateToEntity(candidate) {
+        return axios.post(`/api/Admin/Candidates/AddCandidateToEntity`, candidate);
+    },
     GetCandidates(pageNo, pageSize) {
         return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}`);
     },

@@ -2,7 +2,8 @@
 export default {
     name: 'AddCandidates',    
     created() {
-        this.GetAllProfiles();
+        this.ruleForm.EntityId = this.$parent.EnitiesSelectedId;
+        this.GetCandidatesByEntityId(this.$parent.EnitiesSelectedId);
     },
     components: {
 
@@ -20,9 +21,10 @@ export default {
         return {  
 
             state: 0,
-            Candidates: [],
+            candidates: [],
             ruleForm: {
-                NID:null
+                NID:null,
+                EntityId:null,
             },
             rules: {
                 NID:
@@ -47,12 +49,12 @@ export default {
     },
     methods: {
 
-        GetAllProfiles() {
+        GetCandidatesByEntityId(id) {
             this.loading = true;
-            this.$http.GetAllProfiles()
+            this.$http.GetCandidatesByEntityId(id)
                 .then(response => {
                     this.loading = false;
-                    this.Profiles = response.data.profile;
+                    this.candidates = response.data.candidates;
                 })
                 .catch((err) => {
                     this.loading = false;
@@ -65,11 +67,10 @@ export default {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
-                    this.ruleForm.Number = parseInt(this.ruleForm.Number);
-                    this.$http.AddEnitity(this.ruleForm)
+                    this.$http.AddCandidateToEntity(this.ruleForm)
                         .then(response => {
-                            this.$parent.state = 0;
-                            this.$parent.GetEntities();
+                            this.GetCandidatesByEntityId(this.$parent.EnitiesSelectedId);
+                            this.resetForm(formName);
                             this.$blockUI.Stop();
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',

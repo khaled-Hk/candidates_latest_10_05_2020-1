@@ -25,7 +25,6 @@
                         <el-alert title="لاتــوجد بيانات للكيـانات"
                                   type="warning" v-if="Entites==0">
                         </el-alert>
-
                         <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Entites!=0">
                             <thead>
                                 <tr>
@@ -61,7 +60,7 @@
                                     <td>{{E.email}}</td>
                                     <td>{{E.address}}</td>
                                     <td class="text-right">
-                                        <a href="#" title="اضافة مرشحين" @click="AddCandidate(Entites.entityId)">
+                                        <a href="#" title="اضافة مرشحين" @click="AddCandidate(E.entityId)">
                                             <i class="fas fa-user-check"></i>
                                         </a>
                                         <a href="#" title="اضافة ممثلين">

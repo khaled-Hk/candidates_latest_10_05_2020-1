@@ -11,6 +11,9 @@ export default {
     GetProfiles(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Profile/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
+    GetAllProfiles() {
+        return axios.get(`/Api/Admin/Profile/GetAllProfiles`);
+    },
     AddProfiles(Profile) {
         return axios.post(`/Api/Admin/Profile/Add`, Profile);
     },
@@ -39,12 +42,13 @@ export default {
     GetAllRegions() {
         return axios.get(`/Api/Admin/Regions/GetRegions`);
     },
+    // ************************ Entities **************************
     GetEntities(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Entities/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
-
-
-
+    AddEnitity(Entity) {
+        return axios.post('/Api/Admin/Entities/Add', Entity);
+    },
 
 
     // ************************ User Info **************************

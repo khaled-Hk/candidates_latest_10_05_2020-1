@@ -1,4 +1,5 @@
-﻿//import AddCandidates from './AddCandidates/AddCandidates.vue'
+﻿import AddEntities from './AddEntities/AddEntities.vue'
+import AddCandidates from './AddCandidates/AddCandidates.vue'
 //import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue'
 import moment from 'moment';
 export default {
@@ -7,7 +8,8 @@ export default {
         this.GetEntities(this.pageNo);
     },
     components: {
-        //'add-Candidates': AddCandidates,
+        'AddEntities': AddEntities,
+        'AddCandidates': AddCandidates,
         //'update-Candidates': UpdateCandidates
     },
     filters: {
@@ -26,7 +28,11 @@ export default {
             pageSize: 10,
             pages: 0,
             CandidateId: null,
-            Entites: []
+            Entites: [],
+
+            EnitiesSelectedId:null,
+
+            
 
         };
     },
@@ -55,13 +61,18 @@ export default {
                 });
 
         },
-        AddCandidatesComponent() {
+        AddEntitesComponent() {
             this.state = 1
         },
         UpdateCandidatesComponent(candidateId) {
 
             this.state = 2;
             this.CandidateId = candidateId;
+        },
+
+        AddCandidate(id) {
+            this.state = 2;
+            this.EnitiesSelectedId = id;
         }
 
 

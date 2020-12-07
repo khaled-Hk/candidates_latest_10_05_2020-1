@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Models
 {
-    public partial class CandidatesContext : DbContext
+    public partial class Candidates2Context : DbContext
     {
-        public CandidatesContext()
+        public Candidates2Context()
         {
         }
 
-        public CandidatesContext(DbContextOptions<CandidatesContext> options)
+        public Candidates2Context(DbContextOptions<Candidates2Context> options)
             : base(options)
         {
         }
@@ -43,7 +43,7 @@ namespace Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-4AI87L8\\SQLEXPRESS;Database=Candidates;Trusted_Connection=True;;MultipleActiveResultSets=true;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-4AI87L8\\SQLEXPRESS;Database=Candidates2;Trusted_Connection=True;;MultipleActiveResultSets=true;");
             }
         }
 

@@ -1,0 +1,131 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="card-title">إضافة كيان </h4>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn" @click.prevent="Back()">
+                        <span class="btn-label">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </span>
+                        رجـوع
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <!--{{ruleForm}}-->
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <el-form-item prop="ProfileType">
+                                    <label>الملف الانتخابي</label>
+                                    <div class="form-group">
+                                        <el-select @change="GetAllProfiles"
+                                                   v-model="ruleForm.ProfileId" placeholder="اختر الملف الانتخابي">
+                                            <el-option v-for="item in Profiles"
+                                                       :key="item.profileId"
+                                                       :label="item.name"
+                                                       :value="item.profileId">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="Name">
+                                    <label>اسم الكيان</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل إسم الكيان" v-model="ruleForm.Name"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <el-form-item prop="Number">
+                                    <label>رقم الكيان</label>
+                                    <div class="form-group">
+                                        <el-input type="number" placeholder="إدخل رقم الكيان" v-model="ruleForm.Number"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item>
+                                    <label>الوصف</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل الوصف" v-model="ruleForm.Descriptions"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <el-form-item prop="Owner">
+                                    <label>المسئول</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل اسم المسئول" v-model="ruleForm.Owner"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="Phone">
+                                    <label>رقم الهاتف</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل رقم الهاتف" v-model="ruleForm.Phone"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="Email">
+                                    <label>البريد الإلكتروني</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل البريد الإلكتروني" v-model="ruleForm.Email"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <el-form-item prop="Address">
+                                    <label>العنوان</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل العنوان" v-model="ruleForm.Address"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <div class="">
+
+                        </div>
+
+                        <el-form-item class="AddButtonLeftSide">
+                            <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
+                            <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                        </el-form-item>
+                    </el-form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+                <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+        </div><!-- end content-->
+    </div><!--  end card  -->
+</div> <!-- end col-md-12 -->

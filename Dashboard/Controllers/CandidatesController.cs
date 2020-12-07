@@ -26,6 +26,42 @@ namespace Dashboard.Controllers
             help = new Helper();
         }
 
+        [HttpGet("GetCandidatesByEntityId/{id}")]
+        public IActionResult GetCandidatesByEntityId([FromRoute]long? id)
+        {
+            try
+            {
+                IQueryable<Candidates> CandidatesQuery;
+                CandidatesQuery = from p in db.Candidates where p.EntityId==id && p.Status!=9
+                                  select p;
+
+                var CandidatesCount = (from p in CandidatesQuery
+                                       select p).Count();
+
+                var CandidatesList = (from p in CandidatesQuery
+                                      join sc in db.ConstituencyDetails on p.SubConstituencyId equals sc.ConstituencyDetailId
+                                      orderby p.CreatedOn descending
+                                      select new
+                                      {
+                                          p.CandidateId,
+                                          p.Levels,
+                                          Name = string.Format("{0} {1} {2} {3}", p.FirstName, p.FatherName, p.GrandFatherName, p.SurName),
+                                          subconstituencyName = sc.ArabicName,
+                                          p.Nid,
+                                          p.CreatedOn
+
+                                      }).ToList();
+
+                return Ok(new { Candidates = CandidatesList, count = CandidatesCount });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+
+        }
+
         [HttpGet("GetCandidate/{CandidateId}")]
         public IActionResult GetCandidate([FromRoute]long? CandidateId)
         {
@@ -699,6 +735,46 @@ namespace Dashboard.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e.InnerException.Message);
+            }
+        }
+
+        [HttpPost("AddCandidateToEntity")]
+        public IActionResult AddCandidateToEntity([FromBody] Candidates candidates)
+        {
+            try
+            {
+                if (candidates == null)
+                    return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
+
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+
+                if (string.IsNullOrEmpty(candidates.Nid))
+                    return StatusCode(404, "الرجاء إدخال الرقم الوطني");
+
+                if (candidates.Nid.Length < 12 || candidates.Nid.Length > 13)
+                    return StatusCode(404, "الرجاء إدخال الرقم الوطني بطريقة الصحيحه");
+
+                var Candidate = db.Candidates.Where(x => x.Nid == candidates.Nid && x.Status != 9).SingleOrDefault();
+
+                if (Candidate==null)
+                    return StatusCode(404, "لم يتم العتور علي المرشح");
+
+                //IsExistInEntity
+                if (Candidate.EntityId!=null)
+                    return StatusCode(404, "المرشح موجود في كيان اخر الرجاء التحقق من البيانات");
+
+                Candidate.EntityId = candidates.EntityId;
+
+                db.SaveChanges();
+
+                return Ok(" تم اضافة المرشح للكيان  بنـجاح");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }
 

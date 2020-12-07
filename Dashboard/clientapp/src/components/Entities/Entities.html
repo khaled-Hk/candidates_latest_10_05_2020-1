@@ -1,10 +1,13 @@
 ﻿<div class="Regions">
-    <div class="content" style="background-color:lightgray">
+    
+    <div class="content" style="background-color:lightgray" >
         <div class="panel-header">
         </div>
         <div class="row DataSet" style="height:100%">
+            <AddEntities class="zoomIn" v-if="state==1"></AddEntities>
+            <AddCandidates class="zoomIn" v-if="state==2"></AddCandidates>
             <!--<add-Candidates v-if="state==1" class="zoomIn"></add-Candidates>
-            <update-Candidates v-if="state==2" class="zoomIn"></update-Candidates>-->
+    <update-Candidates v-if="state==2" class="zoomIn"></update-Candidates>-->
             <div class="col-md-12 zoomIn" v-if="state==0">
                 <div class="card cardRTL">
                     <div class="card-header">
@@ -15,13 +18,13 @@
                             <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddEntitesComponent()">إضافة كيـان</button></div>
                         </div>
                     </div>
+
                     <div class="card-body" v-loading="loading">
                         <div class="toolbar">
                         </div>
                         <el-alert title="لاتــوجد بيانات للكيـانات"
                                   type="warning" v-if="Entites==0">
                         </el-alert>
-
                         <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Entites!=0">
                             <thead>
                                 <tr>
@@ -57,13 +60,13 @@
                                     <td>{{E.email}}</td>
                                     <td>{{E.address}}</td>
                                     <td class="text-right">
-                                        <a href="#"   title="اضافة مرشحين">
+                                        <a href="#" title="اضافة مرشحين" @click="AddCandidate(E.entityId)">
                                             <i class="fas fa-user-check"></i>
                                         </a>
                                         <a href="#" title="اضافة ممثلين">
                                             <i class="fas fa-user-tie"></i>
                                         </a>
-                                        <a href="#"  title="اضافة مستخدمين">
+                                        <a href="#" title="اضافة مستخدمين">
                                             <i class="fas fa-users"></i>
                                         </a>
                                     </td>
@@ -86,6 +89,8 @@
                         </div>
 
                     </div>
+
+
                 </div>
             </div>
         </div>

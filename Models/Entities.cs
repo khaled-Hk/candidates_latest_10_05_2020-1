@@ -5,6 +5,12 @@ namespace Models
 {
     public partial class Entities
     {
+        public Entities()
+        {
+            EntityRepresentatives = new HashSet<EntityRepresentatives>();
+            EntityUsers = new HashSet<EntityUsers>();
+        }
+
         public long EntityId { get; set; }
         public string Name { get; set; }
         public long? Number { get; set; }
@@ -18,5 +24,8 @@ namespace Models
         public short? Status { get; set; }
         public DateTime? CreatedOn { get; set; }
         public long? CreatedBy { get; set; }
+
+        public virtual ICollection<EntityRepresentatives> EntityRepresentatives { get; set; }
+        public virtual ICollection<EntityUsers> EntityUsers { get; set; }
     }
 }

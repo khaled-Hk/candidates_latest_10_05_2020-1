@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Models
 {
-    public partial class CandidateUsers
+    public partial class EntityUsers
     {
-        public long CandidateUserId { get; set; }
+        public long EntityUserId { get; set; }
         public string Name { get; set; }
         public string LoginName { get; set; }
         public string Email { get; set; }
@@ -23,6 +23,8 @@ namespace Models
         public DateTime? ModifiedOn { get; set; }
         public long? ModifiedBy { get; set; }
         public short? Status { get; set; }
-        public long? CandidateId { get; set; }
+        public long? EntityId { get; set; }
+
+        public virtual Entities Entity { get; set; }
     }
 }

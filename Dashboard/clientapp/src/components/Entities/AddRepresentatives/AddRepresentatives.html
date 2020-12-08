@@ -1,0 +1,151 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="card-title">إضافة ممثلين </h4>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn" @click.prevent="Back()">
+                        <span class="btn-label">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </span>
+                        رجـوع
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <!--{{ruleForm}}-->
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <el-form-item prop="FirstName">
+                                    <label>الاسم الاول</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="الاسم الاول" v-model="ruleForm.FirstName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-3">
+                                <el-form-item prop="FatherName">
+                                    <label>اسم الاب</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="اسم الاب" v-model="ruleForm.FatherName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-3">
+                                <el-form-item prop="GrandFatherName">
+                                    <label>اسم الجد</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="اسم الجد" v-model="ruleForm.GrandFatherName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-3">
+                                <el-form-item prop="SurName">
+                                    <label>اللقب</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="اللقب" v-model="ruleForm.SurName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <el-form-item prop="NID">
+                                    <label>الرقم الوطني</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="ادخل الرقم الوطني" v-model="ruleForm.NID"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="MotherName">
+                                    <label>اسم الام</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل اسم الام" v-model="ruleForm.MotherName"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <el-form-item prop="Phone">
+                                    <label>رقم الهاتف</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل رقم الهاتف" v-model="ruleForm.Phone"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item>
+                                    <label>رقم هاتف المنزل</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل رقم هاتف المنزل" v-model="ruleForm.HomePhone"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-4">
+                                <el-form-item prop="Email">
+                                    <label>البريد الإلكتروني</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل البريد الإلكتروني" v-model="ruleForm.Email"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <el-form-item prop="Gender">
+                                    <label>الجنس</label>
+                                    <el-select style="width: 100%;" v-model="ruleForm.Gender" filterable placeholder="الجنس">
+                                        <el-option v-for="item in [{id:1,Gender:'ذكـر'},{id:2,Gender:'انـثي'}]"
+                                                   :key="item.id"
+                                                   :label="item.Gender"
+                                                   :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="BirthDate">
+                                    <label>تاريخ الميلاد</label>
+                                    <el-date-picker style="width:100%" v-model="ruleForm.BirthDate"
+                                                    type="date"
+                                                    placeholder="تاريخ الميلاد">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </div>
+
+                        </div>
+
+                        <div class="">
+
+                        </div>
+
+                        <el-form-item class="AddButtonLeftSide">
+                            <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
+                            <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                        </el-form-item>
+                    </el-form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+                <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+        </div><!-- end content-->
+    </div><!--  end card  -->
+</div> <!-- end col-md-12 -->

@@ -49,8 +49,10 @@ export default {
     AddEnitity(Entity) {
         return axios.post('/Api/Admin/Entities/Add', Entity);
     },
-
-
+    // ************************ Representatives **************************
+    AddRepresentatives(Representatives) {
+        return axios.post('/Api/Admin/Representatives/Add', Representatives);
+    },
     // ************************ User Info **************************
     CheckLoginStatus() {
         return axios.post('/security/checkloginstatus');

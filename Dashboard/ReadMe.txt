@@ -12,6 +12,8 @@ Scaffold-DbContext "Server=DESKTOP-4AI87L8\SQLEXPRESS;Database=Candidates;Truste
 
 Scaffold-DbContext "Server=DESKTOP-4AI87L8\SQLEXPRESS;Database=Candidates;Trusted_Connection=True;;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "" -F
 
+Scaffold-DbContext "server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+
 
 Add External Models
 

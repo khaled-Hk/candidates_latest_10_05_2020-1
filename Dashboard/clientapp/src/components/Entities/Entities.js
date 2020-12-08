@@ -1,5 +1,6 @@
 ﻿import AddEntities from './AddEntities/AddEntities.vue'
 import AddCandidates from './AddCandidates/AddCandidates.vue'
+import AddRepresentatives from './AddRepresentatives/AddRepresentatives.vue'
 //import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue'
 import moment from 'moment';
 export default {
@@ -10,6 +11,7 @@ export default {
     components: {
         'AddEntities': AddEntities,
         'AddCandidates': AddCandidates,
+        'AddRepresentatives': AddRepresentatives,
         //'update-Candidates': UpdateCandidates
     },
     filters: {
@@ -73,7 +75,12 @@ export default {
         AddCandidate(id) {
             this.state = 2;
             this.EnitiesSelectedId = id;
-        }
+        },
+
+        AddRepresentatives(id) {
+            this.state = 3;
+            this.EnitiesSelectedId = id;
+        },
 
 
 

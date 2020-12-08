@@ -6,6 +6,7 @@
         <div class="row DataSet" style="height:100%">
             <AddEntities class="zoomIn" v-if="state==1"></AddEntities>
             <AddCandidates class="zoomIn" v-if="state==2"></AddCandidates>
+            <AddRepresentatives class="zoomIn" v-if="state==3"></AddRepresentatives>
             <!--<add-Candidates v-if="state==1" class="zoomIn"></add-Candidates>
     <update-Candidates v-if="state==2" class="zoomIn"></update-Candidates>-->
             <div class="col-md-12 zoomIn" v-if="state==0">
@@ -63,7 +64,7 @@
                                         <a href="#" title="اضافة مرشحين" @click="AddCandidate(E.entityId)">
                                             <i class="fas fa-user-check"></i>
                                         </a>
-                                        <a href="#" title="اضافة ممثلين">
+                                        <a href="#" title="اضافة ممثلين" @click="AddRepresentatives(E.entityId)">
                                             <i class="fas fa-user-tie"></i>
                                         </a>
                                         <a href="#" title="اضافة مستخدمين">

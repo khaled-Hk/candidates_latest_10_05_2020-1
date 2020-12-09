@@ -301,6 +301,14 @@ export default {
 
     GetAllOffices() {
         return axios.get(`/Api/Admin/Offices/GetAllOffices`);
+    },
+    //************************ Represenatives Of Candidates **************************
+
+    AddCandidateRepresentatives(candidateRepresentatives) {
+        return axios.post(`/Api/Admin/Representatives/Candidate/Add`, candidateRepresentatives);
+    },
+    GetCandidateRepresentatives(candidateIs) {
+        return axios.get(`/Api/Admin/Representatives/GetRepresentativesBy/${candidateIs}`);
     }
 
     //Login(loginName, password, secretNo) {

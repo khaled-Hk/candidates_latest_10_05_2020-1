@@ -1,5 +1,7 @@
-﻿import AddCandidates from './AddCandidates/AddCandidates.vue'
-import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue'
+﻿import AddCandidates from './AddCandidates/AddCandidates.vue';
+import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue';
+import AddRepresentatives from './AddRepresentatives/AddRepresentatives.vue';
+import Representatives from './Representatives/Representatives.vue';
 import moment from 'moment';
 export default {
     name: 'Candidates',
@@ -8,7 +10,9 @@ export default {
     },
     components: {
         'add-Candidates': AddCandidates,
-        'update-Candidates': UpdateCandidates
+        'update-Candidates': UpdateCandidates,
+        'AddRepresentatives': AddRepresentatives,
+        'Representatives': Representatives
     },
     filters: {
         moment: function (date) {

@@ -73,6 +73,7 @@
   <ItemGroup>
     <Folder Include="clientapp\src\components\Administration\Offices\" />
     <Folder Include="clientapp\src\components\Candidates\UpdateCandidates\" />
+    <Folder Include="clientapp\src\components\Candidates\Users\" />
     <Folder Include="clientapp\src\components\Rules\Constituencies\" />
     <Folder Include="clientapp\src\components\Rules\ConstituencyDetails\" />
   </ItemGroup>

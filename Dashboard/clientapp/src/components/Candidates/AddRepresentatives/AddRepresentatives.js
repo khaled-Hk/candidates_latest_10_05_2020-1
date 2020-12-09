@@ -1,9 +1,8 @@
 ﻿import moment from 'moment';
 export default {
-    name: 'AddConstituency',
+    name: 'AddRepresentatives',
     created() {
-        this.GetAllConstituencyDetails();
-        this.GetAllOffices();
+     
     },
     components: {
 
@@ -20,18 +19,24 @@ export default {
     data() {
         return {
             constituencyDetails: [],
-            offices: [],
             ruleForm: {
-                ArabicName: '',
-                EnglishName: '',
-                ConstituencDetailId: null,
-                OfficeId: null,
-                Description: null,
-                Longitude: 0.0,
-                Latitude: 0.0,
-                Stations: []
+                Nid: null,
+                FirstName: null,
+                FatherName: '',
+                GrandFatherName: null,
+                SurName: null,
+                MotherName: null,
+                Gender: null,
+                Phone:null,
+                HomePhone: null,
+                BirthDate: null,
+                Email: null,
                
+
             },
+            constituencies: [],
+            regions: [],
+            subConstituencies: [],
             rules: {
 
                 ConstituencDetailId: [
@@ -56,11 +61,12 @@ export default {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
-                    this.$http.AddCenter(this.ruleForm)
+                    this.ruleForm.CandidateId = this.$parent.CandidateId;
+                    this.$http.AddCandidateRepresentatives(this.ruleForm)
                         .then(response => {
-                           // this.$parent.GetConstituencies();
-                            this.$parent.GetCenters(this.$parent.pageNo);
-                            this.$parent.state = 0;
+                            // this.$parent.GetConstituencies();
+
+                            this.$parent.level = response.data.level
                             this.$blockUI.Stop();
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
@@ -68,6 +74,7 @@ export default {
                                 message: '<strong>' + response.data.message + '</strong>',
                                 type: 'success'
                             });
+                            this.$parent.state = 0;
                         })
                         .catch((err) => {
                             this.$blockUI.Stop();
@@ -81,51 +88,10 @@ export default {
                 }
             });
         },
-        GetAllOffices() {
-            this.$blockUI.Start();
-            this.$http.GetAllOffices()
-                .then(response => {
-
-
-                    this.$blockUI.Stop();
-                    this.offices = response.data.offices;
-
-                })
-
-        },
-        GetAllConstituencyDetails() {
-
-            this.$blockUI.Start();
-            this.$http.GetConstituencyDetails()
-                .then(response => {
-
-                    this.$blockUI.Stop();
-                    this.constituencyDetails = response.data.constituencyDetails;
-
-                })
-
-
-        },
-        addStation(index) {
-            let station = this.ruleForm.Stations[index]
-           
-            if (station) {
-                station.lastRow = false
-            }
-               
-            this.ruleForm.Stations.push({ ArabicName: null, EnglishName: null, Description: null, lastRow:true});
-        },
-        removeStations()
-        {
-            this.ruleForm.Stations = []
-        },
-        deleteStation(index) {
-            this.ruleForm.Stations.splice(index,1)
-        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
-        Back() {
+        back() {
             this.$parent.state = 0;
         }
 

@@ -13,10 +13,9 @@ using Services;
 
 namespace Dashboard.Controllers
 {
-    [ValidateAntiForgeryToken]
-    [Produces("application/json")]
-    [Route("Api/Admin/Chairs")]
-    public class ChairsController : Controller 
+    [Route("api/Admin/[controller]")]
+    [ApiController]
+    public class ChairsController : ControllerBase
     {
 
         private readonly CandidatesContext db;

@@ -36,19 +36,23 @@ export default {
             rules: {
                 FirstName: [
                     { required: true, message: 'الرجاء إدخال الاسم', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للاسم', trigger: 'blur' }
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للاسم', trigger: 'blur' },
+                    { required: true, pattern: /[\u0600-\u06FF]/, message: 'الرجاء إدخال حروف العربية فقط', trigger: 'blur' }
                 ],
                 FatherName: [
                     { required: true, message: 'الرجاء إدخال الاسم', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للاسم', trigger: 'blur' }
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للاسم', trigger: 'blur' },
+                    { required: true, pattern: /[\u0600-\u06FF]/, message: 'الرجاء إدخال حروف العربية فقط', trigger: 'blur' }
                 ],
                 GrandFatherName: [
                     { required: true, message: 'الرجاء إدخال الاسم', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للاسم', trigger: 'blur' }
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للاسم', trigger: 'blur' },
+                    { required: true, pattern: /[\u0600-\u06FF]/, message: 'الرجاء إدخال حروف العربية فقط', trigger: 'blur' }
                 ],
                 SurName: [
                     { required: true, message: 'الرجاء إدخال للقب', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للقب', trigger: 'blur' }
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للقب', trigger: 'blur' },
+                    { required: true, pattern: /[\u0600-\u06FF]/, message: 'الرجاء إدخال حروف العربية فقط', trigger: 'blur' }
                 ],
                 NID:
                 [
@@ -67,7 +71,8 @@ export default {
                 ],
                 MotherName: [
                     { required: true, message: 'الرجاء إدخال للقب', trigger: 'blur' },
-                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للقب', trigger: 'blur' }
+                    { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للقب', trigger: 'blur' },
+                    { required: true, pattern: /[\u0600-\u06FF]/, message: 'الرجاء إدخال حروف العربية فقط', trigger: 'blur' }
                 ],
                 Gender: [
                     { required: true, message: 'الرجاء إدخال للقب', trigger: 'blur' },

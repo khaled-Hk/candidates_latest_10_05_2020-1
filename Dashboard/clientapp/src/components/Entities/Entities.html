@@ -7,6 +7,9 @@
             <AddEntities class="zoomIn" v-if="state==1"></AddEntities>
             <AddCandidates class="zoomIn" v-if="state==2"></AddCandidates>
             <AddRepresentatives class="zoomIn" v-if="state==3"></AddRepresentatives>
+            <Representatives class="zoomIn" v-if="state==4"></Representatives>
+            <AddUsers class="zoomIn" v-if="state==5"></AddUsers>
+            <Users class="zoomIn" v-if="state==6"></Users>
             <!--<add-Candidates v-if="state==1" class="zoomIn"></add-Candidates>
     <update-Candidates v-if="state==2" class="zoomIn"></update-Candidates>-->
             <div class="col-md-12 zoomIn" v-if="state==0">
@@ -67,8 +70,14 @@
                                         <a href="#" title="اضافة ممثلين" @click="AddRepresentatives(E.entityId)">
                                             <i class="fas fa-user-tie"></i>
                                         </a>
-                                        <a href="#" title="اضافة مستخدمين">
+                                        <a href="#" title="اضافة مستخدمين"  @click="AddUsers(E.entityId)">
                                             <i class="fas fa-users"></i>
+                                        </a>
+                                        <a href="#" title="عرض الممثلين" @click="Representatives(E.entityId)">
+                                            <i class="fas fa-chalkboard-teacher"></i>
+                                        </a>
+                                        <a href="#" title="عرض المستخدمين" @click="Users(E.entityId)">
+                                            <i class="fas fa-id-card"></i>
                                         </a>
                                     </td>
                                 </tr>

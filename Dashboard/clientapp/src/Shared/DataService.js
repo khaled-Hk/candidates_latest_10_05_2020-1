@@ -44,12 +44,34 @@ export default {
     },
     // ************************ Entities **************************
     GetEntities(pageNo, pageSize) {
+
         return axios.get(`/Api/Admin/Entities/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
     AddEnitity(Entity) {
         return axios.post('/Api/Admin/Entities/Add', Entity);
     },
+    AddEntityUser(User) {
+        return axios.post('/Api/Admin/Entities/AddEntityUser', User);
+    },
+    getEntityUser(id) {
+        return axios.get(`/api/Admin/Entities/getEntityUser/${id}`);
+    },
+    DeactivateEntityUser(UserId) {
+        return axios.post(`/Api/Admin/Entities/${UserId}/Deactivate`);
+    },
+
+    ActivateEntityUser(UserId) {
+        return axios.post(`/Api/Admin/Entities/${UserId}/Activate`);
+    },
+
+    delteEntityUser(UserId) {
+        return axios.post(`/Api/Admin/Entities/${UserId}/delteUser`);
+    },
     // ************************ Representatives **************************
+    GetRepresentativesByEntityId(id) {
+        return axios.get(`/api/Admin/Representatives/GetRepresentativesByEntityId/${id}`);
+    },
+
     AddRepresentatives(Representatives) {
         return axios.post('/Api/Admin/Representatives/Add', Representatives);
     },

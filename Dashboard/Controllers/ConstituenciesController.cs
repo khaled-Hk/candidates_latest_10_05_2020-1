@@ -10,9 +10,9 @@ using Services;
 namespace Vue.Controllers
 {
     [AllowAnonymous]
-    [Produces("application/json")]
-    [Route("Api/Admin/Constituencies")]
-    public class ConstituenciesController : Controller
+    [Route("api/Admin/[controller]")]
+    [ApiController]
+    public class ConstituenciesController : ControllerBase
     {
 
         private readonly CandidatesContext db;

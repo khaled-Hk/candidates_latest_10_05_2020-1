@@ -13,10 +13,9 @@ using Services;
 
 namespace Dashboard.Controllers
 {
-    [ValidateAntiForgeryToken]
-    [Produces("application/json")]
-    [Route("Api/Admin/Offices")]
-    public class OfficesController : Controller 
+    [Route("api/Admin/[controller]")]
+    [ApiController]
+    public class OfficesController : ControllerBase
     {
 
         private readonly CandidatesContext db;

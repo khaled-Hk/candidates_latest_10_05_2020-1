@@ -1,0 +1,133 @@
+﻿
+
+
+    <div class="col-md-12" dir="rtl" style="text-align:right">
+        <div class="card cardRTL">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4 class="card-title"> إضافة بيانات مستخدم </h4>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn" @click.prevent="Back()">
+                            <span class="btn-label">
+                                <i class="now-ui-icons arrows-1_minimal-left"></i>
+                            </span>
+                            رجـوع
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="card-body" style="direction:rtl;text-align:right">
+                <br />
+                <br />
+                <!--{{form}}-->
+                <form class="demo-ruleForm">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                <label for="examplePassword" class="bmd-label-floating"> الاسم التلاثي <small style="color:red">* </small></label>
+                                <input type="text" class="form-control" aria-required="true" v-model="form.Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                <label for="examplePassword" class="bmd-label-floating"> اسم الدخول <small style="color:red">* </small></label>
+                                <input type="text" class="form-control" aria-required="true" v-model="form.LoginName">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <div class="col-md-4" style="margin-top:31px">
+                            <div class="form-group bmd-form-group">
+                                <label for="examplePassword" class="bmd-label-floating">رقم  الهاتف <small style="color:red">* </small></label>
+                                <input type="email" class="form-control" aria-required="true" v-model="form.Phone">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="form-group" style="margin-top:31px">
+                                <label>الجنس <small style="color:red">* </small></label>
+                                <el-select style="width: 100%;" v-model="form.Gender" filterable placeholder="الجنس">
+                                    <el-option v-for="item in [{id:1,Gender:'ذكـر'},{id:2,Gender:'انـثي'}]"
+                                               :key="item.id"
+                                               :label="item.Gender"
+                                               :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" style="margin-top:31px">
+                                <label>تاريخ الميلاد <small style="color:red">* </small></label>
+                                <div class="block">
+                                    <el-date-picker style="width:100%" v-model="form.BirthDate"
+                                                    type="date"
+                                                    placeholder="تاريخ الميلاد">
+                                    </el-date-picker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                <label for="examplePassword" class="bmd-label-floating">البريد الإلكتروني <small style="color:red">* </small></label>
+                                <input type="email" class="form-control" aria-required="true" v-model="form.Email">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                <label for="examplePassword" class="bmd-label-floating">الرقم السري <small style="color:red">* </small></label>
+                                <input type="password" class="form-control" aria-required="true" v-model="form.Password">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                <label for="examplePassword" class="bmd-label-floating">تأكيد الرقم السري <small style="color:red">* </small></label>
+                                <input type="password" class="form-control" aria-required="true" v-model="ConfimPassword">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="form-group bmd-form-group pull-left">
+                                <br />
+                                <button type="submit"
+                                        style="background-color: #f96332;"
+                                        @click.prevent="Save()" class="btn btn-rose btn-fill pull-right">
+                                    إضافة المستخدم
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+

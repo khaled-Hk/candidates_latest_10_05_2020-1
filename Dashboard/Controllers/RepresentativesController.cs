@@ -8,10 +8,9 @@ using Services;
 
 namespace Vue.Controllers
 {
-    [ValidateAntiForgeryToken]
-    [Produces("application/json")]
-    [Route("Api/Admin/Representatives")]
-    public class RepresentativesController : Controller
+    [Route("api/Admin/[controller]")]
+    [ApiController]
+    public class RepresentativesController : ControllerBase
     {
         private readonly CandidatesContext db;
         private Helper help;
@@ -21,43 +20,35 @@ namespace Vue.Controllers
             help = new Helper();
         }
 
-        //[HttpGet("Get")]
-        //public IActionResult Get(int pageNo, int pageSize)
-        //{
-        //    try
-        //    {
-        //        var EntitesCount = db.Entities.Where(x => x.Status != 9).Count();
-        //        var EntitesList = db.Entities.Where(x => x.Status != 9)
-        //            .OrderByDescending(x => x.CreatedOn)
-        //            .Select(x => new
-        //            {
-        //               x.Address,
-        //               x.CreatedBy,
-        //               x.CreatedOn,
-        //               x.Descriptions,
-        //               x.Email,
-        //               x.EntityId,
-        //               //x.EntityRepresentatives,
-        //               //x.EntityUsers,
-        //               x.Name,
-        //               x.Number,
-        //               x.Owner,
-        //               x.Phone,
-        //               x.Status
-        //            }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+        [HttpGet("GetRepresentativesByEntityId/{id}")]
+        public IActionResult GetRepresentativesByEntityId([FromRoute]long? id)
+        {
+            try
+            {
+                var CandidateRepresentatives=db.EntityRepresentatives.Where(x=> x.EntityId==id).Select(x=>new {
+                    Name = string.Format("{0} {1} {2} {3}", x.FirstName, x.FatherName, x.GrandFatherName, x.SurName),
+                    x.Nid,
+                    x.MotherName,
+                    x.Phone,
+                    x.Gender,
+                    x.Email,
+                    x.CreatedOn,
+                    x.BirthDate,
+                }).ToList();
 
 
-        //        return Ok(new { Entites = EntitesList, count = EntitesCount });
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return StatusCode(500, e.Message);
-        //    }
-        //}
+                return Ok(new { representatives = CandidateRepresentatives, count = CandidateRepresentatives.Count() });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
 
 
         [HttpPost("Add")]
-        public IActionResult AddRepresentatives([FromBody] CandidateRepresentatives Representatives)
+        public IActionResult AddRepresentatives([FromBody] EntityRepresentatives Representatives)
         {
             try
             {
@@ -96,25 +87,36 @@ namespace Vue.Controllers
                     return StatusCode(404, "يجب ان يكون الهاتف يبدأ ب (91,92,94) ليبيانا او المدار !!");
                 }
 
+               
 
 
 
-                var NIDExist = db.CandidateRepresentatives.Where(x => x.Nid == Representatives.Nid ).SingleOrDefault();
+
+                var NIDExist = db.EntityRepresentatives.Where(x => x.Nid == Representatives.Nid ).SingleOrDefault();
                 if(NIDExist!=null)
                     return BadRequest("الرقم الوطني موجود مسبقا الرجاء إعادة الادخال");
 
-                var PhoneExist = db.CandidateRepresentatives.Where(x => x.Phone == Representatives.Phone ).SingleOrDefault();
+                var PhoneExist = db.EntityRepresentatives.Where(x => x.Phone == Representatives.Phone ).SingleOrDefault();
                 if (PhoneExist != null)
                     return BadRequest("رقم الهاتف موجود مسبقا الرجاء إعادة الادخال");
 
-                var EmailExist = db.Entities.Where(x => x.Email == Representatives.Email && x.Status != 9).SingleOrDefault();
+                var EmailExist = db.EntityRepresentatives.Where(x => x.Email == Representatives.Email ).SingleOrDefault();
                 if (EmailExist != null)
                     return BadRequest("البريد الإلكتروني موجود مسبقا الرجاء إعادة الادخال");
+
+                if (string.IsNullOrWhiteSpace(Representatives.BirthDate.ToString()))
+                {
+                    return BadRequest("الرجاء دخال تاريخ الميلاد ");
+                }
+                if ((DateTime.Now.Year - Representatives.BirthDate.GetValueOrDefault().Year) < 18)
+                {
+                    return BadRequest("يجب ان يكون عمر الممثل اكبر من 18");
+                }
 
 
                 Representatives.CreatedBy = userId;
                 Representatives.CreatedOn = DateTime.Now;
-                db.CandidateRepresentatives.Add(Representatives);
+                db.EntityRepresentatives.Add(Representatives);
                 db.SaveChanges();
 
                 return Ok(" تم اضافة الممثل  بنـجاح");

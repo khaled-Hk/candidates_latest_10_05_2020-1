@@ -248,6 +248,9 @@ export default {
     GetCandidateInfo(NationalId) {
         return axios.get(`/api/Admin/Candidates/CompleteRegistration/${NationalId}`);
     },
+    AddCandidateUser(User) {
+        return axios.post('/Api/Admin/Candidates/AddCandidateUser', User);
+    },
    
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');

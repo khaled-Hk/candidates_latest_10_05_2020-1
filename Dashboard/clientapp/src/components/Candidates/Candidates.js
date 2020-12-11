@@ -2,6 +2,8 @@
 import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue';
 import AddRepresentatives from './AddRepresentatives/AddRepresentatives.vue';
 import Representatives from './Representatives/Representatives.vue';
+import AddUsers from './AddUsers/AddUsers.vue';
+
 import moment from 'moment';
 export default {
     name: 'Candidates',
@@ -12,7 +14,8 @@ export default {
         'add-Candidates': AddCandidates,
         'update-Candidates': UpdateCandidates,
         'AddRepresentatives': AddRepresentatives,
-        'Representatives': Representatives
+        'Representatives': Representatives,
+        'AddUsers':AddUsers
     },
     filters: {
         moment: function (date) {
@@ -66,6 +69,10 @@ export default {
 
             this.state = 2;
             this.CandidateId = candidateId;
+        },
+        Navigate(obj) {
+            this.state = obj.state;
+            this.CandidateId = obj.candidateId;
         }
 
 

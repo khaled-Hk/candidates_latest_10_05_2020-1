@@ -6,7 +6,9 @@
             <add-Candidates v-if="state==1" class="zoomIn"></add-Candidates>
             <update-Candidates v-if="state==2" class="zoomIn"></update-Candidates>
             <AddRepresentatives v-if="state==3" class="zoomIn"></AddRepresentatives>
+            <AddUsers v-if="state==4" class="zoomIn"></AddUsers>
             <Representatives v-if="state==5" class="zoomIn"></Representatives>
+
             <div class="col-md-12 zoomIn" v-if="state==0">
                 <div class="card cardRTL">
                     <div class="card-header">
@@ -54,13 +56,13 @@
                                         <a href="#" title="تعديل بيانات المرشح" @click.prevent="UpdateCandidatesComponent(R.candidateId)">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
-                                        <a href="#" title="اضافة مندوبين" @click="() =>{ state = 3; CandidateId = R.candidateId}">
+                                        <a href="/" title="اضافة مندوبين" @click="Navigate({ state : 3, candidateId : R.candidateId})">
                                             <i class="fas fa-user-tie"></i>
                                         </a>
-                                        <a href="#" title="اضافة مستخدمين">
+                                        <a href="#" title="اضافة مستخدمين" @click="Navigate({ state : 4, candidateId : R.candidateId})">
                                             <i class="fas fa-users"></i>
                                         </a>
-                                        <a href="#" title="عرض المندوبين " @click="() =>{ state = 5; CandidateId = R.candidateId}">
+                                        <a href="#" title="عرض المندوبين " @click="Navigate({ state : 5, candidateId : R.candidateId})">
                                             <i class="fas fa-user-friends"></i>
                                         </a>
                                     </td>

@@ -2,6 +2,7 @@
 import NationalNumberForm from './NationalNumberForm/NationalNumberForm.vue'
 import PhoneForm from './PhoneForm/PhoneForm.vue'
 import CandidateDocuments from './CandidateDocuments/CandidateDocuments.vue'
+
 import moment from 'moment';
 export default {
     name: 'Candidates',
@@ -12,7 +13,7 @@ export default {
         'add-Candidates': AddCandidates,
         'NationalNumberForm': NationalNumberForm,
         'PhoneForm': PhoneForm,
-        'CandidateDocuments': CandidateDocuments
+        'CandidateDocuments': CandidateDocuments,
     },
     filters: {
         moment: function (date) {

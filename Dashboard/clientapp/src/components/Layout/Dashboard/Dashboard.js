@@ -13,11 +13,24 @@ export default {
         return {            
             loginDetails: null,
             active: 1,
-            menuFlag: [10],
+            menuFlag: [20],
         };
     },
   
     methods: {
+        href(url, id) {
+            //this.$set(this.menuFlag, 0, '');
+            //this.$set(this.menuFlag, 1, '');
+            //this.$set(this.menuFlag, 4, '');
+            for (var i = 0; i < 11; i++) {
+                if (i == id) {
+                    this.$set(this.menuFlag, id, 'active');
+                } else {
+                    this.$set(this.menuFlag, i, '');
+                }
+            }
+            this.$router.push(url);
+        },
         CheckLoginStatus() {
             try {
                 this.loginDetails = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -39,9 +52,9 @@ export default {
             }
         },
 
-        href(url) {
-            this.$router.push(url);
-        }
+        //href(url) {
+        //    this.$router.push(url);
+        //}
 
       
     }    

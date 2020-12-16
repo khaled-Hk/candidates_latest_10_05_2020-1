@@ -14,7 +14,6 @@ namespace Vue.Controllers
     [ApiController]
     public class ConstituenciesController : ControllerBase
     {
-
         private readonly CandidatesContext db;
         private Helper help;
         public ConstituenciesController(CandidatesContext context)

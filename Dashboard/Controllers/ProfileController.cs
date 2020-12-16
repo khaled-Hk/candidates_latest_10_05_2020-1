@@ -23,7 +23,6 @@ namespace Dashboard.Controllers
 
         public ProfileController(CandidatesContext context )
         {
-            
             this.db = context;
             help = new Helper();
         }
@@ -142,7 +141,14 @@ namespace Dashboard.Controllers
                 Profile.IsActivate = 1;
                 Profile.ModifiedBy = userId;
                 Profile.ModifiedOn = DateTime.Now;
+                db.SaveChanges();
 
+                var Profilelist = db.Profile.Where(x=>x.ProfileId != Profile.ProfileId).ToList();
+                foreach(var p in Profilelist)
+                {
+                    p.IsActivate = 0;
+                    db.Profile.Update(p);
+                }
                 db.SaveChanges();
                 return Ok("تــم تفعيل الملف الإنتخابي بنـجاح");
             }
@@ -210,7 +216,14 @@ namespace Dashboard.Controllers
                 Profile.Status = 1;
                 Profile.ModifiedBy = userId;
                 Profile.ModifiedOn = DateTime.Now;
+                db.SaveChanges();
 
+                var Profilelist = db.Profile.Where(x => x.ProfileId != Profile.ProfileId).ToList();
+                foreach (var p in Profilelist)
+                {
+                    p.Status = 2;
+                    db.Profile.Update(p);
+                }
                 db.SaveChanges();
                 return Ok("تم تشغيل الضبط الانتخابي المطلوب بنجاح");
             }

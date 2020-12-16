@@ -136,6 +136,10 @@ export default {
     GetConstituencyBasedOn(constituencyId) {
         return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
     },
+
+    GetConstituenciesDetalsChairs(ConstituencyId) {
+        return axios.get(`/Api/Admin/Constituencies/GetConstituency/${ConstituencyId}`);
+    },
     GetAConstituencyBasedOn(regionId) {
         return axios.get(`/Api/Admin/Constituencies/GetAConstituency/${regionId}`);
     },
@@ -305,6 +309,15 @@ export default {
     GetAllOffices() {
         return axios.get(`/Api/Admin/Offices/GetAllOffices`);
     },
+    GetOffice(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Offices/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+    deleteOffice(id) {
+        return axios.post(`/Api/Admin/Offices/${id}/deleteOffice`);
+    },
+    AddOffice(OfficeData) {
+        return axios.post(`/Api/Admin/Offices/Add`, OfficeData);
+    },
     //************************ Represenatives Of Candidates **************************
 
     AddCandidateRepresentatives(candidateRepresentatives) {
@@ -312,7 +325,33 @@ export default {
     },
     GetCandidateRepresentatives(candidateIs) {
         return axios.get(`/Api/Admin/Representatives/GetRepresentativesBy/${candidateIs}`);
-    }
+    },
+
+    //************************ Chairs **************************
+    GetChairs(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Chairs/Get?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+
+    GetChairsDetails(pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Chairs/GetChairsDetails?pageno=${pageNo}&pagesize=${pageSize}`);
+    },
+
+    deleteChairs(id) {
+        return axios.post(`/Api/Admin/Chairs/${id}/delete`);
+    },
+
+    deleteChairsDetails(id) {
+        return axios.post(`/Api/Admin/Chairs/${id}/deleteChairsDetails`);
+    },
+
+    AddChairs(form) {
+        return axios.post(`/Api/Admin/Chairs/Add`, form);
+    },
+
+   
+
+
+
 
     //Login(loginName, password, secretNo) {
     //    return axios.post(baseUrl + '/security/login', { loginName, password, secretNo });

@@ -14,6 +14,12 @@ export default {
     GetAllProfiles() {
         return axios.get(`/Api/Admin/Profile/GetAllProfiles`);
     },
+    GetRuningProfile() {
+        return axios.get(`/Api/Admin/Profile/GetRuningProfile`);
+    },
+    GetActiveProfile() {
+        return axios.get(`/Api/Admin/Profile/GetActiveProfile`);
+    },
     AddProfiles(Profile) {
         return axios.post(`/Api/Admin/Profile/Add`, Profile);
     },

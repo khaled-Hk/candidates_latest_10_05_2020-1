@@ -65,6 +65,74 @@ namespace Dashboard.Controllers
             }
         }
 
+
+        [HttpGet("GetActiveProfile")]
+        public IActionResult GetActiveProfile()
+        {
+            try
+            {
+                IQueryable<Profile> ProfilesQuery;
+                ProfilesQuery = from p in db.Profile
+                                where p.IsActivate == 1
+                                select p;
+
+                var ProfilList = (from p in ProfilesQuery
+                                  orderby p.CreatedOn descending
+                                  select new
+                                  {
+                                      p.Name,
+                                      p.Description,
+                                      p.StartDate,
+                                      p.EndDate,
+                                      p.IsActivate,
+                                      p.ProfileType,
+                                      p.CreatedOn,
+                                      p.Status,
+                                      p.ProfileId
+                                  }).SingleOrDefault();
+
+                return Ok(new { Profile = ProfilList });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("GetRuningProfile")]
+        public IActionResult GetRuningProfile()
+        {
+            try
+            {
+                IQueryable<Profile> ProfilesQuery;
+                ProfilesQuery = from p in db.Profile
+                                where p.Status == 1
+                                select p;
+
+                var ProfilList = (from p in ProfilesQuery
+                                  orderby p.CreatedOn descending
+                                  select new
+                                  {
+                                      p.Name,
+                                      p.Description,
+                                      p.StartDate,
+                                      p.EndDate,
+                                      p.IsActivate,
+                                      p.ProfileType,
+                                      p.CreatedOn,
+                                      p.Status,
+                                      p.ProfileId
+                                  }).SingleOrDefault();
+
+                return Ok(new { Profile = ProfilList });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+
         [HttpGet("GetAllProfiles")]
         public IActionResult GetAllProfiles()
         {

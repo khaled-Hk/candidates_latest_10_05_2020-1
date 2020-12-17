@@ -91,7 +91,12 @@ namespace Dashboard.Controllers
                                       p.ProfileId
                                   }).SingleOrDefault();
 
-                return Ok(new { Profile = ProfilList });
+                if (ProfilList == null)
+                {
+                    return Ok(new { Id = 0, Profile = ProfilList });
+                }
+
+                return Ok(new { Id = ProfilList.ProfileId, Profile = ProfilList });
             }
             catch (Exception e)
             {
@@ -124,7 +129,11 @@ namespace Dashboard.Controllers
                                       p.ProfileId
                                   }).SingleOrDefault();
 
-                return Ok(new { Profile = ProfilList });
+                if(ProfilList==null){
+                    return Ok(new { Id = 0 , Profile = ProfilList }) ;
+                }
+
+                return Ok(new { Id = ProfilList.ProfileId , Profile = ProfilList });
             }
             catch (Exception e)
             {

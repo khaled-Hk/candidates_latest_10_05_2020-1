@@ -251,6 +251,9 @@ export default {
     AddCandidateUser(User) {
         return axios.post('/Api/Admin/Candidates/AddCandidateUser', User);
     },
+    GetCandidateUser(candidateId) {
+        return axios.get(`/Api/Admin/Candidates/GetCandidateUser/${candidateId}`);
+    },
    
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
@@ -312,6 +315,13 @@ export default {
     },
     GetCandidateRepresentatives(candidateIs) {
         return axios.get(`/Api/Admin/Representatives/GetRepresentativesBy/${candidateIs}`);
+    },
+    //************************ Endorsements **************************
+    GetEndorsements(CandidateId, pageNo, pageSize) {
+        return axios.get(`/Api/Admin/Endorsements?candidateId=${CandidateId}&pageNo=${pageNo}&pageSize=${pageSize}`);
+    },
+    AddEndorsement(obj) {
+        return axios.post(`/Api/Admin/Endorsements`, obj);
     }
 
     //Login(loginName, password, secretNo) {

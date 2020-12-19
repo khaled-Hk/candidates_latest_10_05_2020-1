@@ -316,6 +316,44 @@ export default {
     GetCandidateRepresentatives(candidateIs) {
         return axios.get(`/Api/Admin/Representatives/GetRepresentativesBy/${candidateIs}`);
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     //************************ Endorsements **************************
     GetEndorsements(CandidateId, pageNo, pageSize) {
         return axios.get(`/Api/Admin/Endorsements?candidateId=${CandidateId}&pageNo=${pageNo}&pageSize=${pageSize}`);

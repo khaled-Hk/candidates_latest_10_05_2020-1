@@ -175,6 +175,58 @@ namespace Dashboard
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            //app.UseStaticFiles();
+            //app.UseRouting();
+            //app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseSpaStaticFiles();
+            //app.UseHttpsRedirection();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+
+            //    routes.MapSpaFallbackRoute(
+            //        name: "spa-fallback",
+            //        defaults: new { controller = "Home", action = "Index" });
+            //});
+
+            //app.Use(next => context =>
+            //{
+            ////if (context.Request.Path == "/")
+            ////{
+            //    // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
+            //    var tokens = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = true });
+            ////}
+
+            //    return next(context);
+            //});
+
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapDefaultControllerRoute();
+            //    endpoints.MapRazorPages();
+            //    // 2. Setup fallback to index.html for all app-routes
+            //    endpoints.MapFallbackToFile(@"/clientapp/{*path:nonfile}", @"clientapp/dist/index.html");
+            //});
+
+
+            //app.Use(async (context, next) =>
+            //{
+
+            //    if (!context.User.Identity.IsAuthenticated)
+            //    {
+            //        await context.ChallengeAsync();
+            //    }
+            //    else
+            //    {
+            //        await next();
+            //    }
+            //});
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
@@ -192,31 +244,8 @@ namespace Dashboard
                     defaults: new { controller = "Home", action = "Index" });
             });
 
-            app.Use(next => context =>
-            {
-            //if (context.Request.Path == "/")
-            //{
-                // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
-                var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = true });
-            //}
-
-                return next(context);
-            });
-
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapRazorPages();
-                // 2. Setup fallback to index.html for all app-routes
-                endpoints.MapFallbackToFile(@"/clientapp/{*path:nonfile}", @"clientapp/dist/index.html");
-            });
-
-
             app.Use(async (context, next) =>
             {
-
                 if (!context.User.Identity.IsAuthenticated)
                 {
                     await context.ChallengeAsync();
@@ -225,6 +254,24 @@ namespace Dashboard
                 {
                     await next();
                 }
+            });
+
+            app.Use(next => context =>
+            {
+                string path = context.Request.Path.Value;
+                if (path.IndexOf("a", StringComparison.OrdinalIgnoreCase) != -1 || path.IndexOf("b", StringComparison.OrdinalIgnoreCase) != -1)
+                {
+                    // The request token can be sent as a JavaScript-readable cookie,
+                    // and Angular uses it by default.
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+                }
+                return next(context);
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
             });
 
             app.Map("",

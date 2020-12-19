@@ -4,7 +4,7 @@
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
     <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+        <a href="https://www.hnec.ly" class="simple-text logo-mini">
             CT
         </a>
         <a href="/" class="simple-text logo-normal">
@@ -56,20 +56,24 @@
             </div>
         </div>
         <ul class="nav Dashboard">
-            <li class="active">
-                <a href="#" @click.prevent="href('/')">
+            <li :class="menuFlag[0]">
+                <a href="#" @click.prevent="href('/',0)">
                     <i class="now-ui-icons design_app"></i>
                     <p>الرئيـسية</p>
                 </a>
             </li>
-
-            <li>
-                <a href="#" @click.prevent="href('/Regions')">
+            <li :class="menuFlag[1]">
+                <a href="#" @click.prevent="href('/Profiles',1)">
+                    <i class="now-ui-icons design_scissors"></i>
+                    <p>ملف الإنتخابات</p>
+                </a>
+            </li>
+            <li :class="menuFlag[2]">
+                <a href="#" @click.prevent="href('/Regions',2)">
                     <i class="now-ui-icons design_app"></i>
                     <p>الـمناطق</p>
                 </a>
             </li>
-
             <li>
                 <a data-toggle="collapse" href="#pagesExamples">
                     <i class="now-ui-icons design_image"></i>
@@ -79,56 +83,50 @@
                 </a>
                 <div class="collapse " id="pagesExamples">
                     <ul class="nav">
-                        <li>
-                            <a href="#" @click.prevent="href('/Profiles')">
-                                <span class="sidebar-mini-icon">م</span>
-                                <span class="sidebar-normal"> ملف الإنتخابات  </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Constituency')">
+                        
+                     
+                        <li :class="menuFlag[3]">
+                            <a href="#" @click.prevent="href('/Administration/Constituency',3)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal"> الدوائر الرئيسية</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Subconstituency')">
+                        <li :class="menuFlag[4]">
+                            <a href="#" @click.prevent="href('/Administration/Subconstituency',4)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">الدوائر الفرعية</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Centers')">
+                        <li :class="menuFlag[5]">
+                            <a href="#" @click.prevent="href('/Administration/Centers',5)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">المراكز</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Stations')">
+                        <li :class="menuFlag[6]">
+                            <a href="#" @click.prevent="href('/Administration/Stations',6)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">المحطات</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Chairs')">
+                        <li :class="menuFlag[7]">
+                            <a href="#" @click.prevent="href('/Administration/Chairs',7)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">المقاعد</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Chairs/ChairDetails')">
+                        <li :class="menuFlag[8]">
+                            <a href="#" @click.prevent="href('/Administration/Chairs/ChairDetails',8)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">توزيع المقاعد</span>
                             </a>
                         </li>
-
-
                     </ul>
                 </div>
             </li>
 
-            <li>
-                <a href="#" @click.prevent="href('/Candidates')">
+            <li :class="menuFlag[9]">
+                <a href="#" @click.prevent="href('/Candidates',9)">
                     <i class="now-ui-icons education_atom"></i>
                     <p>
                         تسجيل الناخبين
@@ -136,8 +134,8 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#" @click.prevent="href('/Entites')">
+            <li :class="menuFlag[10]">
+                <a href="#" @click.prevent="href('/Entites',10)">
                     <i class="now-ui-icons education_atom"></i>
                     <p>
                         تسجيل الكيانات
@@ -154,27 +152,27 @@
                 </a>
                 <div class="collapse " id="componentsExamples">
                     <ul class="nav">
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Branches')">
+                        <li :class="menuFlag[11]">
+                            <a href="#" @click.prevent="href('/Administration/Branches',11)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal"> الـفروع  </span>
                             </a>
                         </li>
 
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Subconstituency')">
+                        <li :class="menuFlag[12]">
+                            <a href="#" @click.prevent="href('/Administration/Subconstituency',12)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">الدوائر الفرعية</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Centers')">
+                        <li :class="menuFlag[13]">
+                            <a href="#" @click.prevent="href('/Administration/Centers',13)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">المراكز</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" @click.prevent="href('/Administration/Stations')">
+                        <li :class="menuFlag[14]">
+                            <a href="#" @click.prevent="href('/Administration/Stations',14)">
                                 <span class="sidebar-mini-icon">ا</span>
                                 <span class="sidebar-normal">المحطات</span>
                             </a>

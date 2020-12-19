@@ -67,7 +67,7 @@ export default {
                         this.$notify({
                             title: 'تم التفعيل بنجاح',
                             dangerouslyUseHTMLString: true,
-                            duration:10000000,
+                            duration:10000,
                             message: '<strong>' + response.data + '</strong>',
                             type: 'success'
                         });  

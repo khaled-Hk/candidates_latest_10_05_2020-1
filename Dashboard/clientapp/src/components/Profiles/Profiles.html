@@ -62,18 +62,15 @@
                                             <i class="fas fa-lightbulb fa-off"></i>
                                         </a>        
                                         <a href="#" v-if="P.status==2" @click.prevent="PlayProfile(P.profileId)" title="تشغيل الملف الانتخابي">
-                                            <i class="fas fa-play-circle"></i>
+                                            <i class="fas fa-pause-circle" style="color:orange!important"></i>
                                         </a>
                                         <a href="#" v-if="P.status==1" @click.prevent="PauseProfile(P.profileId)" title="إيقاف الملف الانتخابي">
-                                            <i class="fas fa-pause-circle"></i>
+                                            <i class="fas fa-play-circle" style="color:lawngreen!important"></i>
                                         </a>
                                     </td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                         <div style="text-align: center;padding-bottom:11px" v-if="Profiles!=0">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination pagination-primary">
@@ -93,6 +90,4 @@
             </div> <!-- end col-md-12 -->
         </div> <!-- end row -->
     </div>
-
-
 </div>

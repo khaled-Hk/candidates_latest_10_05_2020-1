@@ -23,7 +23,6 @@ namespace Dashboard.Controllers
 
         public ProfileController(CandidatesContext context )
         {
-            
             this.db = context;
             help = new Helper();
         }
@@ -65,6 +64,83 @@ namespace Dashboard.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+
+        [HttpGet("GetActiveProfile")]
+        public IActionResult GetActiveProfile()
+        {
+            try
+            {
+                IQueryable<Profile> ProfilesQuery;
+                ProfilesQuery = from p in db.Profile
+                                where p.IsActivate == 1
+                                select p;
+
+                var ProfilList = (from p in ProfilesQuery
+                                  orderby p.CreatedOn descending
+                                  select new
+                                  {
+                                      p.Name,
+                                      p.Description,
+                                      p.StartDate,
+                                      p.EndDate,
+                                      p.IsActivate,
+                                      p.ProfileType,
+                                      p.CreatedOn,
+                                      p.Status,
+                                      p.ProfileId
+                                  }).SingleOrDefault();
+
+                if (ProfilList == null)
+                {
+                    return Ok(new { Id = 0, Profile = ProfilList });
+                }
+
+                return Ok(new { Id = ProfilList.ProfileId, Profile = ProfilList });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("GetRuningProfile")]
+        public IActionResult GetRuningProfile()
+        {
+            try
+            {
+                IQueryable<Profile> ProfilesQuery;
+                ProfilesQuery = from p in db.Profile
+                                where p.Status == 1
+                                select p;
+
+                var ProfilList = (from p in ProfilesQuery
+                                  orderby p.CreatedOn descending
+                                  select new
+                                  {
+                                      p.Name,
+                                      p.Description,
+                                      p.StartDate,
+                                      p.EndDate,
+                                      p.IsActivate,
+                                      p.ProfileType,
+                                      p.CreatedOn,
+                                      p.Status,
+                                      p.ProfileId
+                                  }).SingleOrDefault();
+
+                if(ProfilList==null){
+                    return Ok(new { Id = 0 , Profile = ProfilList }) ;
+                }
+
+                return Ok(new { Id = ProfilList.ProfileId , Profile = ProfilList });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
 
         [HttpGet("GetAllProfiles")]
         public IActionResult GetAllProfiles()
@@ -142,7 +218,14 @@ namespace Dashboard.Controllers
                 Profile.IsActivate = 1;
                 Profile.ModifiedBy = userId;
                 Profile.ModifiedOn = DateTime.Now;
+                db.SaveChanges();
 
+                var Profilelist = db.Profile.Where(x=>x.ProfileId != Profile.ProfileId).ToList();
+                foreach(var p in Profilelist)
+                {
+                    p.IsActivate = 0;
+                    db.Profile.Update(p);
+                }
                 db.SaveChanges();
                 return Ok("تــم تفعيل الملف الإنتخابي بنـجاح");
             }
@@ -210,7 +293,14 @@ namespace Dashboard.Controllers
                 Profile.Status = 1;
                 Profile.ModifiedBy = userId;
                 Profile.ModifiedOn = DateTime.Now;
+                db.SaveChanges();
 
+                var Profilelist = db.Profile.Where(x => x.ProfileId != Profile.ProfileId).ToList();
+                foreach (var p in Profilelist)
+                {
+                    p.Status = 2;
+                    db.Profile.Update(p);
+                }
                 db.SaveChanges();
                 return Ok("تم تشغيل الضبط الانتخابي المطلوب بنجاح");
             }

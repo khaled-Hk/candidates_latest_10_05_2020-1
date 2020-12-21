@@ -150,7 +150,7 @@ export default {
         return axios.get(`/Api/Admin/Constituencies/GetAConstituency/${regionId}`);
     },
     GetConstituencyPagination(pageNo, pageSize) {
-        return axios.get(`/Api/Admin/Constituencies/ConstituencyPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
+        return axios.get(`/Api/Admin/Constituencies/Get?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     UpdateConstituency(constituency) {
         return axios.put(`/Api/Admin/Constituencies/UpdateConstituency/`, constituency);

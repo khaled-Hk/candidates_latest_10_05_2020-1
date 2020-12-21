@@ -27,27 +27,32 @@ namespace Vue.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return Ok(new { ResponseCode = 9, ResponseMsg = "الرجاء تفعيل الضبط الانتخابي" });
+                }
                 IQueryable<Constituencies> ConstituenciesQuery;
                 ConstituenciesQuery = from p in db.Constituencies
-                                where p.Status != 9
-                                select p;
+                                      where p.Status != 9 && p.ProfileId == Profile.ProfileId
+                                      select p;
 
                 var ConstituenciesCount = (from p in ConstituenciesQuery
-                                    select p).Count();
+                                           select p).Count();
 
                 var ConstituencyList = (from p in ConstituenciesQuery
-                                  orderby p.CreatedOn descending
-                                  select new
-                                  {
-                                      p.ConstituencyId,
-                                      p.OfficeId,
-                                      p.Status,
-                                      p.ArabicName,
-                                      p.EnglishName,
+                                        orderby p.CreatedOn descending
+                                        select new
+                                        {
+                                            p.ConstituencyId,
+                                            p.OfficeId,
+                                            p.Status,
+                                            p.ArabicName,
+                                            p.EnglishName,
 
-                                  }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
-
-                return Ok(new { Constituencies = ConstituencyList, count = ConstituenciesCount });
+                                        }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+                
+                return Ok(new { ResponseCode = 0, ResponseMsg = new { Constituencies = ConstituencyList, count = ConstituenciesCount } });
             }
             catch (Exception e)
             {
@@ -64,7 +69,12 @@ namespace Vue.Controllers
                 {
                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
                 }
-                if(constituency.RegionId == null)
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return Ok(new { ResponseCode = 9, ResponseMsg = "الملف غير موجود" });
+                }
+                if (constituency.RegionId == null)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة" });
                 }
@@ -88,15 +98,13 @@ namespace Vue.Controllers
                     OfficeId = constituency.OfficeId,
                     CreatedBy = constituency.CreatedBy,
                     CreatedOn = DateTime.Now,
-                    Status = 1
-
+                    Status = 1,
+                    ProfileId= Profile.ProfileId
                 };
 
                 db.Constituencies.Add(newConstituency);
                 db.SaveChanges();
-
-
-                return Ok(new {constituencyId = newConstituency.ConstituencyId, message = string.Format("تم إضافة الدائر الرئيسية {0} بنجاح",newConstituency.ArabicName) });
+                return Ok(new { ResponseCode = 9, ResponseMsg = new { constituencyId = newConstituency.ConstituencyId, message = string.Format("تم إضافة الدائر الرئيسية {0} بنجاح", newConstituency.ArabicName) } });
             }
             catch
             {

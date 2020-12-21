@@ -49,9 +49,21 @@ export default {
             this.loading = true;
             this.$http.GetConstituencyPagination(this.pageNo, this.pageSize)
                 .then(response => {
-                    this.loading = false;
-                    this.constituencies = response.data.constituencies;
-                    this.pages = response.data.count;
+                    if (response.data.responseCode == 0) {
+                        this.loading = false;
+                        this.constituencies = response.data.responseMsg.constituencies;
+                        this.pages = response.data.responseMsg.count;
+                    }
+
+                    if (response.data.responseCode == 9) {
+                        this.loading = false;
+                        this.constituencies = [];
+                        this.$message({
+                            type: 'error',
+                            message: response.data.responseMsg
+                        });
+                    }
+                    
                 })
                 .catch((err) => {
                     this.loading = false;

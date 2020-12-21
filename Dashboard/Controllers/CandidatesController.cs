@@ -632,24 +632,29 @@ namespace Dashboard.Controllers
 
                 var candidate = db.Candidates.Where(x => x.Nid == candidateDocument.Nid).SingleOrDefault();
 
+                if(candidate == null)
+                {
+                    return BadRequest("المرشح غير موجود");
+                }
+
                 byte[] birthCertificateDocument;
                 birthCertificateDocument = Convert.FromBase64String(candidateDocument.BirthCertificateDocument.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
 
                 byte[] NidDocument;
-                NidDocument = Convert.FromBase64String(candidateDocument.NidDocument.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+                NidDocument = Convert.FromBase64String(candidateDocument.NidDocument.Substring(candidateDocument.NidDocument.IndexOf(",") + 1));
 
                 byte[] FamilyPaper;
-                FamilyPaper = Convert.FromBase64String(candidateDocument.FamilyPaper.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+                FamilyPaper = Convert.FromBase64String(candidateDocument.FamilyPaper.Substring(candidateDocument.FamilyPaper.IndexOf(",") + 1));
 
                 byte[] AbsenceOfPrecedents;
-                AbsenceOfPrecedents = Convert.FromBase64String(candidateDocument.AbsenceOfPrecedents.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+                AbsenceOfPrecedents = Convert.FromBase64String(candidateDocument.AbsenceOfPrecedents.Substring(candidateDocument.AbsenceOfPrecedents.IndexOf(",") + 1));
 
                 byte[] PaymentReceipt;
-                PaymentReceipt = Convert.FromBase64String(candidateDocument.PaymentReceipt.Substring(candidateDocument.BirthCertificateDocument.IndexOf(",") + 1));
+                PaymentReceipt = Convert.FromBase64String(candidateDocument.PaymentReceipt.Substring(candidateDocument.PaymentReceipt.IndexOf(",") + 1));
 
                 string subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Attachments", candidate.CandidateId.ToString());
 
-                string birthCertificateDocumentFileName = @"Section" + Guid.NewGuid() + ".pdf";
+                //string birthCertificateDocumentFileName = @"Section" + Guid.NewGuid() + ".pdf";
                 List<string> filesName = new List<string> {
                     @"BirthCertificate" + Guid.NewGuid() + ".pdf",
                     @"Nid" + Guid.NewGuid() + ".pdf",
@@ -657,7 +662,7 @@ namespace Dashboard.Controllers
                     @"AbsenceOfPrecedents" + Guid.NewGuid() + ".pdf",
                     @"PaymentReceipt" + Guid.NewGuid() + ".pdf",
                  };
-                string birthCertificateDirectory = "/PDF/" + candidate.CandidateId.ToString() + "/" + birthCertificateDocumentFileName;
+                //string birthCertificateDirectory = "/PDF/" + candidate.CandidateId.ToString() + "/" + birthCertificateDocumentFileName;
 
                 var filesDirectories = new Dictionary<string, string>
                 {
@@ -890,6 +895,165 @@ namespace Dashboard.Controllers
                 return StatusCode(500, new { message = e.Message });
             }
         }
+
+        [HttpGet("GetCandidateUser/{candidateId}")]
+        public IActionResult GetCandidateUser([FromRoute]long? candidateId)
+        {
+            try
+            {
+                IQueryable<CandidateUsers> Users = from p in db.CandidateUsers
+                                                where
+                       p.Status != 9 &&
+                       p.Status != 6 &&
+                       p.CandidateId == candidateId
+                                                select p;
+
+                var UsersCount = (from p in Users
+                                  select p).Count();
+
+
+                var UserInfo = (from p in Users
+                                orderby p.CreatedOn descending
+                                select new
+                                {
+                                    UserId = p.CandidateUserId,
+                                    Name = p.Name,
+                                    LoginName = p.LoginName,
+                                    State = p.Status,
+                                    Email = p.Email,
+                                    Password = p.Password,
+                                    CreatedOn = p.CreatedOn,
+                                    Phone = p.Phone,
+                                    gender = p.Gender,
+                                    BirthDate = p.BirthDate,
+                                    CreatedBy = p.CreatedBy,
+                                    Image = p.Image,
+                                    UserType = p.UserType
+                                }).ToList();
+
+                return Ok(new { users = UserInfo, count = UsersCount });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("image/{UserId}")]
+        public IActionResult GetUserImage([FromRoute]long UserId)
+        {
+            try
+            {
+                var UserImage = (from p in db.CandidateUsers
+                                 where p.CandidateUserId == UserId
+                                 select p.Image).SingleOrDefault();
+
+                if (UserImage == null)
+                {
+                    return NotFound("المستخدم غير موجــود");
+                }
+
+                return File(UserImage, "image/jpeg");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("{UserId}/Deactivate")]
+        public IActionResult Deactivate(long UserId)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var User = (from p in db.CandidateUsers
+                            where p.CandidateUserId == UserId && p.Status != 9
+                            select p).SingleOrDefault();
+
+                if (User == null)
+                {
+                    return NotFound("خــطأ : المستخدم غير موجود");
+                }
+
+                User.Status = 2;
+                db.SaveChanges();
+                return Ok("تم العمليه بنجاح");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("{UserId}/Activate")]
+        public IActionResult Activate(long UserId)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var User = (from p in db.CandidateUsers
+                            where p.CandidateUserId == UserId && p.Status != 9
+                            select p).SingleOrDefault();
+
+                if (User == null)
+                {
+                    return NotFound("خــطأ : المستخدم غير موجود");
+                }
+
+                User.Status = 1;
+                db.SaveChanges();
+                return Ok("تم العمليه بنجاح");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpDelete("{UserId}/deleteUser")]
+        public IActionResult deleteUser(long UserId)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var User = (from p in db.CandidateUsers
+                            where p.CandidateUserId == UserId && p.Status != 9
+                            select p).SingleOrDefault();
+
+                if (User == null)
+                {
+                    return NotFound("خــطأ : المستخدم غير موجود");
+                }
+
+                User.Status = 9;
+                db.SaveChanges();
+                return Ok("تم العمليه بنجاح");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
 
     }
 }

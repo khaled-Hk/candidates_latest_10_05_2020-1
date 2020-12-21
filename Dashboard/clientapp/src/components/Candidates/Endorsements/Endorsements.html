@@ -1,0 +1,84 @@
+﻿
+<div class="col-md-12" dir="rtl" style="text-align:right">
+    >
+   <AddEndorsement v-if="state==1"></AddEndorsement>
+    <div class="card" v-if="state==0">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="card-title">قوائم المزكين للمرشح {{candidateName}}</h4>
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-4">
+                    <button class="btn" @click.prevent="Back()">
+                        <span class="btn-label">
+                            <i class="now-ui-icons arrows-1_minimal-left"></i>
+                        </span>
+                        رجـوع
+                    </button>
+                    <button class="btn btn-primary" @click.prevent="navigate(1)">إضافة مزكي</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body" style="direction:rtl;text-align:right">
+            <div class="row" v-if="endorsements==0">
+
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <br /><br />
+                        <el-alert style="font-size: 35px;" title="عفــوا! لايوجد مزكين"
+                                  type="info">
+                        </el-alert>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="table-responsive" v-if="endorsements!=0">
+                <table class="table table-shopping">
+                    <thead>
+                        <tr class="text-primary">
+                            <th style="font-size: 1.063rem;">رقم الوطني للمرشح</th>
+                            <th>تاريخ الانشاء</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item,index in endorsements">
+                            <td>
+                                {{item.nid}}
+                            </td>
+                            <td>{{item.createdOn | moment}}</td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <div style="text-align: center;padding-bottom:11px" v-if="endorsements!=0">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination pagination-primary">
+                            <el-pagination background
+                                           layout="prev, pager, next"
+                                           :current-page="pageNo"
+                                           :page-size="pageSize"
+                                           :total="pages"
+                                           @current-change="navigateEndorsmenents($event)">
+                            </el-pagination>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <hr />
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

@@ -3,6 +3,8 @@ import UpdateCandidates from './UpdateCandidates/UpdateCandidates.vue';
 import AddRepresentatives from './AddRepresentatives/AddRepresentatives.vue';
 import Representatives from './Representatives/Representatives.vue';
 import AddUsers from './AddUsers/AddUsers.vue';
+import Endorsements from './Endorsements/Endorsements.vue';
+import Users from './Users/Users.vue'
 
 import moment from 'moment';
 export default {
@@ -15,7 +17,9 @@ export default {
         'update-Candidates': UpdateCandidates,
         'AddRepresentatives': AddRepresentatives,
         'Representatives': Representatives,
-        'AddUsers':AddUsers
+        'AddUsers': AddUsers,
+        'Users': Users,
+        'Endorsements': Endorsements
     },
     filters: {
         moment: function (date) {
@@ -38,9 +42,6 @@ export default {
         };
     },
     methods: {
-
-
-
 
         GetCandidates(pageNo) {
             this.pageNo = pageNo;

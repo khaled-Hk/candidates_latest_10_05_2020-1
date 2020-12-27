@@ -44,15 +44,18 @@
                 });
                 return;
             }
+            debugger;
             this.Loading = true;
             axios.post(`/Security/loginUser`, this.form)
                 .then(response => {
+                    debugger;
                     sessionStorage.setItem('currentUser', JSON.stringify(response.data));
                     window.location.href = '/';
                 
                 })
                 .catch((error) => {
                     //$blockUI.close();
+                    debugger;
                     this.Loading = false;
                     swal({
                         title: "خطأ",

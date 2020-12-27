@@ -84,28 +84,28 @@ namespace Dashboard
                 options.LogoutPath = "/Security/Login";
                 options.AccessDeniedPath = "/Security/Login";
 
-               // Remove the ReturnUrl GET parameter from the sign in page.
-               options.Events = new CookieAuthenticationEvents()
-               {
-                   OnRedirectToLogin = redirectContext =>
-                   {
-                       string redirectUri = redirectContext.RedirectUri;
+                // Remove the ReturnUrl GET parameter from the sign in page.
+                options.Events = new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = redirectContext =>
+                    {
+                        string redirectUri = redirectContext.RedirectUri;
 
-                       UriHelper.FromAbsolute(
-                           redirectUri,
-                           out string scheme,
-                           out HostString host,
-                           out PathString path,
-                           out QueryString query,
-                           out FragmentString fragment);
+                        UriHelper.FromAbsolute(
+                            redirectUri,
+                            out string scheme,
+                            out HostString host,
+                            out PathString path,
+                            out QueryString query,
+                            out FragmentString fragment);
 
-                       redirectUri = UriHelper.BuildAbsolute(scheme, host, path);
+                        redirectUri = UriHelper.BuildAbsolute(scheme, host, path);
 
-                       redirectContext.Response.Redirect(redirectUri);
+                        redirectContext.Response.Redirect(redirectUri);
 
-                       return Task.CompletedTask;
-                   }
-               };
+                        return Task.CompletedTask;
+                    }
+                };
             })
 
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -121,13 +121,13 @@ namespace Dashboard
                 };
             });
 
-            
+
 
             // For refreshing view pages
             services.AddRazorPages().AddRazorRuntimeCompilation();
             //services.AddDataProtection();
 
-           services.AddMvc(config =>
+            services.AddMvc(config =>
             {
                 config.Filters.Add(new AuthorizeFilter(policy));
                 config.EnableEndpointRouting = false;
@@ -143,7 +143,7 @@ namespace Dashboard
                 //development
                 configuration.RootPath = "ClientApp";
                 // publish
-                 configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "ClientApp/dist";
             });
 
             //services.AddControllers(opt =>
@@ -151,9 +151,9 @@ namespace Dashboard
             //    );
 
 
-       
 
-           // services.ConfigureApplicationCookie(options => options.LoginPath = "/LogIn");
+
+            // services.ConfigureApplicationCookie(options => options.LoginPath = "/LogIn");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

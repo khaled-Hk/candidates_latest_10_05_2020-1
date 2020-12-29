@@ -11,6 +11,7 @@ using Services;
 
 using System.IO;
 using Common;
+using System.Diagnostics;
 
 namespace Dashboard.Controllers
 {
@@ -32,9 +33,17 @@ namespace Dashboard.Controllers
         {
             try
             {
+
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 IQueryable<Candidates> CandidatesQuery;
-                CandidatesQuery = from p in db.Candidates where p.EntityId==id && p.Status!=9
+                CandidatesQuery = from p in db.Candidates where p.EntityId==id && p.ProfileId == Profile.ProfileId && p.Status!=9
                                   select p;
+
 
                 var CandidatesCount = (from p in CandidatesQuery
                                        select p).Count();
@@ -96,9 +105,17 @@ namespace Dashboard.Controllers
         {
             try
             {
+
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الرجاء تفعيل الضبط الانتخابي" });
+                }
+
                 IQueryable<Candidates> CandidatesQuery;
                 CandidatesQuery = from p in db.Candidates
-                                  select p;
+                                  where p.Status != 9 && p.ProfileId == Profile.ProfileId
+                                  select p; 
 
                 var CandidatesCount = (from p in CandidatesQuery
                                        select p).Count();
@@ -121,7 +138,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message);
+                return StatusCode(500, new { message = e.Message });
             }
         }
 
@@ -131,10 +148,17 @@ namespace Dashboard.Controllers
             try
             {
                 var userId = this.help.GetCurrentUser(HttpContext);
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
 
                 if (userId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+
+                
+                if (Profile == null)
+                {
+                    return StatusCode(401, new { message = "الملف غير موجود" });
                 }
 
                 if (string.IsNullOrEmpty(nationalId) || string.IsNullOrWhiteSpace(nationalId))
@@ -160,6 +184,7 @@ namespace Dashboard.Controllers
                     {
                         Levels = 1,
                         Nid = nationalId,
+                        ProfileId = Profile.ProfileId,
                         CreatedOn = DateTime.Now,
                         CreatedBy = userId
                     };

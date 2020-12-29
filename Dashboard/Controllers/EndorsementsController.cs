@@ -34,14 +34,14 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest(new { message = "الرجاء قم بإختيار المرشح" });
                 }
-                var candidateUser = db.CandidateUsers.Where(x => x.CandidateId == candidateId).Select(x => new { x.CandidateUserId}).SingleOrDefault();
+
                 var candidate = db.Candidates.Where(x => x.CandidateId == candidateId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName}).SingleOrDefault();
-                var EndorsementsCount = db.Endorsements.Where(x => x.CandidateUserId == candidateUser.CandidateUserId).Count();
-                var EndorsementsList = db.Endorsements.Where(x => x.CandidateUserId == candidateUser.CandidateUserId)
+                var EndorsementsCount = db.Endorsements.Where(x => x.CandidateId == candidateId).Count();
+                var EndorsementsList = db.Endorsements.Where(x => x.CandidateId == candidateId)
                     .OrderByDescending(x => x.CreatedOn)
                     .Select(x => new
                     {
-                        x.CandidateUserId,
+                        x.CandidateId,
                         x.Nid,
                         x.CreatedOn,
                         
@@ -104,12 +104,10 @@ namespace Dashboard.Controllers
                 }
 
 
-                var candidateUser = db.CandidateUsers.Where(x => x.CandidateId == endorsement.CandidateId).Select(x => new { x.CandidateUserId }).SingleOrDefault();
-
                 db.Endorsements.Add(new Endorsements
                 {
                     Nid = endorsement.Nid,
-                    CandidateUserId = candidateUser.CandidateUserId,
+                    CandidateId = endorsement.CandidateId,
                     CreatedOn = DateTime.Now,
                     CreatedBy = userId
                 });

@@ -26,8 +26,16 @@ namespace Vue.Controllers
         {
             try
             {
+
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
+
                 var EntitesCount = db.Entities.Where(x => x.Status != 9).Count();
-                var EntitesList = db.Entities.Where(x => x.Status != 9)
+                var EntitesList = db.Entities.Where(x => x.Status != 9 && x.ProfileId == Profile.ProfileId)
                     .OrderByDescending(x => x.CreatedOn)
                     .Select(x => new
                     {
@@ -67,10 +75,16 @@ namespace Vue.Controllers
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
 
                 if (userId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (Profile == null)
+                {
+                    return StatusCode(401, new { message = "الملف غير موجود" });
                 }
 
                 if (string.IsNullOrWhiteSpace(Entity.Email))
@@ -121,6 +135,7 @@ namespace Vue.Controllers
 
 
                 Entity.CreatedBy = userId;
+                Entity.ProfileId = Profile.ProfileId;
                 Entity.CreatedOn = DateTime.Now;
                 db.Entities.Add(Entity);
                 db.SaveChanges();

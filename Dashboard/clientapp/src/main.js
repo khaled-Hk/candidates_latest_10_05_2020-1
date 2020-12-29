@@ -25,6 +25,7 @@ import Candidates from './components/Candidates/Candidates.vue';
 
 import DataService from './Shared/DataService';
 
+import Endorsements from './components/Endorsements/Endorsements.vue'
 
 //////////////User Component////////////////////
 import Users from './components/Users/Users.vue';
@@ -82,9 +83,9 @@ const router = new VueRouter({
         { path: '/Administration/Chairs', component: Chairs },
         { path: '/Administration/Chairs/ChairDetails', component: ChairDetails },
 
-
         { path: '/Candidates', component: Candidates },
-        { path: '/Entites', component: Entites}
+        { path: '/Entites', component: Entites },
+        { path: '/Endorsements', component: Endorsements },
     ]
 
 });

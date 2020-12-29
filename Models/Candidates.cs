@@ -9,6 +9,7 @@ namespace Models
         {
             CandidateAttachments = new HashSet<CandidateAttachments>();
             CandidateRepresentatives = new HashSet<CandidateRepresentatives>();
+            Endorsements = new HashSet<Endorsements>();
         }
 
         public long CandidateId { get; set; }
@@ -37,5 +38,6 @@ namespace Models
 
         public virtual ICollection<CandidateAttachments> CandidateAttachments { get; set; }
         public virtual ICollection<CandidateRepresentatives> CandidateRepresentatives { get; set; }
+        public virtual ICollection<Endorsements> Endorsements { get; set; }
     }
 }

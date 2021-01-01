@@ -1,8 +1,12 @@
 ﻿import moment from 'moment';
+import EndorsementsList from './EndorsementsList/EndorsementsList.vue'
 export default {
-    name: 'AddEndorsement',
+    name: 'Endorsements',
     created() {
-        //this.ruleForm.CandidateId = this.$parent.candidateId;
+      
+    },
+    components: {
+        'EndorsementsList': EndorsementsList
     },
     filters: {
         moment: function (date) {
@@ -18,43 +22,26 @@ export default {
 
             ruleForm: {
                 CandidateId: null,
-                Nid: null
-            }
+                Nid: null,
+                
+            },
+            state: 0
+               
 
         }
     },
 
     methods: {
 
-        addEndorsements() {
-
-            this.$blockUI.Start();
-            this.$http.GetEndorsements(this.ruleForm).then((response) => {
-                this.$blockUI.Stop();
-                this.endorsements = response.data.endorsements;
-                this.candidateName = response.data.candidateName;
-
-            }).catch((error) => {
-                this.$blockUI.Stop();
-                if (error)
-                    this.$message({
-                        type: 'error',
-                        message: error.response.data.message
-                    });
-                this.endorsements = [];
-                return error;
-            });
-
-        },
 
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
 
                     this.$blockUI.Start();
-                    this.$http.AddEndorsement(this.ruleForm)
+                    this.$http.GetEndorsementsByNid(this.ruleForm.Nid)
                         .then(response => {
-
+                            
                             this.$blockUI.Stop();
                             this.$notify({
                                 title: response.data.message,
@@ -62,17 +49,18 @@ export default {
                                 type: 'info',
                                 // message: err.response.data.message
                             });
-                            this.$parent.getEndorsements(this.$parent.pageNo, this.$parent.pageSize);
-                            this.$parent.state = 0;
+                            this.ruleForm.CandidateId = response.data.candidateId;
+                            this.state = 1;
 
                         })
                         .catch((err) => {
                             this.$blockUI.Stop();
+                            
                             this.$notify({
-                                title: 'خطأ بعملية الاضافة',
+                                title: 'خطأ',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.message
                             });
                         });
                 }
@@ -80,7 +68,7 @@ export default {
         },
 
         Back() {
-            this.$parent.state = 0;
+           // this.$parent.state = 0;
         }
     }
 

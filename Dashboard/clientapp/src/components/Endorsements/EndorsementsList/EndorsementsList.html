@@ -1,8 +1,7 @@
-﻿
-<div class="col-md-12" dir="rtl" style="text-align:right">
-    
-  
-    <div class="card" >
+﻿<div class="col-md-12" dir="rtl" style="text-align:right">
+
+    <AddEndorsement v-if="state==1"></AddEndorsement>
+    <div class="card" v-if="state==0">
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
@@ -11,7 +10,8 @@
                 <div class="col-md-2">
                 </div>
                 <div class="col-md-4">
-                    <button class="btn float-left" @click.prevent="Back()">
+                    <button class="btn btn-primary" @click.prevent="navigate(1)">إضافة مزكي</button>
+                    <button class="btn" @click.prevent="Back()">
                         <span class="btn-label">
                             <i class="now-ui-icons arrows-1_minimal-left"></i>
                         </span>
@@ -33,6 +33,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="table-responsive" v-if="endorsements!=0">
                 <table class="table table-striped table-bordered">
                     <thead>
@@ -52,7 +53,6 @@
 
                     </tbody>
                 </table>
-
                 <div style="text-align: center;padding-bottom:11px" v-if="endorsements!=0">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination pagination-primary">

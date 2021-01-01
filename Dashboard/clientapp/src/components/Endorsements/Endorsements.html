@@ -1,56 +1,65 @@
-﻿<div class="col-md-12">
-    <br/><br /><br /><br />
-    <div class="card cardRTL">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-5">
-                    <h4 class="card-title">البحث عن المرشحين</h4>
-                </div>
-                <div class="col-md-5">
-
-                </div>
-                <div class="col-md-2">
-                   
-                </div>
-            </div>
+﻿<div class="Regions">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
         </div>
-        <div class="card-header">
+        <div class="row DataSet" style="height:100%">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+            <EndorsementsList v-if="state == 1"></EndorsementsList>
+            <div class="col-md-12 zoomIn">
+                <div class="card cardRTL" v-if="state == 0">
+                    <div class="card-header">
                         <div class="row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-8">
-                                <el-form-item prop="Nid">
-                                    <label>الرقم الوطني</label>
-                                    <div class="form-group">
-                                        <el-input placeholder="الرقم الوطني" v-model="ruleForm.Nid"></el-input>
-                                    </div>
-                                </el-form-item>
+                            <div class="col-md-5">
+                                <h4 class="card-title">البحث عن المرشحين</h4>
                             </div>
-                            <div class="col-md-2"> </div>
+                            <div class="col-md-5">
 
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5"></div>
+                            </div>
                             <div class="col-md-2">
-                                <el-form-item>
-                                    <button class="btn-primary btn" @click.prevent="submitForm('ruleForm')">بحث</button>
-                                </el-form-item>
+
                             </div>
-                            <div class="col-md-5"></div>
                         </div>
-                    </el-form>
+                    </div>
+                    <div class="card-header">
 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                                    <div class="row">
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-8">
+                                            <el-form-item prop="Nid">
+                                                <label>الرقم الوطني</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="الرقم الوطني" v-model="ruleForm.Nid"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-2"> </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-2">
+                                            <el-form-item>
+                                                <button class="btn-primary btn" @click.prevent="submitForm('ruleForm')">بحث</button>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-5"></div>
+                                    </div>
+                                </el-form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-
-        </div>
-        <div class="card-body">
-            <div class="toolbar">
-
             </div>
         </div>
     </div>

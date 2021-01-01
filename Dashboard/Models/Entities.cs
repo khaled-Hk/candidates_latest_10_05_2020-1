@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Vue.Models
+{
+    public partial class Entities
+    {
+        public Entities()
+        {
+            EntityRepresentatives = new HashSet<EntityRepresentatives>();
+            EntityUsers = new HashSet<EntityUsers>();
+        }
+
+        public long EntityId { get; set; }
+        public string Name { get; set; }
+        public long? Number { get; set; }
+        public string Descriptions { get; set; }
+        public string Phone { get; set; }
+        public byte[] Logo { get; set; }
+        public string Owner { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public long? ProfileId { get; set; }
+        public short? Status { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public long? CreatedBy { get; set; }
+
+        public virtual ICollection<EntityRepresentatives> EntityRepresentatives { get; set; }
+        public virtual ICollection<EntityUsers> EntityUsers { get; set; }
+    }
+}

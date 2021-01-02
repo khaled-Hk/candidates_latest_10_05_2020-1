@@ -361,6 +361,10 @@ export default {
     GetEndorsements(CandidateId, pageNo, pageSize) {
         return axios.get(`/Api/Admin/Endorsements?candidateId=${CandidateId}&pageNo=${pageNo}&pageSize=${pageSize}`);
     },
+    GetEndorsementsByNid(Nid) {
+        
+        return axios.get(`/Api/Admin/Endorsements/Get?nationalId=${Nid}`);
+    },
     AddEndorsement(obj) {
         return axios.post(`/Api/Admin/Endorsements`, obj);
     },

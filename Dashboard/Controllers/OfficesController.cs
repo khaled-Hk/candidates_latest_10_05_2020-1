@@ -44,9 +44,15 @@ namespace Dashboard.Controllers
             try
             {
 
+                 var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الرجاء تفعيل الضبط الانتخابي" });
+                }
+
                 var OfficeCount = db.Offices.Where(x => x.Status != 9).Count();
 
-                var OfficesList = db.Offices.Where(x=>x.Status!=9)
+                var OfficesList = db.Offices.Where(x=>x.Status!=9 && x.ProfileId == Profile.ProfileId)
                     .OrderByDescending(x=> x.CreatedOn)
                     .Select(x=> new
                     {
@@ -119,16 +125,24 @@ namespace Dashboard.Controllers
         {
             try
             {
+           
+                
                 if (OfficeData == null)
                 {
                     return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
 
                 if (userId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (Profile == null)
+                {
+                    return StatusCode(401, "الملف غير موجود" );
                 }
 
                 var IsExist = db.Offices.Where(x => x.Status != 9 && x.ArabicName == OfficeData.ArabicName && x.BranchId == OfficeData.BranchId).SingleOrDefault();
@@ -137,6 +151,7 @@ namespace Dashboard.Controllers
                 offices.ArabicName = OfficeData.ArabicName;
                 offices.EnglishName = OfficeData.EnglishName;
                 offices.Description = OfficeData.Description;
+                offices.ProfileId = Profile.ProfileId;
                 offices.BranchId = OfficeData.BranchId;
                 offices.CreatedBy = userId;
                 offices.CreatedOn = DateTime.Now;

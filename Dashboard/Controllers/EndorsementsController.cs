@@ -35,21 +35,53 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest(new { message = "الرجاء قم بإختيار المرشح" });
                 }
-                var candidateUser = db.CandidateUsers.Where(x => x.CandidateId == candidateId).Select(x => new { x.CandidateUserId}).SingleOrDefault();
+
                 var candidate = db.Candidates.Where(x => x.CandidateId == candidateId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName}).SingleOrDefault();
-                var EndorsementsCount = db.Endorsements.Where(x => x.CandidateUserId == candidateUser.CandidateUserId).Count();
-                var EndorsementsList = db.Endorsements.Where(x => x.CandidateUserId == candidateUser.CandidateUserId)
+                var EndorsementsCount = db.Endorsements.Where(x => x.CandidateId == candidateId).Count();
+                var EndorsementsList = db.Endorsements.Where(x => x.CandidateId == candidateId)
                     .OrderByDescending(x => x.CreatedOn)
                     .Select(x => new
                     {
-                        x.CandidateUserId,
+                        x.CandidateId,
                         x.Nid,
                         x.CreatedOn,
                         
                     }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
 
-                return Ok(new { Endorsements = EndorsementsList, count = EndorsementsList, candidateName = string.Format("{0} {1} {2} {3}", candidate.FirstName, candidate.FatherName, candidate.GrandFatherName, candidate.SurName) });
+                return Ok(new { Endorsements = EndorsementsList, count = EndorsementsCount, candidateName = string.Format("{0} {1} {2} {3}", candidate.FirstName, candidate.FatherName, candidate.GrandFatherName, candidate.SurName) });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
+        }
+
+        [HttpGet("Get")]
+        public IActionResult GetEndorsementsByNationalId([FromQuery] string nationalId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(nationalId))
+                {
+                    return BadRequest(new { message = "الرجاء قم بإدخال الرقم الوطني" });
+                }
+
+                var candidate = db.Candidates.Where(x => x.Nid == nationalId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId}).SingleOrDefault();
+
+                if (candidate.Levels < 3)
+                {
+                    return BadRequest(new { message = string.Format("المرشح صاحب الرقم الوطني {0} لم يكمل عملية تسجيل",nationalId) });
+                }
+
+                if (candidate.Levels == 3)
+                {
+                    return BadRequest(new { message = string.Format("المرشح {0} {1} {2} {3} لم يكمل عملية تسجيل", candidate.FirstName, candidate.FatherName, candidate.GrandFatherName, candidate.SurName) });
+                }
+           
+
+
+                return Ok(new {candidateId = candidate.CandidateId, candidateName = string.Format("{0} {1} {2} {3}", candidate.FirstName, candidate.FatherName, candidate.GrandFatherName, candidate.SurName) });
             }
             catch (Exception e)
             {
@@ -97,20 +129,18 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "يجب أن يكون عدد الرقم الوطني 12 الحرف" });
                 }
 
-                var selectedEndorsement = db.Endorsements.Where(x => x.Nid == endorsement.Nid).SingleOrDefault();
+                var endorsementCount = db.Endorsements.Where(x => x.Nid == endorsement.Nid).Count();
 
-                if(selectedEndorsement != null)
+                if(endorsementCount > 0)
                 {
                     return BadRequest(new { message = "من غير المسموح تجسيل المزكي أكثر من مرة" });
                 }
 
 
-                var candidateUser = db.CandidateUsers.Where(x => x.CandidateId == endorsement.CandidateId).Select(x => new { x.CandidateUserId }).SingleOrDefault();
-
                 db.Endorsements.Add(new Endorsements
                 {
                     Nid = endorsement.Nid,
-                    CandidateUserId = candidateUser.CandidateUserId,
+                    CandidateId = endorsement.CandidateId,
                     CreatedOn = DateTime.Now,
                     CreatedBy = userId
                 });
@@ -120,7 +150,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { message = e.Message });
+                return StatusCode(500, new { message = e.InnerException.Message });
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Models
+namespace Vue.Models
 {
     public partial class Candidates
     {

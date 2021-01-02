@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Models
+namespace Vue.Models
 {
     public partial class Endorsements
     {
@@ -10,5 +10,7 @@ namespace Models
         public string Nid { get; set; }
         public long? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
+
+        public virtual Candidates Candidate { get; set; }
     }
 }

@@ -48,17 +48,29 @@ export default {
             if (this.pageNo === undefined) {
                 this.pageNo = 1;
             }
+          
             this.loading = true;
             this.$http.GetCandidates(this.pageNo, this.pageSize)
                 .then(response => {
+                   
                     this.loading = false;
                     this.candidates = response.data.candidates;
                     this.pages = response.data.count;
                 })
                 .catch((err) => {
+                  
                     this.loading = false;
-                    //this.$blockUI.Stop();
+                 
+                    
+                   
+                    this.$notify({
+                        title: 'خطأ بعملية جلب المرشحين',
+                        dangerouslyUseHTMLString: true,
+                        type: 'error',
+                        message: err.message
+                    });
                     this.pages = 0;
+                    this.$blockUI.Stop();
                     return err;
                 });
 

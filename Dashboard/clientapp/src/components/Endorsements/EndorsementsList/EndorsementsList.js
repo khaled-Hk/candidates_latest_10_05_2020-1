@@ -1,13 +1,14 @@
 ﻿import moment from 'moment';
+import AddEndorsement from './AddEndorsement/AddEndorsement.vue';
 
 export default {
-    name: 'Endorsements',
+    name: 'EndorsementsList',
     created() {
-        this.candidateId = this.$parent.CandidateId;
-        this.getEndorsements( this.pageNo);
+        this.candidateId = this.$parent.ruleForm.CandidateId;
+        this.getEndorsements(this.pageNo);
     },
     components: {
-        
+        'AddEndorsement': AddEndorsement
     },
     filters: {
         moment: function (date) {
@@ -20,20 +21,24 @@ export default {
     },
     data() {
         return {
-            candidateId:null,
+
+            candidateId: null,
             endorsements: [],
             pageNo: 1,
             pageSize: 10,
+            pages:0,
             candidateName: null,
-            pages: 0,
             state: 0
+
+
         }
     },
+
     methods: {
 
-        getEndorsements(pageNo)
-        {
-           
+
+        getEndorsements(pageNo) {
+
 
             if (pageNo === undefined) {
                 pageNo = 1;
@@ -42,31 +47,29 @@ export default {
             this.$http.GetEndorsements(this.candidateId, pageNo, this.pageSize).then((response) => {
                 this.$blockUI.Stop();
                 this.endorsements = response.data.endorsements;
-                this.candidateName = response.data.candidateName;
                 this.pages = response.data.count;
+                this.candidateName = response.data.candidateName;
                 
+
             }).catch((error) => {
                 this.$blockUI.Stop();
                 if (error)
                     this.$message({
                         type: 'error',
-                        message: error.response.data.message
+                        message: error.message
                     });
-                    this.endorsements = [];
+                this.endorsements = [];
                 return error;
             });
-          
-        },
-        navigateEndorsmenents(pageNo) {
-            this.getEndorsements(this.$parent.CandidateId, pageNo, this.pageSize)
-        },
-        Back()
-        {
-            this.$parent.state = 0;
+
         },
         navigate(state)
         {
-            this.state = state
+            this.state = state;
+        },
+        Back() {
+            this.$parent.state = 0;
+            this.$parent.ruleForm.Nid = null;
         }
     }
 

@@ -369,6 +369,11 @@ export default {
         return axios.post(`/Api/Admin/Endorsements`, obj);
     },
 
+    //************************ Statistics **************************
+    GetStatistics() {
+        return axios.get(`/Api/Admin/Statistics`);
+    },
+
    
 
 

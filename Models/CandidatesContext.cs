@@ -82,8 +82,6 @@ namespace Models
 
                 entity.ToTable("CandidateAttachments", "dbo");
 
-                entity.Property(e => e.CandidateAttachmentId).ValueGeneratedNever();
-
                 entity.Property(e => e.AbsenceOfPrecedents).HasMaxLength(300);
 
                 entity.Property(e => e.BirthDateCertificate).HasMaxLength(300);

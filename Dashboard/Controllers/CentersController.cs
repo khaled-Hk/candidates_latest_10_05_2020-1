@@ -80,30 +80,10 @@ namespace Dashboard.Controllers
         // POST: api/Centers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Centers>> PostCenters(Centers centers)
-        {
-            db.Centers.Add(centers);
-            await db.SaveChangesAsync();
+        
 
-            return CreatedAtAction("GetCenters", new { id = centers.CenterId }, centers);
-        }
-
-        // DELETE: api/Centers/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Centers>> DeleteCenters(long id)
-        {
-            var centers = await db.Centers.FindAsync(id);
-            if (centers == null)
-            {
-                return NotFound();
-            }
-
-            db.Centers.Remove(centers);
-            await db.SaveChangesAsync();
-
-            return centers;
-        }
+       
+        
 
         private bool CentersExists(long id)
         {
@@ -115,10 +95,17 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 if (center == null)
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
                 }
+
                 if (center.ConstituencDetailId == null)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة الفرعية" });
@@ -154,6 +141,7 @@ namespace Dashboard.Controllers
                     Description = center.Description,
                     Longitude = center.Longitude,
                     Latitude = center.Latitude,
+                    ProfileId = Profile.ProfileId,
                     CreatedBy = userId,
                     CreatedOn = DateTime.Now,
                     Status = 1
@@ -172,6 +160,7 @@ namespace Dashboard.Controllers
                             EnglishName = station.EnglishName,
                             Description = station.Description,
                             CenterId = newCenter.CenterId,
+                            ProfileId = Profile.ProfileId,
                             CreatedBy = userId,
                             CreatedOn = DateTime.Now,
                             Status = 1
@@ -197,9 +186,15 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 IQueryable<Centers> CentersQuery;
                 CentersQuery = from p in db.Centers
-                                           where p.Status != 9
+                                           where p.ProfileId == Profile.ProfileId && p.Status != 9
                                            select p;
 
 
@@ -208,6 +203,8 @@ namespace Dashboard.Controllers
 
                 var CenterList = (from p in CentersQuery
                                   join sc in db.ConstituencyDetails on p.ConstituencDetailId equals sc.ConstituencyDetailId
+                                  where sc.ProfileId == Profile.ProfileId && sc.Status != 9
+
                                   orderby p.CreatedOn descending
                                                select new
                                                {
@@ -275,29 +272,41 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 if (centerId == null)
                 {
                     return BadRequest("الرجاء إختيار المركز");
                 }
-                var selectCenter = db.Centers.Where(x => x.CenterId == centerId && x.Status == 1).Select(obj => new { ConstituencyDetailId = obj.ConstituencDetailId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName, obj.Description, obj.Latitude, obj.Longitude }).FirstOrDefault();
+                var selectCenter = db.Centers.Where(x => x.CenterId == centerId && x.Status == 1 && x.ProfileId == Profile.ProfileId ).Select(obj => new { ConstituencyDetailId = obj.ConstituencDetailId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName, obj.Description, obj.Latitude, obj.Longitude }).FirstOrDefault();
                 return Ok(new { Center = selectCenter });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
-        }
+        } 
 
         [HttpGet("GetCentersBasedOn/{constituencyDetailId}")]
         public IActionResult GetCentersBasedOn([FromRoute] long? constituencyDetailId)
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 if (constituencyDetailId == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
+                var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.ProfileId == Profile.ProfileId &&  x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
 
                 if (selectedCenters.Count == 0)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها" });
@@ -316,8 +325,13 @@ namespace Dashboard.Controllers
         {
             try
             {
-                
-                var selectCenters = db.Centers.Where(x => x.Status == 1 ).Select(obj => new { value = obj.ConstituencDetailId, label = obj.ArabicName }).ToList();
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
+                var selectCenters = db.Centers.Where(x => x.Status == 1 && x.ProfileId == Profile.ProfileId).Select(obj => new { value = obj.ConstituencDetailId, label = obj.ArabicName }).ToList();
                 return Ok(new { Centers = selectCenters });
             }
             catch (Exception ex)

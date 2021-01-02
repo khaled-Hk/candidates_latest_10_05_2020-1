@@ -2,8 +2,12 @@
 export default {
     name: 'UpdateCandidates',
     created() {
-        this.GetCandidate();
+        
         this.GetAllRegions();
+        this.GetCandidate();
+       
+       
+        
     },
     components: {
 
@@ -105,7 +109,8 @@ export default {
 
             this.$http.GetAllRegions()
                 .then(response => {
-
+                  
+                   
                     this.regions = response.data;
                     this.$blockUI.Stop();
                 })
@@ -119,9 +124,26 @@ export default {
 
         GetConstituencies() {
             this.$blockUI.Start();
-
             this.ruleForm.ConstituencyId = null;
             this.ruleForm.SubConstituencyId = null
+
+            this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
+                .then(response => {
+                    this.$blockUI.Stop();
+                    this.constituencies = response.data.constituency;
+
+
+                })
+                .catch((err) => {
+                    //  this.loading = false;
+                    //this.$blockUI.Stop();
+                    this.$blockUI.Stop();
+                    return err;
+                });
+        },
+        OnLoadGetConstituencies() {
+            this.$blockUI.Start();
+
 
             this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
                 .then(response => {
@@ -156,6 +178,24 @@ export default {
                     return err;
                 });
         },
+        OnLoadGetAllConstituencyDetails() {
+
+
+            this.$blockUI.Start();
+            this.$http.GetAllConstituencyDetailsBasedOn(this.ruleForm.ConstituencyId)
+                .then(response => {
+                    this.$blockUI.Stop();
+                    this.subConstituencies = response.data.constituencyDetails;
+
+
+                })
+                .catch((err) => {
+                    //  this.loading = false;
+                    //this.$blockUI.Stop();
+                    this.$blockUI.Stop();
+                    return err;
+                });
+        },
         GetCandidate() {
           
             this.$blockUI.Start();
@@ -174,11 +214,13 @@ export default {
                     this.ruleForm.SubConstituencyId = candidate.subConstituencyId;
                     this.ruleForm.ConstituencyId = candidate.constituencyId;
                     this.ruleForm.BirthDate = candidate.birthDate;
-
+                 
                     this.ruleForm.Qualification = candidate.qualification;
                     this.ruleForm.CompetitionType = candidate.competitionType;
                     this.ruleForm.Gender = candidate.gender;
-
+                    this.ruleForm.RegionId = response.data.regionId;
+                    this.OnLoadGetConstituencies();
+                    this.OnLoadGetAllConstituencyDetails();
                 })
                 .catch((err) => {
                     //  this.loading = false;

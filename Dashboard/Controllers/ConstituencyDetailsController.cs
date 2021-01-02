@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Services;
 
 namespace Dashboard.Controllers
 {
@@ -16,10 +17,12 @@ namespace Dashboard.Controllers
     public class ConstituencyDetailsController : ControllerBase
     {
         private readonly CandidatesContext db;
+        private Helper help;
 
         public ConstituencyDetailsController(CandidatesContext context)
         {
             db = context;
+            help = new Helper();
         }
 
         // GET: api/ConstituencyDetails
@@ -104,6 +107,19 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
                 if (constituencyDetails == null)
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
@@ -136,7 +152,9 @@ namespace Dashboard.Controllers
                     ConstituencyId = constituencyDetails.ConstituencyId,
                     RegionId = constituencyDetails.RegionId,
                     Description = constituencyDetails.Description,
+                    ProfileId = Profile.ProfileId,
                     CreatedOn = DateTime.Now,
+                    CreatedBy = userId,
                     Status = 1
 
                 };
@@ -169,6 +187,12 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة" });
                 }
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
 
                 var constituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == ConstituencyDetailsId).FirstOrDefault();
 
@@ -179,6 +203,7 @@ namespace Dashboard.Controllers
 
                 constituencyDetail.Status = 9;
                 constituencyDetail.ModifiedOn = DateTime.Now ;
+                constituencyDetail.ModifiedBy = userId;
 
                 db.ConstituencyDetails.Update(constituencyDetail);
                 db.SaveChanges();
@@ -201,8 +226,14 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
                 }
+                var userId = this.help.GetCurrentUser(HttpContext);
 
-                if(constituencyDetails.ConstituencyDetailId == null)
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (constituencyDetails.ConstituencyDetailId == null || constituencyDetails.ConstituencyDetailId == 0)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة الفرعية" });
                 }
@@ -238,7 +269,7 @@ namespace Dashboard.Controllers
                 selectedConstituencyDetails.RegionId = constituencyDetails.RegionId;
                 selectedConstituencyDetails.Description = constituencyDetails.Description;
                 selectedConstituencyDetails.ConstituencyId = constituencyDetails.ConstituencyId;
-                selectedConstituencyDetails.ModifiedBy = constituencyDetails.ModifiedBy;
+                selectedConstituencyDetails.ModifiedBy = userId;
                 selectedConstituencyDetails.ModifiedOn = DateTime.Now;
 
                 db.ConstituencyDetails.Update(selectedConstituencyDetails);
@@ -258,8 +289,13 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
 
-                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
+                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1 && x.ProfileId == Profile.ProfileId).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
                 return Ok(new { ConstituencyDetails = selectConstituencyDetails });
             }
             catch (Exception ex)
@@ -273,11 +309,17 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 if (constituencyDetailId == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetailId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetailId && x.ProfileId == Profile.ProfileId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).SingleOrDefault();
 
                 if (selectConstituencyDetail == null)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
@@ -290,17 +332,23 @@ namespace Dashboard.Controllers
 
 
         }
-
+        
         [HttpGet("GetConstituencyDetails/{constituencyId}")]
         public IActionResult GetConstituencyDetailsBasedOn([FromRoute] long? constituencyId)
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 if (constituencyId == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
+                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.ProfileId == Profile.ProfileId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
 
                 if (selectedConstituencyDetails.Count == 0)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها" });
@@ -319,9 +367,15 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 IQueryable<ConstituencyDetails> ConstituencyDetailsQuery;
                 ConstituencyDetailsQuery = from p in db.ConstituencyDetails
-                                           where p.Status != 9
+                                           where  p.ProfileId == Profile.ProfileId && p.Status != 9
                                     select p;
 
 
@@ -330,7 +384,7 @@ namespace Dashboard.Controllers
 
                 var ConstituencyDetailsList = (from p in ConstituencyDetailsQuery
                                                join mc in db.Constituencies on p.ConstituencyId equals mc.ConstituencyId
-                                          orderby p.CreatedOn descending
+                                          where mc.ProfileId == Profile.ProfileId && mc.Status != 9 orderby p.CreatedOn descending
                                           select new
                                           {
                                               p.ConstituencyDetailId,

@@ -32,11 +32,18 @@ namespace Dashboard.Controllers
         {
             try
             {
-                if(centerId == null)
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
+                if (centerId == null)
                     return BadRequest(new { message = "الرجاء إختيار المركز"});
+
                 IQueryable<Stations> StationsQuery;
                 StationsQuery = from p in db.Stations
-                               where p.Status != 9 && p.CenterId == centerId
+                               where p.ProfileId == Profile.ProfileId && p.Status != 9 && p.CenterId == centerId
                                select p;
 
 
@@ -45,8 +52,8 @@ namespace Dashboard.Controllers
 
                 var StationList = (from p in StationsQuery
                                   join c in db.Centers on p.CenterId equals c.CenterId
-                                  
-                                  orderby p.CreatedOn descending
+                                   where c.ProfileId == Profile.ProfileId && c.Status != 9
+                                   orderby p.CreatedOn descending
                                   select new
                                   {
                                       p.StationId,
@@ -72,6 +79,12 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 var userId = this.help.GetCurrentUser(HttpContext);
 
                 if (userId <= 0)
@@ -98,6 +111,7 @@ namespace Dashboard.Controllers
                     EnglishName = stations.EnglishName,
                     Description = stations.Description,
                     CenterId = stations.CenterId,
+                    ProfileId = Profile.ProfileId,
                     CreatedBy = userId,
                     CreatedOn = DateTime.Now,
                     Status = 1
@@ -220,11 +234,17 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404,"الملف غير موجود");
+                }
+
                 if (stationId == null)
                 {
                     return BadRequest("الرجاء إختيار المحطة");
                 }
-                var selectedStation = db.Stations.Where(x => x.StationId == stationId && x.Status == 1).Select(obj => new { obj.ArabicName, obj.EnglishName, obj.Description }).FirstOrDefault();
+                var selectedStation = db.Stations.Where(x => x.ProfileId == Profile.ProfileId && x.StationId == stationId && x.Status == 1).Select(obj => new { obj.ArabicName, obj.EnglishName, obj.Description }).FirstOrDefault();
 
                
                 return Ok(new { Station = selectedStation });

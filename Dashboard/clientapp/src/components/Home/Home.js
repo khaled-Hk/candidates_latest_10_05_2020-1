@@ -5,10 +5,26 @@ export default {
     components: {
       
     },
-    created() {        
+    created() {
+       
+        this.getStatistics();
     },
     data() {
-        return {};
+        return {
+            statistics : {}
+        };
     },
-    methods: {}    
+    methods: {
+        getStatistics() {
+            this.$blockUI.Start();
+            this.$http.GetStatistics().then(response => {
+
+                this.statistics = response.data;
+                this.$blockUI.Stop();
+                
+            }).catch(e => {
+                alert(JSON.stringify(e.message))
+            })
+        }
+    }    
 }

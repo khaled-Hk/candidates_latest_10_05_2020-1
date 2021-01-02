@@ -43,15 +43,19 @@ namespace Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-4AI87L8\\SQLEXPRESS;Database=Candidates;Trusted_Connection=True;;MultipleActiveResultSets=true;");
+                optionsBuilder.UseSqlServer("server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("Relational:DefaultSchema", "Candidates");
+
             modelBuilder.Entity<Branches>(entity =>
             {
                 entity.HasKey(e => e.BrancheId);
+
+                entity.ToTable("Branches", "dbo");
 
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
@@ -75,6 +79,8 @@ namespace Models
             {
                 entity.HasKey(e => e.CandidateAttachmentId)
                     .HasName("PK_CandidateAttachments_1");
+
+                entity.ToTable("CandidateAttachments", "dbo");
 
                 entity.Property(e => e.CandidateAttachmentId).ValueGeneratedNever();
 
@@ -102,6 +108,8 @@ namespace Models
             {
                 entity.HasKey(e => e.CandidateContactId);
 
+                entity.ToTable("CandidateContacts", "dbo");
+
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.Object)
@@ -116,6 +124,8 @@ namespace Models
             modelBuilder.Entity<CandidateRepresentatives>(entity =>
             {
                 entity.HasKey(e => e.CandidateRepresentativeId);
+
+                entity.ToTable("CandidateRepresentatives", "dbo");
 
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
@@ -158,6 +168,8 @@ namespace Models
             {
                 entity.HasKey(e => e.CandidateUserId);
 
+                entity.ToTable("CandidateUsers", "dbo");
+
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -198,6 +210,8 @@ namespace Models
             modelBuilder.Entity<Candidates>(entity =>
             {
                 entity.HasKey(e => e.CandidateId);
+
+                entity.ToTable("Candidates", "dbo");
 
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
@@ -244,6 +258,8 @@ namespace Models
             {
                 entity.HasKey(e => e.CenterId);
 
+                entity.ToTable("Centers", "dbo");
+
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -284,6 +300,8 @@ namespace Models
             {
                 entity.HasKey(e => e.ChairDetailId);
 
+                entity.ToTable("ChairDetails", "dbo");
+
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
@@ -298,6 +316,8 @@ namespace Models
             {
                 entity.HasKey(e => e.ChairId);
 
+                entity.ToTable("Chairs", "dbo");
+
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
@@ -311,6 +331,8 @@ namespace Models
             modelBuilder.Entity<Constituencies>(entity =>
             {
                 entity.HasKey(e => e.ConstituencyId);
+
+                entity.ToTable("Constituencies", "dbo");
 
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
@@ -344,6 +366,8 @@ namespace Models
             {
                 entity.HasKey(e => e.ConstituencyDetailChairId);
 
+                entity.ToTable("ConstituencyDetailChairs", "dbo");
+
                 entity.HasOne(d => d.ChairDetail)
                     .WithMany(p => p.ConstituencyDetailChairs)
                     .HasForeignKey(d => d.ChairDetailId)
@@ -359,6 +383,8 @@ namespace Models
             {
                 entity.HasKey(e => e.ConstituencyDetailId)
                     .HasName("PK_SubConstituencyId");
+
+                entity.ToTable("ConstituencyDetails", "dbo");
 
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
@@ -393,17 +419,26 @@ namespace Models
             {
                 entity.HasKey(e => e.EndorsementId);
 
+                entity.ToTable("Endorsements", "dbo");
+
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.Nid)
                     .HasColumnName("NID")
                     .HasMaxLength(13)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Candidate)
+                    .WithMany(p => p.Endorsements)
+                    .HasForeignKey(d => d.CandidateId)
+                    .HasConstraintName("FK_Endorsements_Candidates");
             });
 
             modelBuilder.Entity<Entities>(entity =>
             {
                 entity.HasKey(e => e.EntityId);
+
+                entity.ToTable("Entities", "dbo");
 
                 entity.Property(e => e.Address).HasMaxLength(250);
 
@@ -428,6 +463,8 @@ namespace Models
             {
                 entity.HasKey(e => e.EntityAttachmentId);
 
+                entity.ToTable("EntityAttachments", "dbo");
+
                 entity.Property(e => e.CampaignAccountNumber).HasMaxLength(300);
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -442,6 +479,8 @@ namespace Models
             modelBuilder.Entity<EntityRepresentatives>(entity =>
             {
                 entity.HasKey(e => e.EntityRepresentativeId);
+
+                entity.ToTable("EntityRepresentatives", "dbo");
 
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
@@ -483,6 +522,8 @@ namespace Models
             modelBuilder.Entity<EntityUsers>(entity =>
             {
                 entity.HasKey(e => e.EntityUserId);
+
+                entity.ToTable("EntityUsers", "dbo");
 
                 entity.Property(e => e.EntityUserId).ValueGeneratedNever();
 
@@ -532,6 +573,8 @@ namespace Models
             {
                 entity.HasKey(e => e.OfficeId);
 
+                entity.ToTable("Offices", "dbo");
+
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -557,6 +600,8 @@ namespace Models
 
             modelBuilder.Entity<Profile>(entity =>
             {
+                entity.ToTable("Profile", "dbo");
+
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(600);
@@ -574,6 +619,8 @@ namespace Models
             {
                 entity.HasKey(e => e.RegionId);
 
+                entity.ToTable("Regions", "dbo");
+
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -588,6 +635,8 @@ namespace Models
             modelBuilder.Entity<Stations>(entity =>
             {
                 entity.HasKey(e => e.StationId);
+
+                entity.ToTable("Stations", "dbo");
 
                 entity.Property(e => e.ArabicName).HasMaxLength(200);
 
@@ -609,6 +658,8 @@ namespace Models
 
             modelBuilder.Entity<Users>(entity =>
             {
+                entity.ToTable("Users", "dbo");
+
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");

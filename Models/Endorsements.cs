@@ -10,5 +10,7 @@ namespace Models
         public string Nid { get; set; }
         public long? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
+
+        public virtual Candidates Candidate { get; set; }
     }
 }

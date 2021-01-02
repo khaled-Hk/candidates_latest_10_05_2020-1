@@ -20,6 +20,7 @@ namespace Models
         public DateTime? CreatedOn { get; set; }
         public long? CreatedBy { get; set; }
         public long? CandidateId { get; set; }
+
         public virtual Candidates Candidate { get; set; }
     }
 }

@@ -208,7 +208,6 @@ namespace Dashboard
                 var tokens = antiforgery.GetAndStoreTokens(context);
                 context.Response.Cookies.Append("X-XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
                 //}
-
                 return next(context);
             });
 
@@ -232,7 +231,6 @@ namespace Dashboard
 
             app.Use(async (context, next) =>
             {
-
                 if (!context.User.Identity.IsAuthenticated)
                 {
                     await context.ChallengeAsync();
@@ -259,8 +257,6 @@ namespace Dashboard
                    });
                }
            );
-
-
         }
     }
 }

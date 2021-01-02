@@ -69,6 +69,11 @@ namespace Dashboard.Controllers
 
                 var candidate = db.Candidates.Where(x => x.Nid == nationalId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId}).SingleOrDefault();
 
+                if (candidate==null)
+                {
+                    return BadRequest(new { message = string.Format("المرشح صاحب الرقم الوطني {0} لم يسجل من قبل ", nationalId) });
+                }
+
                 if (candidate.Levels < 3)
                 {
                     return BadRequest(new { message = string.Format("المرشح صاحب الرقم الوطني {0} لم يكمل عملية تسجيل",nationalId) });

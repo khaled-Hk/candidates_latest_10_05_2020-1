@@ -9,7 +9,7 @@ using Services;
 
 namespace Management.Controllers
 {
-    //[ValidateAntiForgeryToken]
+  
     [Produces("application/json")]
     [Route("Api/Admin/User")]
     public class UserController : Controller
@@ -373,6 +373,7 @@ namespace Management.Controllers
             }
         }
 
+       // [IgnoreAntiforgeryToken]
         [HttpGet("{UserId}/image")]
         public IActionResult GetUserImage(long UserId)
         {

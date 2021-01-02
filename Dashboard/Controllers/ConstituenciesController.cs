@@ -9,7 +9,7 @@ using Services;
 
 namespace Vue.Controllers
 {
-    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
     public class ConstituenciesController : ControllerBase

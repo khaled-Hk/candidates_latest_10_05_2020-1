@@ -12,7 +12,7 @@ using Services;
 
 namespace Dashboard.Controllers
 {
-    [ValidateAntiForgeryToken]
+   // [ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("Api/Admin/Profile")]
     public class ProfileController : Controller 

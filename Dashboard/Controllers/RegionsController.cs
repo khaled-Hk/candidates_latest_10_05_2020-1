@@ -8,7 +8,7 @@ using Services;
 
 namespace Dashboard.Controllers
 {
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("Api/Admin/Regions")]
     public class RegionsController : Controller

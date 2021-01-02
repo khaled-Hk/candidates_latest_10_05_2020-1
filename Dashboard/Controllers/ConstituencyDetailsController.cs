@@ -10,7 +10,7 @@ using Models;
 
 namespace Dashboard.Controllers
 {
-   [AllowAnonymous]
+    [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
     public class ConstituencyDetailsController : ControllerBase

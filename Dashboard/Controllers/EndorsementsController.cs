@@ -11,6 +11,7 @@ using Services;
 
 namespace Dashboard.Controllers
 {
+    [ValidateAntiForgeryToken]
     [Route("Api/Admin/[controller]")]
     [ApiController]
     public class EndorsementsController : ControllerBase

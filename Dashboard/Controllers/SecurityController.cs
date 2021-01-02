@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 
 namespace Dashboard.Controllers
 {
+   
     [Produces("application/json")]
     [Route("Security")]
     public class SecurityController : Controller
@@ -65,7 +66,7 @@ namespace Dashboard.Controllers
 
        
 
-
+        
         [AllowAnonymous]
         [HttpGet("Login")] 
         public async Task<IActionResult> Login(string returnUrl = null)

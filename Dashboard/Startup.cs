@@ -49,6 +49,11 @@ namespace Dashboard
                 options.HeaderName = "X-XSRF-TOKEN";
             });
 
+            //services.AddHttpsRedirection(options =>
+            //{
+            //    options.HttpsPort = 443;
+            //});
+
             services.AddDbContext<CandidatesContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Candidate")));
 
             services.AddCors(options =>
@@ -64,7 +69,8 @@ namespace Dashboard
                       .RequireAuthenticatedUser()
                       .Build();
 
-            //services.AddAuthentication(OAuthValidationDefaults.AuthenticationScheme)
+            //  services.AddAuthentication(OAuthValidationDefaults.AuthenticationScheme)
+
 
             services.AddAuthentication(o =>
             {
@@ -170,69 +176,19 @@ namespace Dashboard
                 app.UseHsts();
             }
 
+           // app.UseHttpsRedirection();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            //app.UseStaticFiles();
-            //app.UseRouting();
-            //app.UseAuthorization();
-            //app.UseAuthentication();
-            //app.UseSpaStaticFiles();
-            //app.UseHttpsRedirection();
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-
-            //    routes.MapSpaFallbackRoute(
-            //        name: "spa-fallback",
-            //        defaults: new { controller = "Home", action = "Index" });
-            //});
-
-            //app.Use(next => context =>
-            //{
-            ////if (context.Request.Path == "/")
-            ////{
-            //    // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
-            //    var tokens = antiforgery.GetAndStoreTokens(context);
-            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = true });
-            ////}
-
-            //    return next(context);
-            //});
-
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapDefaultControllerRoute();
-            //    endpoints.MapRazorPages();
-            //    // 2. Setup fallback to index.html for all app-routes
-            //    endpoints.MapFallbackToFile(@"/clientapp/{*path:nonfile}", @"clientapp/dist/index.html");
-            //});
-
-
-            //app.Use(async (context, next) =>
-            //{
-
-            //    if (!context.User.Identity.IsAuthenticated)
-            //    {
-            //        await context.ChallengeAsync();
-            //    }
-            //    else
-            //    {
-            //        await next();
-            //    }
-            //});
-
+            
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
             app.UseSpaStaticFiles();
-            app.UseHttpsRedirection();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -244,8 +200,39 @@ namespace Dashboard
                     defaults: new { controller = "Home", action = "Index" });
             });
 
+            app.Use(next => context =>
+            {
+                //if (context.Request.Path == "/")
+                //{
+                // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
+                var tokens = antiforgery.GetAndStoreTokens(context);
+                context.Response.Cookies.Append("X-XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+                //}
+
+                return next(context);
+            });
+
+            //app.Use(next => context =>
+            //{
+            //    string path = context.Request.Path.Value;
+            //    if (path.IndexOf("a", StringComparison.OrdinalIgnoreCase) != -1 || path.IndexOf("b", StringComparison.OrdinalIgnoreCase) != -1)
+            //    {
+            //        // The request token can be sent as a JavaScript-readable cookie,
+            //        // and Angular uses it by default.
+            //        var tokens = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+            //    }
+            //    return next(context);
+            //});
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
             app.Use(async (context, next) =>
             {
+
                 if (!context.User.Identity.IsAuthenticated)
                 {
                     await context.ChallengeAsync();
@@ -256,24 +243,6 @@ namespace Dashboard
                 }
             });
 
-            app.Use(next => context =>
-            {
-                string path = context.Request.Path.Value;
-                if (path.IndexOf("a", StringComparison.OrdinalIgnoreCase) != -1 || path.IndexOf("b", StringComparison.OrdinalIgnoreCase) != -1)
-                {
-                    // The request token can be sent as a JavaScript-readable cookie,
-                    // and Angular uses it by default.
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
-                }
-                return next(context);
-            });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
             app.Map("",
                adminApp =>
                {
@@ -281,14 +250,11 @@ namespace Dashboard
                    {
                        if (env.IsDevelopment())
                            spa.Options.SourcePath = "ClientApp";
-
                        else
                            spa.Options.SourcePath = "dist";
-
                        if (env.IsDevelopment())
                        {
-                           spa.UseVueCli(npmScript: "serve", port: 8080);
-                           // spa.UseVueCli(npmScript: "serve",port : 7001);
+                           spa.UseVueCli(npmScript: "serve");
                        }
                    });
                }

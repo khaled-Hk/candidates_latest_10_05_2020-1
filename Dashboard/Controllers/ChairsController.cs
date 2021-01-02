@@ -13,6 +13,7 @@ using Services;
 
 namespace Dashboard.Controllers
 {
+    [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
     public class ChairsController : ControllerBase

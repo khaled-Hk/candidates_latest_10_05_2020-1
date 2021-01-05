@@ -11,7 +11,7 @@ using Services;
 
 namespace Dashboard.Controllers
 {
-  //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
     public class StationsController : ControllerBase

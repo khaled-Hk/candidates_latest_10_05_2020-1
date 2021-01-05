@@ -22,7 +22,7 @@ export default {
             //this.$set(this.menuFlag, 0, '');
             //this.$set(this.menuFlag, 1, '');
             //this.$set(this.menuFlag, 4, '');
-            for (var i = 0; i < 11; i++) {
+            for (var i = 0; i < 20; i++) {
                 if (i == id) {
                     this.$set(this.menuFlag, id, 'active');
                 } else {

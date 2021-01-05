@@ -8,6 +8,7 @@ using Services;
 
 namespace Vue.Controllers
 {
+    [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
     public class RepresentativesController : ControllerBase

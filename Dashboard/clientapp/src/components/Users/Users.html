@@ -55,7 +55,7 @@
                                                         <tr v-for="item,index in users">
                                                             <td>
                                                                 <div class="img-container">
-                                                                    <a :href="'http://localhost:5000/Api/Admin/User/' + item.userId + '/image'"><img :src="'http://localhost:5000/Api/Admin/User/' + item.userId + '/image'" /></a>
+                                                                    <a :href="'/Api/Admin/User/' + item.userId + '/image'"><img :src="'/Api/Admin/User/' + item.userId + '/image'" /></a>
                                                                 </div>
                                                             </td>
                                                             <td class="td-name ">

@@ -47,7 +47,7 @@ export default {
                     }
 
                     if (this.ActiveProfileflage) {
-                        if (this.ActiveProfileId != response.data.id) {
+                        if (this.ActiveProfileId != response.data.id && response.data.id != undefined) {
                             this.ActiveProfile = response.data.profile;
                             this.ActiveProfileId = response.data.id
                             this.$alert('<h4>' + 'تم تغير تاريخ تفـعيل الانتخابات' + '</h4>', '', this.warning);
@@ -65,8 +65,9 @@ export default {
         GetRuningProfile() {
             this.$http.GetRuningProfile()
                 .then(response => {
-                ///* eslint-disable no-debugger */
-                //    debugger;
+                    
+              // /* eslint-disable no-debugger */
+                    //   debugger;
                     if (!this.RuningProfileFlage) {
                         this.RuningProfileFlage = true;
                         this.RuningProfile = response.data.profile;
@@ -75,7 +76,7 @@ export default {
                     }
 
                     if (this.RuningProfileFlage) {
-                        if (this.RuningProfileId != response.data.id) {
+                        if (this.RuningProfileId != response.data.id && response.data.id != undefined) {
                             this.RuningProfile = response.data.profile;
                             this.RuningProfileId = response.data.id
                             this.$alert('<h4>' + 'تم تغير ضبط الانتخابات للنظام الرجاء التأكد عند ادخال البيانات' + '</h4>', '', this.warning);

@@ -9,7 +9,7 @@ using Services;
 
 namespace Management.Controllers
 {
-  
+    //[ValidateAntiForgeryToken]
     [Produces("application/json")]
     [Route("Api/Admin/User")]
     public class UserController : Controller
@@ -27,30 +27,30 @@ namespace Management.Controllers
         {
             try
             {
-                IQueryable<Users> Users = from p in db.Users where p.Status != 9 && p.Status != 6 && p.UserType!=3 && p.UserType != 4 && p.UserType != 5 select p;
+                IQueryable<Users> Users = from p in db.Users where p.Status != 9 && p.Status != 6 && p.UserType != 3 && p.UserType != 4 && p.UserType != 5 select p;
 
                 var UsersCount = (from p in Users
                                   select p).Count();
 
 
                 var UserInfo = (from p in Users
-                                     orderby p.CreatedOn descending
-                                     select new
-                                     {
-                                         UserId = p.Id,
-                                         Name = p.Name,
-                                         LoginName = p.LoginName,
-                                         State = p.Status,
-                                         Email = p.Email,
-                                         Password = p.Password,
-                                         CreatedOn = p.CreatedOn,
-                                         Phone = p.Phone,
-                                         gender = p.Gender,
-                                         BirthDate = p.BirthDate,
-                                         CreatedBy = p.CreatedBy,
-                                         Image = p.Image,
-                                         UserType=p.UserType
-                                     }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+                                orderby p.CreatedOn descending
+                                select new
+                                {
+                                    UserId = p.Id,
+                                    Name = p.Name,
+                                    LoginName = p.LoginName,
+                                    State = p.Status,
+                                    Email = p.Email,
+                                    Password = p.Password,
+                                    CreatedOn = p.CreatedOn,
+                                    Phone = p.Phone,
+                                    gender = p.Gender,
+                                    BirthDate = p.BirthDate,
+                                    CreatedBy = p.CreatedBy,
+                                    Image = p.Image,
+                                    UserType = p.UserType
+                                }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { users = UserInfo, count = UsersCount });
             }
@@ -138,7 +138,7 @@ namespace Management.Controllers
 
 
                 }
-                 
+
 
                 var cPhone = (from u in db.Users
                               where u.Phone == user.Phone
@@ -373,7 +373,6 @@ namespace Management.Controllers
             }
         }
 
-       // [IgnoreAntiforgeryToken]
         [HttpGet("{UserId}/image")]
         public IActionResult GetUserImage(long UserId)
         {

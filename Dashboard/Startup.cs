@@ -29,17 +29,21 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using VueCliMiddleware;
+using IHostingEnvironment = Microsoft.Extensions.Hosting.IHostingEnvironment;
 
 namespace Dashboard
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IHostingEnvironment _env { get; }
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
-        public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -133,7 +137,7 @@ namespace Dashboard
             services.AddRazorPages().AddRazorRuntimeCompilation();
             //services.AddDataProtection();
 
-            services.AddMvc(config =>
+             services.AddMvc(config =>
             {
                 config.Filters.Add(new AuthorizeFilter(policy));
                 config.EnableEndpointRouting = false;
@@ -176,19 +180,25 @@ namespace Dashboard
                 app.UseHsts();
             }
 
-           // app.UseHttpsRedirection();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
-            
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
             app.UseSpaStaticFiles();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            
+        
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -202,12 +212,12 @@ namespace Dashboard
 
             app.Use(next => context =>
             {
-                //if (context.Request.Path == "/")
-                //{
+                if (context.Request.Path == "/")
+                {
                 // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
                 var tokens = antiforgery.GetAndStoreTokens(context);
                 context.Response.Cookies.Append("X-XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
-                //}
+                }
                 return next(context);
             });
 

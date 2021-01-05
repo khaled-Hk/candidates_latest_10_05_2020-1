@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 
 namespace Dashboard.Controllers
 {
-   
     [Produces("application/json")]
     [Route("Security")]
     public class SecurityController : Controller
@@ -64,11 +63,11 @@ namespace Dashboard.Controllers
             }
         }
 
-       
 
-        
+
+
         [AllowAnonymous]
-        [HttpGet("Login")] 
+        [HttpGet("Login")]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
 
@@ -79,8 +78,8 @@ namespace Dashboard.Controllers
             //}
             //else
             //{
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return View();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return View();
             //  //  return RedirectPermanent("/Login");
             //}
         }
@@ -308,7 +307,7 @@ namespace Dashboard.Controllers
                 if (loginUser.Password != null)
                 {
                     var User = db.Users.Where(x => x.Id == userId && x.Status != 9).SingleOrDefault();
-                    
+
 
                     if (Security.VerifyHash(loginUser.Password, User.Password, HashAlgorithms.SHA512))
                     {
@@ -329,7 +328,7 @@ namespace Dashboard.Controllers
                 else
                 {
                     var User = db.Users.Where(x => x.Id == loginUser.UserId && x.Status != 9).SingleOrDefault();
-                    
+
                     if (User == null)
                     {
                         return BadRequest("خطأ بيانات المستخدم غير موجودة");

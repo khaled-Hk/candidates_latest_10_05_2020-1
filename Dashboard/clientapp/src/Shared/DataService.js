@@ -1,6 +1,6 @@
 ﻿import axios from 'axios';
 
-axios.defaults.headers.common['X-CSRF-TOKEN'] = document.cookie.split("=")[1];
+axios.defaults.headers.common['X-XSRF-TOKEN'] = document.cookie.split('=')[1];
 //const baseUrl = 'http://localhost:4810/Api';
 
 export default {

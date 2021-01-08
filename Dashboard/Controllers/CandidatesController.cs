@@ -767,7 +767,7 @@ namespace Dashboard.Controllers
                 db.CandidateAttachments.Add(attachments);
 
                 candidate.Levels = 4;
-                candidate.Status = 1;
+              
                 db.Candidates.Update(candidate);
                 db.SaveChanges();
                 return Ok(new { message = "لقد قمت برفع الملفات بنــجاح", level = candidate.Levels});
@@ -778,7 +778,27 @@ namespace Dashboard.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [HttpGet("CandidateId")]
+        public IActionResult GetCandidateIdByNationalId([FromQuery] string nationalId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(nationalId))
+                {
+                    return BadRequest(new { message = "الرجاء قم بإدخال الرقم الوطني" });
+                }
+
+                var candidate = db.Candidates.Where(x => x.Nid == nationalId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId }).SingleOrDefault();
+
+               
+                return Ok(new { candidateId = candidate.CandidateId, candidateName = string.Format("{0} {1} {2} {3}", candidate.FirstName, candidate.FatherName, candidate.GrandFatherName, candidate.SurName) });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
+        }
+
         [HttpGet("CompleteRegistration/{NationalId}")]
         public IActionResult CompleteRegistration([FromRoute] string NationalId)
         {

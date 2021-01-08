@@ -263,7 +263,10 @@ export default {
     GetCandidateUser(candidateId) {
         return axios.get(`/Api/Admin/Candidates/GetCandidateUser/${candidateId}`);
     },
-   
+    GetCandidateIdByNid(Nid) {
+       
+        return axios.get(`/api/Admin/Candidates/CandidateId?nationalId=${Nid}`);
+    },
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
     //    return axios.post(`/Api/Admin/Companies/${CompanyId}/delete`);
@@ -334,7 +337,9 @@ export default {
     GetCandidateRepresentatives(candidateIs) {
         return axios.get(`/Api/Admin/Representatives/GetRepresentativesBy/${candidateIs}`);
     },
-
+    AddCandidateRepresentative(form) {
+        return axios.post(`/Api/Admin/Representatives/Candidate/Add`, form);
+    },
 
     //************************ Chairs **************************
     GetChairs(pageNo, pageSize) {
@@ -367,6 +372,10 @@ export default {
     },
     AddEndorsement(obj) {
         return axios.post(`/Api/Admin/Endorsements`, obj);
+    },
+    AddNewEndorsement(obj) {
+        
+        return axios.post(`/Api/Admin/Endorsements/Add`, obj);
     },
 
     //************************ Statistics **************************

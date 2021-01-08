@@ -22,8 +22,7 @@ export default {
 
             ruleForm: {
                 CandidateId: null,
-                Nid: null,
-                
+                Nid: null
             },
             state: 0
                

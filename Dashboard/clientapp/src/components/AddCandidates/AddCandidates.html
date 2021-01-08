@@ -1,0 +1,17 @@
+﻿<div class="Regions">
+    <div class="content" style="background-color:lightgray">
+        <div class="panel-header">
+        </div>
+        <div class="row DataSet" style="height:100%">
+
+            <NationalNumberForm v-if="level==0"></NationalNumberForm>
+            <PhoneForm v-if="level==1"></PhoneForm>
+            <candidates-data v-if="level==2"></candidates-data>
+            <CandidateDocuments v-if="level==3"></CandidateDocuments>
+            <AddRepresentatives v-if="level==4"></AddRepresentatives>
+            <EndorsementsList v-if="level==5"></EndorsementsList>
+            <CompleteRegistration v-if="level==6"></CompleteRegistration>
+
+        </div>
+    </div>
+</div>

@@ -13,6 +13,7 @@ namespace Models
         }
 
         public long CandidateId { get; set; }
+        public long? CandidateNumber { get; set; }
         public string FirstName { get; set; }
         public string FatherName { get; set; }
         public string GrandFatherName { get; set; }
@@ -36,6 +37,7 @@ namespace Models
         public DateTime? CreatedOn { get; set; }
         public long? CreatedBy { get; set; }
 
+        public virtual Profile Profile { get; set; }
         public virtual ICollection<CandidateAttachments> CandidateAttachments { get; set; }
         public virtual ICollection<CandidateRepresentatives> CandidateRepresentatives { get; set; }
         public virtual ICollection<Endorsements> Endorsements { get; set; }

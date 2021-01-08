@@ -8,9 +8,11 @@ namespace Models
         public Profile()
         {
             Branches = new HashSet<Branches>();
+            Candidates = new HashSet<Candidates>();
             Centers = new HashSet<Centers>();
             Constituencies = new HashSet<Constituencies>();
             ConstituencyDetails = new HashSet<ConstituencyDetails>();
+            Endorsements = new HashSet<Endorsements>();
             Offices = new HashSet<Offices>();
         }
 
@@ -28,9 +30,11 @@ namespace Models
         public DateTime? ModifiedOn { get; set; }
 
         public virtual ICollection<Branches> Branches { get; set; }
+        public virtual ICollection<Candidates> Candidates { get; set; }
         public virtual ICollection<Centers> Centers { get; set; }
         public virtual ICollection<Constituencies> Constituencies { get; set; }
         public virtual ICollection<ConstituencyDetails> ConstituencyDetails { get; set; }
+        public virtual ICollection<Endorsements> Endorsements { get; set; }
         public virtual ICollection<Offices> Offices { get; set; }
     }
 }

@@ -22,8 +22,7 @@ export default {
 
             ruleForm: {
                 CandidateId: null,
-                Nid: null,
-                
+                Nid: null
             },
             state: 0
                
@@ -43,12 +42,7 @@ export default {
                         .then(response => {
                             
                             this.$blockUI.Stop();
-                            this.$notify({
-                                title: response.data.message,
-                                dangerouslyUseHTMLString: true,
-                                type: 'info',
-                                // message: err.response.data.message
-                            });
+                          
                             this.ruleForm.CandidateId = response.data.candidateId;
                             this.state = 1;
 

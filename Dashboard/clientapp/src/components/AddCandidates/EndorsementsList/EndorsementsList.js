@@ -4,8 +4,7 @@ import AddEndorsement from './AddEndorsement/AddEndorsement.vue';
 export default {
     name: 'EndorsementsList',
     created() {
-        this.candidateId = this.$parent.ruleForm.CandidateId;
-       
+        this.candidateId = this.$parent.candidateId;
         this.getEndorsements(this.pageNo);
     },
     components: {
@@ -51,7 +50,7 @@ export default {
                 this.pages = response.data.count;
                 this.candidateName = response.data.candidateName;
                 
-
+               
             }).catch((error) => {
                 this.$blockUI.Stop();
                 if (error)
@@ -66,6 +65,7 @@ export default {
         },
         navigate(state)
         {
+           
             this.state = state;
         },
         Back() {

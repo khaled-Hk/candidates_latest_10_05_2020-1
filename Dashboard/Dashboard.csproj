@@ -84,6 +84,7 @@
     <Folder Include="clientapp\src\components\Candidates\UpdateCandidates\" />
     <Folder Include="clientapp\src\components\Rules\Constituencies\" />
     <Folder Include="clientapp\src\components\Rules\ConstituencyDetails\" />
+    <Folder Include="wwwroot\Attachments\" />
   </ItemGroup>
 
   <ItemGroup>

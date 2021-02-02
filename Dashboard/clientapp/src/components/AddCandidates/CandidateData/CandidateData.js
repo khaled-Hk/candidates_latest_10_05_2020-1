@@ -1,13 +1,8 @@
 ﻿import moment from 'moment';
 export default {
-    name: 'UpdateCandidates',
+    name: 'AddCandidates',
     created() {
-        
         this.GetAllRegions();
-        this.GetCandidate();
-       
-       
-        
     },
     components: {
 
@@ -25,8 +20,7 @@ export default {
         return {
             constituencyDetails: [],
             ruleForm: {
-                CandidateId:null,
-               
+                Nid:null,
                 FirstName: null,
                 FatherName: '',
                 GrandFatherName: null,
@@ -40,9 +34,8 @@ export default {
                 ConstituencyId: null,
                 RegionId: null,
                 SubConstituencyId: null,
-                CompetitionType: null,
+                CompetitionType:null,
                
-
             },
             constituencies: [],
             regions: [],
@@ -71,12 +64,12 @@ export default {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
-                    this.ruleForm.CandidateId = this.$parent.CandidateId;
-                    this.$http.UpdateCandidate(this.ruleForm)
+                    this.ruleForm.Nid = this.$parent.Nid;
+                    this.$http.UploadCandidateData(this.ruleForm)
                         .then(response => {
-                         
-
-                           
+                            // this.$parent.GetConstituencies();
+                          
+                            this.$parent.level = response.data.level
                             this.$blockUI.Stop();
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
@@ -84,10 +77,6 @@ export default {
                                 message: '<strong>' + response.data.message + '</strong>',
                                 type: 'success'
                             });
-                            this.$parent.GetCandidates(this.$parent.pageNo);
-                            this.$parent.state = 0
-
-
                         })
                         .catch((err) => {
                             this.$blockUI.Stop();
@@ -106,11 +95,10 @@ export default {
             this.ruleForm.RegionId = null;
             this.ruleForm.ConstituencyId = null;
             this.ruleForm.SubConstituencyId = null
-
+          
             this.$http.GetAllRegions()
                 .then(response => {
-                  
-                   
+
                     this.regions = response.data;
                     this.$blockUI.Stop();
                 })
@@ -124,27 +112,10 @@ export default {
 
         GetConstituencies() {
             this.$blockUI.Start();
+            
             this.ruleForm.ConstituencyId = null;
             this.ruleForm.SubConstituencyId = null
-
-            this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
-                .then(response => {
-                    this.$blockUI.Stop();
-                    this.constituencies = response.data.constituency;
-
-
-                })
-                .catch((err) => {
-                    //  this.loading = false;
-                    //this.$blockUI.Stop();
-                    this.$blockUI.Stop();
-                    return err;
-                });
-        },
-        OnLoadGetConstituencies() {
-            this.$blockUI.Start();
-
-
+            
             this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
                 .then(response => {
                     this.$blockUI.Stop();
@@ -160,7 +131,7 @@ export default {
                 });
         },
         GetAllConstituencyDetails() {
-
+          
             this.ruleForm.SubConstituencyId = null
 
             this.$blockUI.Start();
@@ -178,62 +149,9 @@ export default {
                     return err;
                 });
         },
-        OnLoadGetAllConstituencyDetails() {
-
-
-            this.$blockUI.Start();
-            this.$http.GetAllConstituencyDetailsBasedOn(this.ruleForm.ConstituencyId)
-                .then(response => {
-                    this.$blockUI.Stop();
-                    this.subConstituencies = response.data.constituencyDetails;
-
-
-                })
-                .catch((err) => {
-                    //  this.loading = false;
-                    //this.$blockUI.Stop();
-                    this.$blockUI.Stop();
-                    return err;
-                });
-        },
-        GetCandidate() {
-          
-            this.$blockUI.Start();
-            this.$http.GetCandidate(this.$parent.CandidateId)
-                .then(response => {
-                    this.$blockUI.Stop();
-                    const candidate = response.data.candidate
-                    this.ruleForm.CandidateId = candidate.candidateId;
-                    this.ruleForm.FirstName = candidate.firstName;
-                    this.ruleForm.FatherName = candidate.fatherName;
-                    this.ruleForm.GrandFatherName = candidate.grandFatherName;
-                    this.ruleForm.SurName = candidate.surName;
-                    this.ruleForm.MotherName = candidate.motherName;
-                    this.ruleForm.HomePhone = candidate.homePhone;
-                    this.ruleForm.Email = candidate.email;
-                    this.ruleForm.SubConstituencyId = candidate.subConstituencyId;
-                    this.ruleForm.ConstituencyId = candidate.constituencyId;
-                    this.ruleForm.BirthDate = candidate.birthDate;
-                 
-                    this.ruleForm.Qualification = candidate.qualification;
-                    this.ruleForm.CompetitionType = candidate.competitionType;
-                    this.ruleForm.Gender = candidate.gender;
-                    this.ruleForm.RegionId = response.data.regionId;
-                    this.OnLoadGetConstituencies();
-                    this.OnLoadGetAllConstituencyDetails();
-                })
-                .catch((err) => {
-                    //  this.loading = false;
-                    //this.$blockUI.Stop();
-                    this.$blockUI.Stop();
-                    return err;
-                });
-        },
+       
         resetForm(formName) {
             this.$refs[formName].resetFields();
-        },
-        Back() {
-            this.$parent.state = 0;
         }
 
 

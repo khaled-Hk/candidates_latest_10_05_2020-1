@@ -12,6 +12,7 @@ using Services;
 using System.IO;
 using Common;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dashboard.Controllers
 {
@@ -79,20 +80,29 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, new { message = "الملف غير موجود" });
+                }
+
                 if (CandidateId == null)
                 {
                     return BadRequest(new { message = "حدث خطأ في إستقبال البيانات الرجاء إعادة الادخال" });
                 }
 
-                var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId).Select(s => new { s.FirstName, s.FatherName, s.GrandFatherName, s.SurName, s.MotherName, s.BirthDate, s.CompetitionType, s.ConstituencyId, s.SubConstituencyId, s.Email, s.Gender, s.Qualification, s.HomePhone, s.CandidateId }).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId && x.ProfileId == Profile.ProfileId)
+                    .Select(s => new { s.FirstName, s.FatherName, s.GrandFatherName, s.SurName, s.MotherName, s.BirthDate, s.CompetitionType, s.ConstituencyId, s.SubConstituencyId, s.Email, s.Gender, s.Qualification, s.HomePhone, s.CandidateId }).FirstOrDefault();
 
                 if (candidate == null)
                 {
                     return BadRequest(new { message = "لا يوجد ناخب مسجل " });
                 }
+                var constituency = db.Constituencies.Where(x => x.ConstituencyId == candidate.ConstituencyId).SingleOrDefault();
+                var Region = db.Regions.Where(x => x.RegionId == constituency.RegionId).FirstOrDefault();
 
-                return Ok(new { candidate });
-
+                return Ok(new { candidate, Region.RegionId});
+               
             }
             catch (Exception ex)
             {
@@ -229,6 +239,11 @@ namespace Dashboard.Controllers
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي" );
+                }
                 string codePhoneNumber = candidates.Phone.Substring(0, 3);
                 if (!codePhoneNumber.Equals("091") && !codePhoneNumber.Equals("092") && !codePhoneNumber.Equals("093") && !codePhoneNumber.Equals("094"))
                 {
@@ -240,7 +255,7 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "يجب أن يكون رقم الهاتف بطول 10 أرقام" });
                 }
 
-                var phoneCount = db.Candidates.Where(x => x.Phone == candidates.Phone).Count();
+                var phoneCount = db.Candidates.Where(x => x.Phone == candidates.Phone && x.ProfileId == Profile.ProfileId).Count();
 
                 if (phoneCount > 0)
                 {
@@ -286,12 +301,18 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                }
+
                 if (obj.VerifyCode != 1111)
                 {
                     return BadRequest("رمز التحقق الذي أدخلته خطأ، أعد المحاولة");
                 }
 
-                var candidate = db.Candidates.Where(x => x.Nid == obj.Nid).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == obj.Nid && x.ProfileId == Profile.ProfileId).FirstOrDefault();
 
                 if (candidate == null)
                 {
@@ -327,6 +348,12 @@ namespace Dashboard.Controllers
                 if (userId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
                 }
 
                 if (candidates == null)
@@ -540,6 +567,7 @@ namespace Dashboard.Controllers
                 candidate.ConstituencyId = candidates.ConstituencyId;
                 candidate.SubConstituencyId = candidates.SubConstituencyId;
                 candidate.CompetitionType = candidates.CompetitionType;
+               
                 candidate.Levels = 3;
 
 
@@ -574,6 +602,12 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                }
+
                 var userId = this.help.GetCurrentUser(HttpContext);
 
                 if (userId <= 0)
@@ -585,7 +619,7 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
                 }
-                var candidate = db.Candidates.Where(x => x.Nid == file.Nid).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == file.Nid && x.ProfileId == Profile.ProfileId).FirstOrDefault();
 
 
                 var path = Environment.CurrentDirectory;
@@ -638,6 +672,11 @@ namespace Dashboard.Controllers
                     return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                }
 
                 if (string.IsNullOrEmpty(candidateDocument.BirthCertificateDocument))
                 {
@@ -668,7 +707,7 @@ namespace Dashboard.Controllers
                 }
 
 
-                var candidate = db.Candidates.Where(x => x.Nid == candidateDocument.Nid).SingleOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == candidateDocument.Nid && x.ProfileId == Profile.ProfileId).FirstOrDefault();
 
                 if(candidate == null)
                 {
@@ -745,6 +784,9 @@ namespace Dashboard.Controllers
                 attachments.Status = 1;
                 db.CandidateAttachments.Add(attachments);
 
+                candidate.Levels = 4;
+              
+                db.Candidates.Update(candidate);
                 db.SaveChanges();
                 return Ok(new { message = "لقد قمت برفع الملفات بنــجاح", level = candidate.Levels});
             }
@@ -754,31 +796,57 @@ namespace Dashboard.Controllers
             }
         }
 
-         [HttpGet("CompleteRegistration/{NationalId}")]
+        [HttpGet("CandidateId")]
+        public IActionResult GetCandidateIdByNationalId([FromQuery] string nationalId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(nationalId))
+                {
+                    return BadRequest(new { message = "الرجاء قم بإدخال الرقم الوطني" });
+                }
 
+                var candidate = db.Candidates.Where(x => x.Nid == nationalId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId }).SingleOrDefault();
+
+               
+                return Ok(new { candidateId = candidate.CandidateId, candidateName = string.Format("{0} {1} {2} {3}", candidate.FirstName, candidate.FatherName, candidate.GrandFatherName, candidate.SurName) });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
+        }
+
+        [HttpGet("CompleteRegistration/{NationalId}")]
         public IActionResult CompleteRegistration([FromRoute] string NationalId)
         {
             try
             {
-                var selectedCandidate = db.Candidates.Where(x => x.Nid == NationalId )
-                    .Join(
-                    db.ConstituencyDetails,
-                     candidate => candidate.CandidateId,
-                     subconstituency => subconstituency.ConstituencyDetailId,
-                     (candidate, subconstituency) => new
-                      {
-                         Nid = candidate.Nid,
-                         FirstName = candidate.FirstName,
-                         FatherName = candidate.FatherName,
-                         SurName = candidate.SurName,
-                         subconstituencyName = subconstituency.ArabicName,
-                        
-                     }
-                    )
-                    .Select( s => new { s.Nid, fullName = string.Format("{0} {1} {2}", s.FirstName, s.FatherName, s.SurName), s.subconstituencyName }).FirstOrDefault();
-                
+                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+                if (Profile == null)
+                {
+                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                }
 
-                return Ok(selectedCandidate);
+                //var selectedCandidate = db.Candidates.Where(x => x.Nid == NationalId )
+                //    .Join(
+                //    db.ConstituencyDetails,
+                //     candidate => candidate.CandidateId,
+                //     subconstituency => subconstituency.ConstituencyDetailId,
+                //     (candidate, subconstituency) => new
+                //      {
+                //         Nid = candidate.Nid,
+                //         FirstName = candidate.FirstName,
+                //         FatherName = candidate.FatherName,
+                //         SurName = candidate.SurName,
+                //         subconstituencyName = subconstituency.ArabicName,
+                        
+                //     }
+                //    )
+                //    .Select( s => new { s.Nid, fullName = string.Format("{0} {1} {2}", s.FirstName, s.FatherName, s.SurName), s.subconstituencyName }).SingleOrDefault();
+
+                var candidate = (from c in db.Candidates join sc in db.ConstituencyDetails on c.SubConstituencyId equals sc.ConstituencyDetailId where c.Nid == NationalId select new { c.Nid, fullName = string.Format("{0} {1} {2}", c.FirstName, c.FatherName, c.SurName), subconstituencyName = sc.ArabicName }).FirstOrDefault();
+                return Ok(candidate);
             }
             catch (Exception e)
             {

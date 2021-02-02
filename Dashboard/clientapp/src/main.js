@@ -21,6 +21,7 @@ import Chairs from './components/Administration/Chairs/Chairs.vue';
 import ChairDetails from './components/Administration/Chairs/ChairDetails/ChairDetails.vue';
 import Offices from './components/Administration/Offices/Offices.vue';
 
+import AddCandidates from './components/AddCandidates/AddCandidates.vue'
 import Candidates from './components/Candidates/Candidates.vue';
 
 import DataService from './Shared/DataService';
@@ -84,6 +85,7 @@ const router = new VueRouter({
         { path: '/Administration/Chairs/ChairDetails', component: ChairDetails },
 
         { path: '/Candidates', component: Candidates },
+        { path: '/AddCandidates', component: AddCandidates },
         { path: '/Entites', component: Entites },
         { path: '/Endorsements', component: Endorsements },
     ]

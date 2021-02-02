@@ -1,0 +1,237 @@
+﻿<div class="col-md-12">
+    <div class="card cardRTL">
+        <div class="card-header">
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <ul class="nav nav-pills nav-pills-primary" role="tablist">
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                الرقم الوطني
+                            </a>
+                        </li>
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                جهات الإتصال
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="" role="tablist" aria-expanded="true">
+                                بيانات الناخب
+                            </a>
+                        </li>
+
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                وثائق الناخب
+                            </a>
+                        </li>
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                إضافة مندوب
+                            </a>
+                        </li>
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                قائمة المزكين
+                            </a>
+                        </li>
+                        <li class="nav-item" style="cursor: context-menu">
+                            <a class="nav-link" disabled>
+                                إكمال العملية
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+              
+            </div>
+            </div>
+                    <div class="card-header">
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <el-form-item prop="FirstName">
+                                                <label>إسم الأول</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="إدخل إسم الأول" v-model="ruleForm.FirstName"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <el-form-item prop="FatherName">
+                                                <label>إسم الأب</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="إدخل إسم الأب" v-model="ruleForm.FatherName"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <el-form-item prop="GrandFatherName">
+                                                <label>إسم الجد</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder=" إدخل إسم الجد" v-model="ruleForm.GrandFatherName"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <el-form-item prop="SurName">
+                                                <label>اللقب</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="إدخل اللقب" v-model="ruleForm.SurName"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <el-form-item prop="MotherName">
+                                                <label>إسم الأم الثلاثي</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="إسم الأم الثلاثي" v-model="ruleForm.MotherName"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <el-form-item prop="Gender">
+                                                <label>الجنس</label>
+                                                <div class="form-group">
+                                                    <el-select placeholder="الجنس" v-model="ruleForm.Gender" filterable>
+                                                        <el-option v-for="item in [{label:'ذكر', value: 1},{label:'أنثى', value: 2}]"
+                                                                   :key="item.value"
+                                                                   :label="item.label"
+                                                                   :value="item.value">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <el-form-item prop="HomePhone">
+                                                <label>رقم الهاتف البيت</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="رقم الهاتف البيت" v-model="ruleForm.HomePhone"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <el-form-item prop="Email">
+                                                <label>البريد الإلكتروني</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="البريد الإلكتروني" v-model="ruleForm.Email"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <el-form-item prop="BirthDate">
+                                                <label>تاريخ الميلاد</label>
+                                                <div class="form-group">
+                                                    <el-date-picker class="BirthData w-100"  v-model="ruleForm.BirthDate"
+                                                                    placeholder="إختار تاريخ الميلاد">
+                                                    </el-date-picker>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <el-form-item prop="Qualification">
+                                                <label>المؤهل</label>
+                                                <div class="form-group">
+                                                    <el-input placeholder="المؤهل" v-model="ruleForm.Qualification"></el-input>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <el-form-item>
+                                                <label>المنطقة</label>
+                                                <div class="form-group">
+                                                    <el-select placeholder="إختار المنطقة " v-model="ruleForm.RegionId" @change="GetConstituencies" filterable>
+                                                        <el-option v-for="item in regions"
+                                                                   :key="item.value"
+                                                                   :label="item.label"
+                                                                   :value="item.value">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <el-form-item>
+                                                <label>الدائرة الرئيسية</label>
+                                                <div class="form-group">
+                                                    <el-select placeholder="إختار الدائرة الرئيسية" v-model="ruleForm.ConstituencyId" @change="GetAllConstituencyDetails" filterable>
+                                                        <el-option v-for="item in constituencies"
+                                                                   :key="item.value"
+                                                                   :label="item.label"
+                                                                   :value="item.value">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <el-form-item>
+                                                <label>الدائرة الفرعية</label>
+                                                <div class="form-group">
+                                                    <el-select placeholder="إختار الدائرة الفرعية" v-model="ruleForm.SubConstituencyId" @change="GetCenters" filterable>
+                                                        <el-option v-for="item in subConstituencies"
+                                                                   :key="item.value"
+                                                                   :label="item.label"
+                                                                   :value="item.value">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <el-form-item prop="CompetitionType">
+                                                <label>نوع التنافس</label>
+                                                <div class="form-group">
+                                                    <el-select placeholder="نوع التنافس" v-model="ruleForm.CompetitionType" filterable>
+                                                        <el-option v-for="item in [{label:'عام', value: 1},{label:'خاص', value: 2}]"
+                                                                   :key="item.value"
+                                                                   :label="item.label"
+                                                                   :value="item.value">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                            </el-form-item>
+                                        </div>
+
+                                    </div>
+
+                                    <el-form-item class="AddButtonLeftSide">
+                                        <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
+                                        <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                                    </el-form-item>
+                                </el-form>
+
+                        </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                        </div>
+                    </div><!-- end content-->
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->

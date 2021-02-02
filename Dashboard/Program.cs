@@ -39,5 +39,6 @@ namespace Dashboard
 
                     //.UseUrls("https://localhost:5001");
                 });
+   
     }
 }

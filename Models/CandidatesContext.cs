@@ -82,8 +82,6 @@ namespace Models
 
                 entity.ToTable("CandidateAttachments", "dbo");
 
-                entity.Property(e => e.CandidateAttachmentId).ValueGeneratedNever();
-
                 entity.Property(e => e.AbsenceOfPrecedents).HasMaxLength(300);
 
                 entity.Property(e => e.BirthDateCertificate).HasMaxLength(300);
@@ -213,6 +211,8 @@ namespace Models
 
                 entity.ToTable("Candidates", "dbo");
 
+                entity.HasIndex(e => e.CandidateNumber);
+
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
                 entity.Property(e => e.CompetitionType).HasComment(@"1- عام 
@@ -252,6 +252,11 @@ namespace Models
                 entity.Property(e => e.Qualification).HasMaxLength(200);
 
                 entity.Property(e => e.SurName).HasMaxLength(100);
+
+                entity.HasOne(d => d.Profile)
+                    .WithMany(p => p.Candidates)
+                    .HasForeignKey(d => d.ProfileId)
+                    .HasConstraintName("FK_Candidates_Profile");
             });
 
             modelBuilder.Entity<Centers>(entity =>
@@ -432,6 +437,11 @@ namespace Models
                     .WithMany(p => p.Endorsements)
                     .HasForeignKey(d => d.CandidateId)
                     .HasConstraintName("FK_Endorsements_Candidates");
+
+                entity.HasOne(d => d.Profile)
+                    .WithMany(p => p.Endorsements)
+                    .HasForeignKey(d => d.ProfileId)
+                    .HasConstraintName("FK_Endorsements_Profile");
             });
 
             modelBuilder.Entity<Entities>(entity =>

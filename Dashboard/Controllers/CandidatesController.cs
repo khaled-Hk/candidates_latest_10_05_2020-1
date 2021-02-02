@@ -15,6 +15,7 @@ using System.Diagnostics;
 
 namespace Dashboard.Controllers
 {
+    [Produces("application/json")]
     [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
@@ -102,7 +103,7 @@ namespace Dashboard.Controllers
 
 
         [HttpGet("GetCandidates")]
-        public IActionResult GetCandidates([FromQuery]int pageNo, [FromQuery]int pageSize)
+        public IActionResult GetCandidates([FromQuery]int pageNo, [FromQuery]int pageSize,long SubConstituencyId)
         {
             try
             {
@@ -114,9 +115,20 @@ namespace Dashboard.Controllers
                 }
 
                 IQueryable<Candidates> CandidatesQuery;
-                CandidatesQuery = from p in db.Candidates
-                                  where p.Status != 9 && p.ProfileId == Profile.ProfileId
-                                  select p; 
+                if (SubConstituencyId <= 0)
+                {
+         
+                    CandidatesQuery = from p in db.Candidates
+                                      where p.Status != 9 && p.ProfileId == Profile.ProfileId
+                                      select p;
+                } else
+                {
+                    
+                    CandidatesQuery = from p in db.Candidates
+                                      where p.Status != 9 && p.ProfileId == Profile.ProfileId && p.SubConstituencyId == SubConstituencyId
+                                      select p;
+                }
+               
 
                 var CandidatesCount = (from p in CandidatesQuery
                                        select p).Count();
@@ -715,8 +727,14 @@ namespace Dashboard.Controllers
                     }
                 }
                
+               
+
+                candidate.Levels = 4;
+                db.Candidates.Update(candidate);
+
                 var attachments = new CandidateAttachments();
                 attachments.BirthDateCertificate = filesDirectories["BirthCertificate"];
+                attachments.CandidateId = candidate.CandidateId;
                 attachments.Nidcertificate = filesDirectories["Nid"];
                 attachments.FamilyPaper = filesDirectories["FamilyPaper"];
                 attachments.AbsenceOfPrecedents = filesDirectories["AbsenceOfPrecedents"];
@@ -727,8 +745,6 @@ namespace Dashboard.Controllers
                 attachments.Status = 1;
                 db.CandidateAttachments.Add(attachments);
 
-                candidate.Levels = 4;
-                db.Candidates.Update(candidate);
                 db.SaveChanges();
                 return Ok(new { message = "لقد قمت برفع الملفات بنــجاح", level = candidate.Levels});
             }

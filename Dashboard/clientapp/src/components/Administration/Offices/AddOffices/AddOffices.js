@@ -28,8 +28,8 @@ export default {
                 ArabicName: '',
                 EnglishName: '',
                 Description: '',
-                BranchId:'',
-                ProfileId: '',
+                //BranchId:'',
+                //ProfileId: '',
             },
             rules: {
                 ArabicName: [
@@ -42,12 +42,12 @@ export default {
                     { min: 3, max: 200, message: 'لقد اجتزت الطول المحدد للملف الانتخابي', trigger: 'blur' },
                     { required: true, pattern: /^[a-zA-Z ]+$/, message: 'الرجاء إدخال حروف انجليزية فقط', trigger: 'blur' }
                 ],
-                BranchId: [
-                    { required: true, message: 'الرجاء إختيار الفرع', trigger: 'blur' },
-                ],
-                ProfileId: [
-                    { required: true, message: 'الرجاء إختيار الملف الانتخابي', trigger: 'blur' },
-                ],
+                //BranchId: [
+                //    { required: true, message: 'الرجاء إختيار الفرع', trigger: 'blur' },
+                //],
+                //ProfileId: [
+                //    { required: true, message: 'الرجاء إختيار الملف الانتخابي', trigger: 'blur' },
+                //],
             }
         };
     },

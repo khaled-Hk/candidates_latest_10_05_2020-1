@@ -38,38 +38,6 @@
                                 </el-form-item>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <el-form-item prop="ProfileType">
-                                    <label>الفرع</label>
-                                    <div class="form-group">
-                                        <el-select v-model="ruleForm.BranchId" placeholder="اختر الفرع">
-                                            <el-option v-for="item in Branches"
-                                                       :key="item.brancheId"
-                                                       :label="item.arabicName"
-                                                       :value="item.brancheId">
-                                            </el-option>
-                                        </el-select>
-                                    </div>
-                                </el-form-item>
-                            </div>
-                            <div class="col-md-6">
-                                <el-form-item prop="ProfileType">
-                                    <label>الملف الانتخابي</label>
-                                    <div class="form-group">
-                                        <el-select v-model="ruleForm.ProfileId" placeholder="اختر الملف الانتخابي">
-                                            <el-option v-for="item in Profiles"
-                                                       :key="item.profileId"
-                                                       :label="item.name"
-                                                       :value="item.profileId">
-                                            </el-option>
-                                        </el-select>
-                                    </div>
-                                </el-form-item>
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class="col-md-12">
                                 <el-form-item>

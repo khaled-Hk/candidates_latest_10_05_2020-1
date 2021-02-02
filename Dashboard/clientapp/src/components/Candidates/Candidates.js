@@ -11,6 +11,7 @@ export default {
     name: 'Candidates',
     created() {
         this.GetCandidates(this.pageNo);
+        this.GetConstituencies();
     },
     components: {
         'add-Candidates': AddCandidates,
@@ -37,11 +38,16 @@ export default {
             pageSize: 10,
             pages: 0,
             CandidateId: null,
-            candidates: []
+            candidates: [],
+            ConstituencyDetails: [],
+            SubConstituency:'',
 
         };
     },
     methods: {
+        FilterBy() {
+            this.GetCandidates(this.pageNo);
+        },
 
         GetCandidates(pageNo) {
             this.pageNo = pageNo;
@@ -50,9 +56,8 @@ export default {
             }
           
             this.loading = true;
-            this.$http.GetCandidates(this.pageNo, this.pageSize)
+            this.$http.GetCandidates(this.pageNo, this.pageSize, this.SubConstituency || 0)
                 .then(response => {
-                   
                     this.loading = false;
                     this.candidates = response.data.candidates;
                     this.pages = response.data.count;
@@ -75,6 +80,24 @@ export default {
                 });
 
         },
+
+
+        GetConstituencies() {
+            this.$blockUI.Start();
+            this.$http.GetConstituencyDetails()
+                .then(response => {
+                    this.$blockUI.Stop();
+                    this.ConstituencyDetails = response.data.constituencyDetails;
+                })
+                .catch((err) => {
+                    this.$blockUI.Stop();
+                    return err;
+                });
+
+        },
+
+
+
         AddCandidatesComponent() {
             this.state = 1
         },

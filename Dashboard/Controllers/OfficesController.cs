@@ -34,8 +34,8 @@ namespace Dashboard.Controllers
             public string ArabicName { get; set; }
             public string EnglishName { get; set; }
             public string Description { get; set; }
-            public long? BranchId { get; set; }
-            public long? ProfileId { get; set; }
+           // public long? BranchId { get; set; }
+          //  public long? ProfileId { get; set; }
         }
 
         [HttpGet("Get")]
@@ -145,14 +145,14 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الملف غير موجود" );
                 }
 
-                var IsExist = db.Offices.Where(x => x.Status != 9 && x.ArabicName == OfficeData.ArabicName && x.BranchId == OfficeData.BranchId).SingleOrDefault();
+                var IsExist = db.Offices.Where(x => x.Status != 9 && x.ArabicName == OfficeData.ArabicName).SingleOrDefault();
+
 
                 Offices offices = new Offices();
                 offices.ArabicName = OfficeData.ArabicName;
                 offices.EnglishName = OfficeData.EnglishName;
                 offices.Description = OfficeData.Description;
                 offices.ProfileId = Profile.ProfileId;
-                offices.BranchId = OfficeData.BranchId;
                 offices.CreatedBy = userId;
                 offices.CreatedOn = DateTime.Now;
                 db.Offices.Add(offices);

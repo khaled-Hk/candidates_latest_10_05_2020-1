@@ -9,6 +9,11 @@
 @import "assets/demo/demo.css";
 
 
+.Filter {
+    display: block;
+}
+
+
 body {
     font-family: 'DroidArabicKufiRegular';
 }
@@ -165,7 +170,7 @@ textarea {
 }
 
 .el-select {
-    width: 100%;
+    width: 100%!important;
 }
 
 .fas {

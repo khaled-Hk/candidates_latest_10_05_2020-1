@@ -11,6 +11,7 @@ export default {
        
     },
     created() {
+        localStorage.clear();
         this.$blockUI.$loading = this.$loading;
      //   this.IsLogin();
     },

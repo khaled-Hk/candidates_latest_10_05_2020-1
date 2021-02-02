@@ -225,8 +225,8 @@ export default {
     AddCandidateToEntity(candidate) {
         return axios.post(`/api/Admin/Candidates/AddCandidateToEntity`, candidate);
     },
-    GetCandidates(pageNo, pageSize) {
-        return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}`);
+    GetCandidates(pageNo, pageSize,SubConstituencyId) {
+        return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}&SubConstituencyId=${SubConstituencyId}`);
     },
     RegisterCandidateLevelOne(nationalId) {
 

@@ -15,10 +15,27 @@
                 <div class="card cardRTL">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-2"> <h4 class="card-title">المراشحين</h4></div>
+                            <div class="col-md-2"> <h4 class="card-title">المرشحين</h4></div>
                             <div class="col-md-8">
                             </div>
                             <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddCandidatesComponent()">إضافة مرشح</button></div>
+                        </div>
+                    </div>
+                    <div class="Filter">
+                       
+                        <div class="form-group" style="margin-top:31px;right:20px;">
+                            <el-select style="width: 20%;" v-model="SubConstituency" filterable placeholder="الدائـرة الفرعية" @change="FilterBy()">
+                                <el-option 
+                                           key="0"
+                                           label="الـكل"
+                                           value="0">
+                                </el-option>
+                                <el-option v-for="item in ConstituencyDetails"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
                         </div>
                     </div>
                     <div class="card-body" v-loading="loading">
@@ -33,7 +50,8 @@
                                 <tr>
                                     <th>الرقم الوطني</th>
                                     <th>إسم الناخب</th>
-                                    <th>الدائرة الرئيسية</th>
+                                    <!--<th>الدائرة الرئيسية</th>-->
+                                    <th>الدائرة الفرعية</th>
                                     <th>تاريخ الانشاء</th>
                                     <th class="disabled-sorting text-right">العمليات</th>
                                 </tr>
@@ -42,7 +60,8 @@
                                 <tr>
                                     <th>الرقم الوطني</th>
                                     <th>إسم الناخب</th>
-                                    <th>الدائرة الرئيسية</th>
+                                    <!--<th>الدائرة الرئيسية</th>-->
+                                    <th>الدائرة الفرعية</th>
                                     <th>تاريخ الانشاء</th>
                                     <th class="disabled-sorting text-right">العمليات</th>
                                 </tr>
@@ -51,6 +70,7 @@
                                 <tr v-for="R in candidates">
                                     <td>{{R.nid}}</td>
                                     <td>{{R.name}}</td>
+                                    <!--<td>{{R.subconstituencyName}}</td>-->
                                     <td>{{R.subconstituencyName}}</td>
                                     <td>{{R.createdOn | moment}}</td>
                                     <td class="text-left">

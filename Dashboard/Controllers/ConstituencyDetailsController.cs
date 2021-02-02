@@ -164,7 +164,6 @@ namespace Dashboard.Controllers
         {
             try
             {
-
                 if (ConstituencyDetailsId == null)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة" });
@@ -267,7 +266,7 @@ namespace Dashboard.Controllers
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }
-
+        
         [HttpGet("GetConstituencyDetail/{constituencyDetailId}")]
         public IActionResult GetConstituencyDetailBasedOn([FromRoute] long? constituencyDetailId)
         {

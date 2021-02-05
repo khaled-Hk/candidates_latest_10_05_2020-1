@@ -129,6 +129,74 @@ namespace Dashboard.Controllers
             }
         }
 
+        [HttpPut("{RegionId}/Disable")]
+        public IActionResult DisableRegion(long RegionId)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var Region = (from p in db.Regions
+                              where p.RegionId == RegionId
+                              select p).SingleOrDefault();
+
+                if (Region == null)
+                {
+                    return NotFound("خــطأ : لا يمكن اجراء العملية المنطقة غير موجود");
+                }
+
+                Region.Status = 2;
+                Region.ModifiedBy = userId;
+                Region.ModifiedOn = DateTime.Now;
+
+                db.SaveChanges();
+                return Ok("تم إلغاء تفعيل المنطـقة بنـجاح");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("{RegionId}/Enable")]
+        public IActionResult EnableRegion(long RegionId)
+        {
+            try
+            {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var Region = (from p in db.Regions
+                              where p.RegionId == RegionId
+                              select p).SingleOrDefault();
+
+                if (Region == null)
+                {
+                    return NotFound("خــطأ : لا يمكن اجراء العملية المنطقة غير موجود");
+                }
+
+                Region.Status = 1;
+                Region.ModifiedBy = userId;
+                Region.ModifiedOn = DateTime.Now;
+
+                db.SaveChanges();
+                return Ok("تم تفعيل المنطـقة بنـجاح");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         [HttpGet("GetRegions")]
         public IActionResult GetRegions()
         {

@@ -179,7 +179,7 @@ export default {
                            
                             this.$notify({
                                 title: 'تم الرفع بنجاح',
-                                dangerouslyusehtmlstring: true,
+                                dangerouslyUseHTMLString: true,
                                 message: '<strong>' + response.data.message + '</strong>',
                                 type: 'success'
                             });

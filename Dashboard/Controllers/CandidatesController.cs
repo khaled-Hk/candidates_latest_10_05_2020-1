@@ -13,6 +13,7 @@ using System.IO;
 using Common;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using NodaTime;
 
 namespace Dashboard.Controllers
 {
@@ -370,6 +371,10 @@ namespace Dashboard.Controllers
 
                 }
 
+
+
+               
+
                 if (string.IsNullOrEmpty(candidates.FirstName) || string.IsNullOrWhiteSpace(candidates.FirstName))
                 {
                     return BadRequest(new { message = "الرجاء إدخال اسم الأول" });
@@ -415,6 +420,7 @@ namespace Dashboard.Controllers
                 }
 
 
+
                 if (string.IsNullOrEmpty(candidates.Email) || string.IsNullOrWhiteSpace(candidates.Email))
                 {
                     return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني" });
@@ -423,8 +429,18 @@ namespace Dashboard.Controllers
                 if (!IsItValidEmail(candidates.Email))
                 {
                     return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني بشكل صحيح" });
+
                 }
 
+                LocalDate birthday = LocalDateTime.FromDateTime(candidates.BirthDate.Value).Date; // For example
+                LocalDate today = LocalDateTime.FromDateTime(DateTime.Now).Date; // See below
+                Period period = Period.Between(birthday, today);
+
+
+                if (period.Years < Profile.Age)
+                {
+                    return BadRequest(new { message = string.Format("يجب أن يكون عمر المترشح على الأقل {0}", Profile.Age) });
+                }
 
 
 
@@ -442,6 +458,7 @@ namespace Dashboard.Controllers
                 candidate.SubConstituencyId = candidates.SubConstituencyId;
                 candidate.CompetitionType = candidates.CompetitionType;
                 candidate.Levels = 3;
+                
 
                 db.Candidates.Update(candidate);
                 db.SaveChanges();

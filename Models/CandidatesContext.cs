@@ -439,7 +439,7 @@ namespace Models
                     .HasConstraintName("FK_Endorsements_Candidates");
 
                 entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.Endorsements)
+                    .WithMany(p => p.EndorsementsNavigation)
                     .HasForeignKey(d => d.ProfileId)
                     .HasConstraintName("FK_Endorsements_Profile");
             });

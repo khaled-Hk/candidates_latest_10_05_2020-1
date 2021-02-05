@@ -44,6 +44,12 @@ export default {
     DeleteRegion(RegionId) {
         return axios.delete(`/Api/Admin/Regions/${RegionId}/Delete`);
     },
+    DisableRegion(RegionId) {
+        return axios.put(`/Api/Admin/Regions/${RegionId}/Disable`);
+    },
+    EnableRegion(RegionId) {
+        return axios.put(`/Api/Admin/Regions/${RegionId}/Enable`);
+    },
     GetAllRegions() {
         return axios.get(`/Api/Admin/Regions/GetRegions`);
     },

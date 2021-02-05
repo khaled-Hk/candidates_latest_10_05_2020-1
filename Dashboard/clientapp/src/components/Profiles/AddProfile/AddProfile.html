@@ -71,6 +71,25 @@
                                 </el-form-item>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <el-form-item prop="Endorsements">
+                                    <label>عدد المزكين</label>
+                                    <div class="form-group">
+                                        <el-input-number :min="10" placeholder="عدد المزكين" number  v-model="ruleForm.Endorsements"></el-input-number>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="Age">
+                                    <label>عمر المترشح</label>
+                                    <div class="form-group">
+                                       
+                                        <el-input-number :min="18" placeholder="عمر المترشح" v-model="ruleForm.Age"></el-input-number>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-md-12">
@@ -80,12 +99,11 @@
                                         <el-input type="textarea"
                                                   placeholder="ادخل معلومات عن الملف الانتخابي"
                                                   v-model="ruleForm.Description"
-                                                  maxlength="600"
-                                                  >
+                                                  maxlength="600">
                                         </el-input>
                                     </div>
                                 </el-form-item>
-                            </div>        
+                            </div>
                         </div>
 
                         <div class="">

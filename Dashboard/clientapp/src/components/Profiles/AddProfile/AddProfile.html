@@ -21,19 +21,11 @@
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
                         <div class="row">
                             <div class="col-md-6">
-                                <el-form-item prop="name">
-                                    <label>الملف الإنتـخابي</label>
-                                    <div class="form-group">
-                                        <el-input placeholder="إدخل الملف الإنتخابي" v-model="ruleForm.name"></el-input>
-                                    </div>
-                                </el-form-item>
-                            </div>
-                            <div class="col-md-6">
                                 <el-form-item prop="ProfileType">
-                                    <label>نوع الانتخبات</label>
+                                    <label>نوع الانتخابات</label>
                                     <div class="form-group">
                                         <el-select v-model="ruleForm.ProfileType" placeholder="اختر نوع الانتخابات">
-                                            <el-option v-for="item in [{id:1,name:'الانتخابات الرئيسية'},{id:2,name:'انتخابات النواب'},{id:3,name:'انتخابات التشريعية'},{id:4,name:'الإستفتئات'}]"
+                                            <el-option v-for="item in [{id:1,name:'الانتخابات الرئاسية'},{id:3,name:'الانتخابات التشريعية'}]"
                                                        :key="item.id"
                                                        :label="item.name"
                                                        :value="item.id">
@@ -42,6 +34,15 @@
                                     </div>
                                 </el-form-item>
                             </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="name">
+                                    <label>الملف الإنتـخابي</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل الملف الإنتخابي" v-model="ruleForm.name"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-md-6">

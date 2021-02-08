@@ -24,9 +24,10 @@
                         <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%" v-if="Profiles!=0">
                             <thead>
                                 <tr>
-                                    <th>الملف النتخابي</th>
-                                    <th>معلومات</th>
                                     <th>نوع الانتخابات</th>
+                                    <th>الملف الانتخابي</th>
+                                    <th>معلومات</th>
+
                                     <th>تاريخ البداية</th>
                                     <th>تاريخ النهاية</th>
                                     <th class="disabled-sorting text-right">العمليات</th>
@@ -34,9 +35,10 @@
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th>نوع الانتخابات</th>
                                     <th>الملف النتخابي</th>
                                     <th>معلومات</th>
-                                    <th>نوع الانتخابات</th>
+
                                     <th>تاريخ البداية</th>
                                     <th>تاريخ النهاية</th>
                                     <th class="disabled-sorting text-right">العمليات</th>
@@ -44,14 +46,15 @@
                             </tfoot>
                             <tbody>
                                 <tr v-for="P in Profiles">
-                                    <td>{{P.name}}</td>
-                                    <td>{{P.description}}</td>
                                     <td>
                                         <span v-if="P.profileType==1">الانتخابات الرئيسية</span>
                                         <span v-if="P.profileType==2">انتخابات النواب</span>
                                         <span v-if="P.profileType==3">انتخابات التشريعية</span>
                                         <span v-if="P.profileType==4">الإستفتئات</span>
                                     </td>
+                                    <td>{{P.name}}</td>
+                                    <td>{{P.description}}</td>
+
                                     <td>{{P.startDate | moment}}</td>
                                     <td>{{P.endDate | moment}}</td>
                                     <td class="text-right">
@@ -60,7 +63,7 @@
                                         </a>
                                         <a href="#" v-if="P.isActivate==0" @click.prevent="Activate(P.profileId)" title="تفعيل الملف الانتخابي">
                                             <i class="fas fa-lightbulb fa-off"></i>
-                                        </a>        
+                                        </a>
                                         <a href="#" v-if="P.status==2" @click.prevent="PlayProfile(P.profileId)" title="تشغيل الملف الانتخابي">
                                             <i class="fas fa-pause-circle" style="color:orange!important"></i>
                                         </a>

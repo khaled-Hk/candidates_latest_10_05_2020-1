@@ -116,6 +116,12 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
+                var profile = db.Profile.Where(x => x.Status == 1).FirstOrDefault();
+
+                if (profile == null)
+                {
+                    return BadRequest(new { message = "لا يوجد ملف إنتخابي مفعل" });
+                }
 
                 if (endorsement.CandidateId == null || endorsement.CandidateId == 0)
                 {
@@ -144,18 +150,27 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "من غير المسموح تجسيل المزكي أكثر من مرة" });
                 }
 
-                if (endorsementCount == 1)
+                var endorsementsCount = db.Endorsements.Where(x => x.CandidateId == endorsement.CandidateId).Count();
+               
+                if (endorsementsCount == profile.Endorsements)
                 {
-                    return BadRequest(new { message = "من غير المسموح تجسيل المزكي أكثر من مرة" });
+                    return BadRequest(new { message = "لقد حصلت على العدد المطلوب من المزكين ومن غير المسموح لك بإضافة مزكي جديد" });
+                }
+                else
+                {
+                    db.Endorsements.Add(new Endorsements
+                    {
+                        Nid = endorsement.Nid,
+                        CandidateId = endorsement.CandidateId,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = userId
+                    });
+                    db.SaveChanges();
                 }
 
-                db.Endorsements.Add(new Endorsements
-                {
-                    Nid = endorsement.Nid,
-                    CandidateId = endorsement.CandidateId,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = userId
-                });
+
+
+             
 
 
                 return Ok(new { message = "تم تسجيل المزكي بنجاح" });
@@ -183,7 +198,7 @@ namespace Dashboard.Controllers
                 var profile = db.Profile.Where(x => x.Status == 1).FirstOrDefault(); 
 
                 var candidate = db.Candidates.Where(x => x.Nid == endorsement.CandidateNid && x.ProfileId == profile.ProfileId).FirstOrDefault();
-                Debug.WriteLine(candidate.CandidateId + " // " + profile.ProfileId);
+
 
                 if (candidate.CandidateId == null || candidate.CandidateId == 0)
                 {
@@ -215,7 +230,7 @@ namespace Dashboard.Controllers
 
                 var registeredEndorsements = db.Endorsements.Where( x => x.CandidateId == candidate.CandidateId).Count();
                 int endorsementsCount = registeredEndorsements;
-                if (endorsementsCount == 2)
+                if (endorsementsCount == profile.Endorsements)
                 {
                     return BadRequest(new { message = "لقد حصلت على العدد المطلوب من المزكين ومن غير المسموح لك بإضافة مزكي جديد" });
                 }

@@ -54,7 +54,7 @@ export default {
                                 title: 'خطأ',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.message
+                                message: err.response.data.message
                             });
                         });
                 }

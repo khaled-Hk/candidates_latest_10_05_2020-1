@@ -140,7 +140,7 @@
                                                 <label>تاريخ الميلاد</label>
                                                 <div class="form-group">
                                                     <el-date-picker class="BirthData w-100"  v-model="ruleForm.BirthDate"
-                                                                    placeholder="إختار تاريخ الميلاد">
+                                                                    placeholder="إختار تاريخ الميلاد"  type="date" >
                                                     </el-date-picker>
                                                 </div>
                                             </el-form-item>
@@ -219,7 +219,7 @@
 
                                     <el-form-item class="AddButtonLeftSide">
                                         <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
-                                        <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                                        <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">التالي</button>
                                     </el-form-item>
                                 </el-form>
 

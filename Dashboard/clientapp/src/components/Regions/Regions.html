@@ -43,10 +43,16 @@
                                     <td>{{R.arabicName}}</td>
                                     <td>{{R.englishName}}</td>
                                     <td>{{R.createdOn | moment}}</td>
-                                    <td  class="text-right">
-                                  
-                                        <a href="#"  title="مسح المنطقة" @click.prevent="Delete(R.regionId)">
+                                    <td class="text-right">
+
+                                        <a href="#" title="مسح المنطقة" @click.prevent="Delete(R.regionId)">
                                             <i class="fa fa-user-slash"></i>
+                                        </a>
+                                        <a href="#" title="إلغاء تفعيل المنطقة" @click.prevent="Disable(R.regionId)" v-if="R.status == 1">
+                                            <i class="far fa-eye-slash"></i>
+                                        </a>
+                                        <a href="#" title="تفعيل المنطقة" @click.prevent="Enable(R.regionId)" v-if="R.status == 2">
+                                            <i class="far fa-eye"></i>
                                         </a>
 
                                     </td>

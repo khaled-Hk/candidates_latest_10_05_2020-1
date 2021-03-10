@@ -81,5 +81,63 @@ export default {
                     });
             })
         },
+        Disable(RegionId) {
+            this.$confirm('هل حقا تريد إلغاء تفعيل المنطقة . متـابعة ؟', 'تـحذيـر', {
+                confirmButtonText: 'نـعم',
+                cancelButtonText: 'إلغاء',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.$blockUI.Start();
+                this.$http.DisableRegion(RegionId)
+                    .then(response => {
+                        this.$blockUI.Stop();
+                        this.$notify({
+                            title: 'تم إلغاء التفعيل بنجاح',
+                            dangerouslyUseHTMLString: true,
+                            message: '<strong>' + response.data + '</strong>',
+                            type: 'success'
+                        });
+
+                        this.GetRegions(this.pageNo);
+                    })
+                    .catch((err) => {
+                        this.$blockUI.Stop();
+                        this.$message({
+                            type: 'error',
+                            message: err.response.data
+                        });
+                    });
+            })
+        },
+        Enable(RegionId) {
+            this.$confirm('هل حقا تريد تفعيل المنطقة . متـابعة ؟', 'تـحذيـر', {
+                confirmButtonText: 'نـعم',
+                cancelButtonText: 'إلغاء',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.$blockUI.Start();
+                this.$http.EnableRegion(RegionId)
+                    .then(response => {
+                        this.$blockUI.Stop();
+                        this.$notify({
+                            title: 'تم تفعيل بنجاح',
+                            dangerouslyUseHTMLString: true,
+                            message: '<strong>' + response.data + '</strong>',
+                            type: 'success'
+                        });
+
+                        this.GetRegions(this.pageNo);
+                    })
+                    .catch((err) => {
+                        this.$blockUI.Stop();
+                        this.$message({
+                            type: 'error',
+                            message: err.response.data
+                        });
+                    });
+            })
+        }
     }    
 }

@@ -25,6 +25,8 @@ export default {
                 ProfileType:'',
                 StartDate: '',
                 EndDate: '',
+                Endorsements: '',
+                Age:''
             },
             rules: {
                 name: [
@@ -39,6 +41,14 @@ export default {
                 ],
                 ProfileType: [
                     { type: 'date', required: true, message: 'الرجاء إختيار نوع الانتخابات', trigger: 'change' }
+                ],
+                Endorsements: [
+                    { required: true, message: 'الرجاء إدخال العدد المطلوب من المزكين', trigger: 'blur' },
+                    { type: 'number', required: true, message: 'يجب أن يكون عددالمزكين رقم صحيح', trigger: 'change' }
+                ],
+                Age: [
+                    { required: true, message: 'الرجاء إدخال العمر الأدنى للمترشح', trigger: 'blur' },
+                    { type: 'number', required: true, message: 'يجب أن يكون العمر رقم صحيح', trigger: 'change' }
                 ]
             }
         };

@@ -14,6 +14,7 @@ using Common;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using NodaTime;
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -38,14 +39,18 @@ namespace Dashboard.Controllers
             try
             {
 
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 IQueryable<Candidates> CandidatesQuery;
-                CandidatesQuery = from p in db.Candidates where p.EntityId==id && p.ProfileId == Profile.ProfileId && p.Status!=9
+                CandidatesQuery = from p in db.Candidates where p.EntityId==id && p.ProfileId == UP.ProfileId && p.Status!=9
                                   select p;
 
 
@@ -81,10 +86,14 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (CandidateId == null)
@@ -92,7 +101,7 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "حدث خطأ في إستقبال البيانات الرجاء إعادة الادخال" });
                 }
 
-                var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId && x.ProfileId == Profile.ProfileId)
+                var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId && x.ProfileId == UP.ProfileId)
                     .Select(s => new { s.FirstName, s.FatherName, s.GrandFatherName, s.SurName, s.MotherName, s.BirthDate, s.CompetitionType, s.ConstituencyId, s.SubConstituencyId, s.Email, s.Gender, s.Qualification, s.HomePhone, s.CandidateId }).FirstOrDefault();
 
                 if (candidate == null)
@@ -119,10 +128,14 @@ namespace Dashboard.Controllers
             try
             {
 
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الرجاء تفعيل الضبط الانتخابي" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 IQueryable<Candidates> CandidatesQuery;
@@ -130,13 +143,13 @@ namespace Dashboard.Controllers
                 {
          
                     CandidatesQuery = from p in db.Candidates
-                                      where p.Status != 9 && p.ProfileId == Profile.ProfileId
+                                      where p.Status != 9 && p.ProfileId == UP.ProfileId
                                       select p;
                 } else
                 {
                     
                     CandidatesQuery = from p in db.Candidates
-                                      where p.Status != 9 && p.ProfileId == Profile.ProfileId && p.SubConstituencyId == SubConstituencyId
+                                      where p.Status != 9 && p.ProfileId == UP.ProfileId && p.SubConstituencyId == SubConstituencyId
                                       select p;
                 }
                
@@ -155,7 +168,6 @@ namespace Dashboard.Controllers
                                           subconstituencyName = sc.ArabicName,
                                           p.Nid,
                                           p.CreatedOn
-
                                       }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { Candidates = CandidatesList, count = CandidatesCount });
@@ -172,19 +184,15 @@ namespace Dashboard.Controllers
             try
             {
                 var userId = this.help.GetCurrentUser(HttpContext);
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
-
-                
-                if (Profile == null)
+                if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
-
                 if (string.IsNullOrEmpty(nationalId) || string.IsNullOrWhiteSpace(nationalId))
                 {
                     return BadRequest(new { message = "الرجاء التأكد من إدخال الرقم الوطني" });
@@ -200,7 +208,7 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "الرقم الوطني يتكون من 12 رقماً" });
                 }
 
-                var candidate = db.Candidates.Where(x => x.Nid == nationalId).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == nationalId && x.ProfileId== UP.ProfileId).FirstOrDefault();
 
                 if (candidate == null)
                 {
@@ -208,9 +216,9 @@ namespace Dashboard.Controllers
                     {
                         Levels = 1,
                         Nid = nationalId,
-                        ProfileId = Profile.ProfileId,
+                        ProfileId = UP.ProfileId,
                         CreatedOn = DateTime.Now,
-                        CreatedBy = userId
+                        CreatedBy = UP.UserId
                     };
                     db.Candidates.Add(candidate);
                     db.SaveChanges();
@@ -234,16 +242,14 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي" );
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
                 string codePhoneNumber = candidates.Phone.Substring(0, 3);
                 if (!codePhoneNumber.Equals("091") && !codePhoneNumber.Equals("092") && !codePhoneNumber.Equals("093") && !codePhoneNumber.Equals("094"))
@@ -256,18 +262,13 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "يجب أن يكون رقم الهاتف بطول 10 أرقام" });
                 }
 
-                var phoneCount = db.Candidates.Where(x => x.Phone == candidates.Phone && x.ProfileId == Profile.ProfileId).Count();
+                var phoneCount = db.Candidates.Where(x => x.Phone == candidates.Phone && x.ProfileId == UP.ProfileId).Count();
 
                 if (phoneCount > 0)
                 {
                     return BadRequest(new { message = "لقد تم إستخدام هذا الرقم بالفعل من قبل مرشح أخر" });
                 }
-
-
                 return Ok(new { isVerifyCodeSent = true, message = "الرجاء إدخال رمز التحقق" });
-
-
-
             }
             catch (Exception ex)
             {
@@ -295,17 +296,14 @@ namespace Dashboard.Controllers
 
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
-
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (obj.VerifyCode != 1111)
@@ -313,7 +311,7 @@ namespace Dashboard.Controllers
                     return BadRequest("رمز التحقق الذي أدخلته خطأ، أعد المحاولة");
                 }
 
-                var candidate = db.Candidates.Where(x => x.Nid == obj.Nid && x.ProfileId == Profile.ProfileId).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == obj.Nid && x.ProfileId == UP.ProfileId).FirstOrDefault();
 
                 if (candidate == null)
                 {
@@ -343,15 +341,18 @@ namespace Dashboard.Controllers
         {
             try
             {
-
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
 
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
+
+                var Profile = db.Profile.Where(x =>  x.ProfileId == UP.ProfileId).SingleOrDefault();
                 if (Profile == null)
                 {
                     return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
@@ -458,31 +459,31 @@ namespace Dashboard.Controllers
                 candidate.SubConstituencyId = candidates.SubConstituencyId;
                 candidate.CompetitionType = candidates.CompetitionType;
                 candidate.Levels = 3;
+                candidate.ProfileId = UP.ProfileId;
                 
 
                 db.Candidates.Update(candidate);
                 db.SaveChanges();
-
-
-                bool IsItValidEmail(string emailaddress)
-                {
-                    try
-                    {
-                        var email = new MailAddress(emailaddress);
-
-                        return true;
-                    }
-                    catch (FormatException)
-                    {
-                        return false;
-                    }
-                }
 
                 return Ok(new { level = candidate.Levels, message = "تم تسجيل بيانات المرشح بنجاح" });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+            }
+        }
+
+        bool IsItValidEmail(string emailaddress)
+        {
+            try
+            {
+                var email = new MailAddress(emailaddress);
+
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
             }
         }
 
@@ -592,19 +593,19 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                bool IsItValidEmail(string emailaddress)
-                {
-                    try
-                    {
-                        var email = new MailAddress(emailaddress);
+                //bool IsItValidEmail(string emailaddress)
+                //{
+                //    try
+                //    {
+                //        var email = new MailAddress(emailaddress);
 
-                        return true;
-                    }
-                    catch (FormatException)
-                    {
-                        return false;
-                    }
-                }
+                //        return true;
+                //    }
+                //    catch (FormatException)
+                //    {
+                //        return false;
+                //    }
+                //}
 
                 return Ok(new { level = candidate.Levels, message = "تم تحديث المرشح بنجاح" });
             }
@@ -619,24 +620,21 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
-                {
-                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
-                }
-
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
 
-                if (file == null)
+               if (file == null)
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
                 }
-                var candidate = db.Candidates.Where(x => x.Nid == file.Nid && x.ProfileId == Profile.ProfileId).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == file.Nid && x.ProfileId == UP.ProfileId).FirstOrDefault();
 
 
                 var path = Environment.CurrentDirectory;
@@ -689,10 +687,14 @@ namespace Dashboard.Controllers
                     return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (string.IsNullOrEmpty(candidateDocument.BirthCertificateDocument))
@@ -724,7 +726,7 @@ namespace Dashboard.Controllers
                 }
 
 
-                var candidate = db.Candidates.Where(x => x.Nid == candidateDocument.Nid && x.ProfileId == Profile.ProfileId).FirstOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == candidateDocument.Nid && x.ProfileId == UP.ProfileId).FirstOrDefault();
 
                 if(candidate == null)
                 {
@@ -776,6 +778,7 @@ namespace Dashboard.Controllers
                 for(var i = 0; i < streams.Length; i++)
                 {
                     IFormFile file = new FormFile(streams[i], 0, streams[i].Length, "وثائق الناحب", filesName[i]);
+
                     string fullpath = Path.Combine(subPath, file.FileName);
                     using (var fileStream = new FileStream(fullpath, FileMode.Create))
                     {
@@ -839,29 +842,17 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, "الرجاء تفعيل الضبط الانتخابي");
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
-                //var selectedCandidate = db.Candidates.Where(x => x.Nid == NationalId )
-                //    .Join(
-                //    db.ConstituencyDetails,
-                //     candidate => candidate.CandidateId,
-                //     subconstituency => subconstituency.ConstituencyDetailId,
-                //     (candidate, subconstituency) => new
-                //      {
-                //         Nid = candidate.Nid,
-                //         FirstName = candidate.FirstName,
-                //         FatherName = candidate.FatherName,
-                //         SurName = candidate.SurName,
-                //         subconstituencyName = subconstituency.ArabicName,
-                        
-                //     }
-                //    )
-                //    .Select( s => new { s.Nid, fullName = string.Format("{0} {1} {2}", s.FirstName, s.FatherName, s.SurName), s.subconstituencyName }).SingleOrDefault();
-
+    
                 var candidate = (from c in db.Candidates join sc in db.ConstituencyDetails on c.SubConstituencyId equals sc.ConstituencyDetailId where c.Nid == NationalId select new { c.Nid, fullName = string.Format("{0} {1} {2}", c.FirstName, c.FatherName, c.SurName), subconstituencyName = sc.ArabicName }).FirstOrDefault();
                 return Ok(candidate);
             }

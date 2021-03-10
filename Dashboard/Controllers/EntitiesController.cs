@@ -6,6 +6,7 @@ using Common;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
+using static Services.Helper;
 
 namespace Vue.Controllers
 {
@@ -28,15 +29,19 @@ namespace Vue.Controllers
             try
             {
 
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
 
                 var EntitesCount = db.Entities.Where(x => x.Status != 9).Count();
-                var EntitesList = db.Entities.Where(x => x.Status != 9 && x.ProfileId == Profile.ProfileId)
+                var EntitesList = db.Entities.Where(x => x.Status != 9 && x.ProfileId == UP.ProfileId)
                     .OrderByDescending(x => x.CreatedOn)
                     .Select(x => new
                     {
@@ -75,17 +80,14 @@ namespace Vue.Controllers
                     return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
-                var userId = this.help.GetCurrentUser(HttpContext);
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
                 }
-
-                if (Profile == null)
+                if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
                 if (string.IsNullOrWhiteSpace(Entity.Email))
@@ -135,8 +137,8 @@ namespace Vue.Controllers
                     return BadRequest("البريد الإلكتروني موجود مسبقا الرجاء إعادة الادخال");
 
 
-                Entity.CreatedBy = userId;
-                Entity.ProfileId = Profile.ProfileId;
+                Entity.CreatedBy = UP.UserId;
+                Entity.ProfileId = UP.ProfileId;
                 Entity.CreatedOn = DateTime.Now;
                 db.Entities.Add(Entity);
                 db.SaveChanges();
@@ -154,8 +156,15 @@ namespace Vue.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                }
                 if (string.IsNullOrWhiteSpace(user.LoginName))
                 {
                     return BadRequest("الرجاء ادحال اسم المسنخدم بطريقة صحيحة");
@@ -228,7 +237,7 @@ namespace Vue.Controllers
                 cUser.Name = user.Name;
                 cUser.Email = user.Email;
                 cUser.BirthDate = user.BirthDate;
-                cUser.CreatedBy = userId;
+                cUser.CreatedBy = UP.UserId;
                 cUser.CreatedOn = DateTime.Now;
                 cUser.Gender = (short)user.Gender;
                 cUser.LoginTryAttempts = 0;

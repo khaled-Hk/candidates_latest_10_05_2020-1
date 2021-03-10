@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -67,8 +68,17 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest(new { message = "الرجاء قم بإدخال الرقم الوطني" });
                 }
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                }
 
-                var candidate = db.Candidates.Where(x => x.Nid == nationalId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId}).SingleOrDefault();
+                var candidate = db.Candidates.Where(x => x.Nid == nationalId && x.ProfileId == UP.ProfileId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId}).SingleOrDefault();
 
                 if (candidate==null)
                 {
@@ -133,11 +143,6 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "الرجاءإدخال الرقم الوطني" });
                 }
 
-                //if (numericRegex.IsMatch(endorsement.Nid.Trim()))
-                //{
-                //    return BadRequest(new { message = "يجب أن يحتوي الرقم الوطني على أرقام فقط" });
-                //}
-
                 if (endorsement.Nid.Length != 12)
                 {
                     return BadRequest(new { message = "يجب أن يكون عدد الرقم الوطني 12 الحرف" });
@@ -186,16 +191,19 @@ namespace Dashboard.Controllers
         {
             try
             {
-      
 
-                var userId = this.help.GetCurrentUser(HttpContext);
 
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
-                var profile = db.Profile.Where(x => x.Status == 1).FirstOrDefault(); 
+                var profile = db.Profile.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).FirstOrDefault(); 
 
                 var candidate = db.Candidates.Where(x => x.Nid == endorsement.CandidateNid && x.ProfileId == profile.ProfileId).FirstOrDefault();
 
@@ -239,9 +247,9 @@ namespace Dashboard.Controllers
                 {
                     Nid = endorsement.Nid,
                     CandidateId = candidate.CandidateId,
-                    ProfileId = profile.ProfileId,
+                    ProfileId = UP.ProfileId,
                     CreatedOn = DateTime.Now,
-                    CreatedBy = userId
+                    CreatedBy = UP.ProfileId
                 });
              
 

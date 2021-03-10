@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -82,12 +83,15 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
-
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
                 if (center == null)
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
@@ -128,8 +132,8 @@ namespace Dashboard.Controllers
                     Description = center.Description,
                     Longitude = center.Longitude,
                     Latitude = center.Latitude,
-                    ProfileId = Profile.ProfileId,
-                    CreatedBy = userId,
+                    ProfileId = UP.ProfileId,
+                    CreatedBy = UP.UserId,
                     CreatedOn = DateTime.Now,
                     Status = 1
 
@@ -147,8 +151,8 @@ namespace Dashboard.Controllers
                             EnglishName = station.EnglishName,
                             Description = station.Description,
                             CenterId = newCenter.CenterId,
-                            ProfileId = Profile.ProfileId,
-                            CreatedBy = userId,
+                            ProfileId = UP.ProfileId,
+                            CreatedBy = UP.UserId,
                             CreatedOn = DateTime.Now,
                             Status = 1
                         };
@@ -173,22 +177,25 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
-
-                var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
-                if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
+                if (UP.ProfileId <= 0)
                 {
                     return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
+                //var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                //if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
+                //{
+                //    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                //}
+
                 IQueryable<Centers> CentersQuery;
                 CentersQuery = from p in db.Centers
-                                           where p.ProfileId == user.ProfileRuningId && p.Status != 9
+                                           where p.ProfileId == UP.ProfileId && p.Status != 9
                                            select p;
 
 
@@ -197,7 +204,7 @@ namespace Dashboard.Controllers
 
                 var CenterList = (from p in CentersQuery
                                   join sc in db.ConstituencyDetails on p.ConstituencDetailId equals sc.ConstituencyDetailId
-                                  where sc.ProfileId == user.ProfileRuningId && sc.Status != 9
+                                  where sc.ProfileId == UP.ProfileId && sc.Status != 9
 
                                   orderby p.CreatedOn descending
                                                select new
@@ -209,8 +216,6 @@ namespace Dashboard.Controllers
                                                    constituencyDetailName = sc.ArabicName,
                                                    p.CreatedOn,
                                                    p.Status
-
-
                                                }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { Centers = CenterList, count = CenterCount });
@@ -266,14 +271,17 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
 
-                var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                var user = db.Users.Where(x => x.Id == UP.UserId).SingleOrDefault();
                 if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
                 {
                     return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
@@ -297,17 +305,21 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (constituencyDetailId == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.ProfileId == Profile.ProfileId &&  x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
+                var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.ProfileId == UP.ProfileId &&  x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
 
                 if (selectedCenters.Count == 0)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها" });
@@ -326,14 +338,17 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
 
-                var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                var user = db.Users.Where(x => x.Id == UP.UserId).SingleOrDefault();
                 if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
                 {
                     return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
@@ -356,6 +371,16 @@ namespace Dashboard.Controllers
                 if (center == null)
                 {
                     return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                }
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (center.ConstituencDetailId == null)
@@ -415,7 +440,7 @@ namespace Dashboard.Controllers
                 selectedCenter.Latitude = center.Latitude;
                 selectedCenter.Longitude = center.Longitude;
                 selectedCenter.Description = center.Description;
-                selectedCenter.ModifiedBy = userId;
+                selectedCenter.ModifiedBy = UP.UserId;
                 selectedCenter.ModifiedOn = DateTime.Now;
 
                 db.Centers.Update(selectedCenter);

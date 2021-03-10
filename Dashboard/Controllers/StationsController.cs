@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
-
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -32,10 +32,14 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (centerId == null)
@@ -43,7 +47,7 @@ namespace Dashboard.Controllers
 
                 IQueryable<Stations> StationsQuery;
                 StationsQuery = from p in db.Stations
-                               where p.ProfileId == Profile.ProfileId && p.Status != 9 && p.CenterId == centerId
+                               where p.ProfileId == UP.ProfileId && p.Status != 9 && p.CenterId == centerId
                                select p;
 
 
@@ -52,7 +56,7 @@ namespace Dashboard.Controllers
 
                 var StationList = (from p in StationsQuery
                                   join c in db.Centers on p.CenterId equals c.CenterId
-                                   where c.ProfileId == Profile.ProfileId && c.Status != 9
+                                   where c.ProfileId == UP.ProfileId && c.Status != 9
                                    orderby p.CreatedOn descending
                                   select new
                                   {
@@ -62,8 +66,6 @@ namespace Dashboard.Controllers
                                       centerName = c.ArabicName,
                                       p.CreatedOn,
                                       p.Status
-
-
                                   }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { Stations = StationList, count = StationCount });
@@ -79,10 +81,14 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
@@ -111,16 +117,14 @@ namespace Dashboard.Controllers
                     EnglishName = stations.EnglishName,
                     Description = stations.Description,
                     CenterId = stations.CenterId,
-                    ProfileId = Profile.ProfileId,
+                    ProfileId = UP.ProfileId,
                     CreatedBy = userId,
                     CreatedOn = DateTime.Now,
                     Status = 1
-
                 };
 
                 db.Stations.Add(newStation);
                 db.SaveChanges();
-
 
                 return Ok(new { StationId = stations.StationId, message = string.Format("تم إضافة المحطة {0} بنجاح", newStation.ArabicName) });
             }
@@ -139,6 +143,16 @@ namespace Dashboard.Controllers
                 if (StationId == null)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المحطة" });
+                }
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 var station = db.Stations.Where(x => x.StationId == StationId).FirstOrDefault();
@@ -234,17 +248,21 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404,"الملف غير موجود");
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (stationId == null)
                 {
                     return BadRequest("الرجاء إختيار المحطة");
                 }
-                var selectedStation = db.Stations.Where(x => x.ProfileId == Profile.ProfileId && x.StationId == stationId && x.Status == 1).Select(obj => new { obj.ArabicName, obj.EnglishName, obj.Description }).FirstOrDefault();
+                var selectedStation = db.Stations.Where(x => x.ProfileId == UP.ProfileId && x.StationId == stationId && x.Status == 1).Select(obj => new { obj.ArabicName, obj.EnglishName, obj.Description }).FirstOrDefault();
 
                
                 return Ok(new { Station = selectedStation });

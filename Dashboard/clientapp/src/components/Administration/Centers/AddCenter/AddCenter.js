@@ -56,6 +56,8 @@ export default {
                 if (valid) {
                     //AddProfiles
                     this.$blockUI.Start();
+                    this.ruleForm.Longitude=this.ruleForm.Longitude + "";
+                    this.ruleForm.Latitude = this.ruleForm.Latitude + "";
                     this.$http.AddCenter(this.ruleForm)
                         .then(response => {
                            // this.$parent.GetConstituencies();
@@ -85,26 +87,22 @@ export default {
             this.$blockUI.Start();
             this.$http.GetAllOffices()
                 .then(response => {
-
-
                     this.$blockUI.Stop();
                     this.offices = response.data.offices;
-
-                })
+                }).catch(() => {
+                    this.$blockUI.Stop();
+                });
 
         },
         GetAllConstituencyDetails() {
-
             this.$blockUI.Start();
             this.$http.GetConstituencyDetails()
                 .then(response => {
-
                     this.$blockUI.Stop();
                     this.constituencyDetails = response.data.constituencyDetails;
-
-                })
-
-
+                }).catch(() => {
+                    this.$blockUI.Stop();
+                });
         },
         addStation(index) {
             let station = this.ruleForm.Stations[index]

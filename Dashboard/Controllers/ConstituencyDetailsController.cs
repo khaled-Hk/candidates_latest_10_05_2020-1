@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using static Services.Helper;
 
 namespace Dashboard.Controllers
@@ -129,7 +127,7 @@ namespace Dashboard.Controllers
                     return BadRequest(new { message = "الرجاء إختيار المنطقة" });
                 }
 
-                if(constituencyDetails.ConstituencyId == 0)
+                if (constituencyDetails.ConstituencyId == 0)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة الرئيسية" });
                 }
@@ -164,7 +162,7 @@ namespace Dashboard.Controllers
 
                 return Ok(new { constituencyId = newConstituencyDetails.ConstituencyId, message = string.Format("تم إضافة الدائر الفرعية {0} بنجاح", newConstituencyDetails.ArabicName) });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
@@ -200,7 +198,7 @@ namespace Dashboard.Controllers
                 }
 
                 constituencyDetail.Status = 9;
-                constituencyDetail.ModifiedOn = DateTime.Now ;
+                constituencyDetail.ModifiedOn = DateTime.Now;
                 constituencyDetail.ModifiedBy = userId;
 
                 db.ConstituencyDetails.Update(constituencyDetail);
@@ -276,9 +274,9 @@ namespace Dashboard.Controllers
 
                 return Ok(new { ConstituencyDetailId = selectedConstituencyDetails.ConstituencyDetailId, message = string.Format("تم تحديث الدائر الفرعية {0} بنجاح", selectedConstituencyDetails.ArabicName) });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, new {ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }
 
@@ -305,7 +303,7 @@ namespace Dashboard.Controllers
                 return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
             }
         }
-        
+
         [HttpGet("GetConstituencyDetail/{constituencyDetailId}")]
         public IActionResult GetConstituencyDetailBasedOn([FromRoute] long? constituencyDetailId)
         {
@@ -325,11 +323,14 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyDetailId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).ToList();
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyDetailId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { obj.ConstituencyId, RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).ToList();
+
+
+                var chairsDetails = db.Chairs.Where(x => x.ConstituencyId == constituencyDetailId).SingleOrDefault();
 
                 //if (selectConstituencyDetail == null)
                 //    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
-                return Ok(new { ConstituencyDetail = selectConstituencyDetail });
+                return Ok(new { ConstituencyDetail = selectConstituencyDetail, chairsDetails = chairsDetails });
             }
             catch (Exception ex)
             {
@@ -338,7 +339,7 @@ namespace Dashboard.Controllers
 
 
         }
-        
+
         [HttpGet("GetConstituencyDetails/{constituencyId}")]
         public IActionResult GetConstituencyDetailsBasedOn([FromRoute] long? constituencyId)
         {
@@ -358,7 +359,7 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
+                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
 
                 if (selectedConstituencyDetails.Count == 0)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها" });
@@ -373,7 +374,7 @@ namespace Dashboard.Controllers
         }
 
         [HttpGet("ConstituencyDetailsPagination")]
-        public IActionResult ConstituencyDetailsPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
+        public IActionResult ConstituencyDetailsPagination([FromQuery] int pageNo, [FromQuery] int pageSize)
         {
             try
             {
@@ -389,29 +390,30 @@ namespace Dashboard.Controllers
 
                 IQueryable<ConstituencyDetails> ConstituencyDetailsQuery;
                 ConstituencyDetailsQuery = from p in db.ConstituencyDetails
-                                           where  p.ProfileId == UP.ProfileId && p.Status != 9
-                                    select p;
+                                           where p.ProfileId == UP.ProfileId && p.Status != 9
+                                           select p;
 
 
                 var ConstituencyDetailsCount = (from p in ConstituencyDetailsQuery
-                                           select p).Count();
+                                                select p).Count();
 
                 var ConstituencyDetailsList = (from p in ConstituencyDetailsQuery
                                                join mc in db.Constituencies on p.ConstituencyId equals mc.ConstituencyId
-                                          where mc.ProfileId == UP.ProfileId && mc.Status != 9 orderby p.CreatedOn descending
-                                          select new
-                                          {
-                                              p.ConstituencyDetailId,
-                                              p.ConstituencyId,
-                                              p.ArabicName,
-                                              p.EnglishName,
-                                              constituencyName = mc.ArabicName,
-                                              p.RegionId,
-                                              p.CreatedOn,
-                                              p.Status
+                                               where mc.ProfileId == UP.ProfileId && mc.Status != 9
+                                               orderby p.CreatedOn descending
+                                               select new
+                                               {
+                                                   p.ConstituencyDetailId,
+                                                   p.ConstituencyId,
+                                                   p.ArabicName,
+                                                   p.EnglishName,
+                                                   constituencyName = mc.ArabicName,
+                                                   p.RegionId,
+                                                   p.CreatedOn,
+                                                   p.Status
 
 
-                                          }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+                                               }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { ConstituencyDetails = ConstituencyDetailsList, count = ConstituencyDetailsCount });
             }
@@ -421,6 +423,6 @@ namespace Dashboard.Controllers
             }
         }
 
-        
+
     }
 }

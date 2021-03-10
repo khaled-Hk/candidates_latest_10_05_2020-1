@@ -110,7 +110,7 @@
 
                         </div>
 
-                        <el-form-item class="AddButtonLeftSide">
+                        <el-form-item class="AddButtonLeftSide" v-if="ChairsDetails!=0">
                             <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
                             <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
                         </el-form-item>

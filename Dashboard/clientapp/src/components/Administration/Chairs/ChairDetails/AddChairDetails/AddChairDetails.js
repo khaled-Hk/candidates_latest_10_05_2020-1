@@ -107,8 +107,8 @@ export default {
                 /* eslint-disable no-debugger */
                     debugger;
                     this.ConstituencyDetails = response.data.constituencyDetail;
-                    //this.ChairsDetails = response.data.chairsDetails;
-                    //this.ruleForm.ChairId = this.ChairsDetails.chairId;
+                    this.ChairsDetails = response.data.chairsDetails;
+                    this.ruleForm.ChairId = this.ChairsDetails.chairId;
                 })
                 .catch(() => {
                     this.$blockUI.Stop();

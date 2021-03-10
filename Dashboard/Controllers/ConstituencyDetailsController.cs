@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -25,13 +26,20 @@ namespace Dashboard.Controllers
             help = new Helper();
         }
 
-        // GET: api/ConstituencyDetails
-     
-
         // GET: api/ConstituencyDetails/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ConstituencyDetails>> GetConstituencyDetails(long id)
         {
+            UserProfile UP = this.help.GetProfileId(HttpContext, db);
+            if (UP.UserId <= 0)
+            {
+                return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+            }
+            if (UP.ProfileId <= 0)
+            {
+                return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+            }
+
             var constituencyDetails = await db.ConstituencyDetails.FindAsync(id);
 
             if (constituencyDetails == null)
@@ -42,9 +50,6 @@ namespace Dashboard.Controllers
             return constituencyDetails;
         }
 
-        // PUT: api/ConstituencyDetails/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConstituencyDetails(long id, ConstituencyDetails constituencyDetails)
         {
@@ -74,9 +79,6 @@ namespace Dashboard.Controllers
             return NoContent();
         }
 
-        // POST: api/ConstituencyDetails
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<ConstituencyDetails>> PostConstituencyDetails(ConstituencyDetails constituencyDetails)
         {
@@ -107,17 +109,14 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
                 }
-
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
                 if (constituencyDetails == null)
@@ -152,9 +151,9 @@ namespace Dashboard.Controllers
                     ConstituencyId = constituencyDetails.ConstituencyId,
                     RegionId = constituencyDetails.RegionId,
                     Description = constituencyDetails.Description,
-                    ProfileId = Profile.ProfileId,
+                    ProfileId = UP.ProfileId,
                     CreatedOn = DateTime.Now,
-                    CreatedBy = userId,
+                    CreatedBy = UP.UserId,
                     Status = 1
 
                 };
@@ -288,13 +287,17 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
-                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1 && x.ProfileId == Profile.ProfileId).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
+                var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
                 return Ok(new { ConstituencyDetails = selectConstituencyDetails });
             }
             catch (Exception ex)
@@ -308,20 +311,24 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
                 if (constituencyDetailId == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetailId && x.ProfileId == Profile.ProfileId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).SingleOrDefault();
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyDetailId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { obj.ConstituencyId,RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).ToList();
 
-                if (selectConstituencyDetail == null)
-                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
+                //if (selectConstituencyDetail == null)
+                //    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
                 return Ok(new { ConstituencyDetail = selectConstituencyDetail });
             }
             catch (Exception ex)
@@ -337,17 +344,21 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
                 if (constituencyId == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.ProfileId == Profile.ProfileId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
+                var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label  = obj.ArabicName }).ToList();
 
                 if (selectedConstituencyDetails.Count == 0)
                     return BadRequest(new { message = "لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها" });
@@ -366,15 +377,19 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
                 IQueryable<ConstituencyDetails> ConstituencyDetailsQuery;
                 ConstituencyDetailsQuery = from p in db.ConstituencyDetails
-                                           where  p.ProfileId == Profile.ProfileId && p.Status != 9
+                                           where  p.ProfileId == UP.ProfileId && p.Status != 9
                                     select p;
 
 
@@ -383,7 +398,7 @@ namespace Dashboard.Controllers
 
                 var ConstituencyDetailsList = (from p in ConstituencyDetailsQuery
                                                join mc in db.Constituencies on p.ConstituencyId equals mc.ConstituencyId
-                                          where mc.ProfileId == Profile.ProfileId && mc.Status != 9 orderby p.CreatedOn descending
+                                          where mc.ProfileId == UP.ProfileId && mc.Status != 9 orderby p.CreatedOn descending
                                           select new
                                           {
                                               p.ConstituencyDetailId,

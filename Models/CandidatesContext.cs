@@ -43,7 +43,7 @@ namespace Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;");
+                optionsBuilder.UseSqlServer("Server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;");
             }
         }
 
@@ -311,9 +311,9 @@ namespace Models
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Chair)
+                entity.HasOne(d => d.Profile)
                     .WithMany(p => p.ChairDetails)
-                    .HasForeignKey(d => d.ChairId)
+                    .HasForeignKey(d => d.ProfileId)
                     .HasConstraintName("FK_ChairDetails_Chairs");
             });
 
@@ -331,6 +331,11 @@ namespace Models
                     .WithMany(p => p.Chairs)
                     .HasForeignKey(d => d.ConstituencyId)
                     .HasConstraintName("FK_Chairs_Constituencies");
+
+                entity.HasOne(d => d.Profile)
+                    .WithMany(p => p.Chairs)
+                    .HasForeignKey(d => d.ProfileId)
+                    .HasConstraintName("FK_Chairs_Profile");
             });
 
             modelBuilder.Entity<Constituencies>(entity =>
@@ -439,7 +444,7 @@ namespace Models
                     .HasConstraintName("FK_Endorsements_Candidates");
 
                 entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.Endorsements)
+                    .WithMany(p => p.EndorsementsNavigation)
                     .HasForeignKey(d => d.ProfileId)
                     .HasConstraintName("FK_Endorsements_Profile");
             });

@@ -10,14 +10,18 @@ namespace Models
             Branches = new HashSet<Branches>();
             Candidates = new HashSet<Candidates>();
             Centers = new HashSet<Centers>();
+            ChairDetails = new HashSet<ChairDetails>();
+            Chairs = new HashSet<Chairs>();
             Constituencies = new HashSet<Constituencies>();
             ConstituencyDetails = new HashSet<ConstituencyDetails>();
-            Endorsements = new HashSet<Endorsements>();
+            EndorsementsNavigation = new HashSet<Endorsements>();
             Offices = new HashSet<Offices>();
         }
 
         public long ProfileId { get; set; }
         public string Name { get; set; }
+        public int? Age { get; set; }
+        public int? Endorsements { get; set; }
         public string Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -32,9 +36,11 @@ namespace Models
         public virtual ICollection<Branches> Branches { get; set; }
         public virtual ICollection<Candidates> Candidates { get; set; }
         public virtual ICollection<Centers> Centers { get; set; }
+        public virtual ICollection<ChairDetails> ChairDetails { get; set; }
+        public virtual ICollection<Chairs> Chairs { get; set; }
         public virtual ICollection<Constituencies> Constituencies { get; set; }
         public virtual ICollection<ConstituencyDetails> ConstituencyDetails { get; set; }
-        public virtual ICollection<Endorsements> Endorsements { get; set; }
+        public virtual ICollection<Endorsements> EndorsementsNavigation { get; set; }
         public virtual ICollection<Offices> Offices { get; set; }
     }
 }

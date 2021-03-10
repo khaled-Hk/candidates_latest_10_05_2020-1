@@ -5,11 +5,6 @@ namespace Models
 {
     public partial class Chairs
     {
-        public Chairs()
-        {
-            ChairDetails = new HashSet<ChairDetails>();
-        }
-
         public long ChairId { get; set; }
         public int? GeneralChairs { get; set; }
         public int? PrivateChairs { get; set; }
@@ -23,8 +18,9 @@ namespace Models
         public DateTime CreatedOn { get; set; }
         public long? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
+        public long? ProfileId { get; set; }
 
         public virtual Constituencies Constituency { get; set; }
-        public virtual ICollection<ChairDetails> ChairDetails { get; set; }
+        public virtual Profile Profile { get; set; }
     }
 }

@@ -45,10 +45,6 @@ export default {
         };
     },
     methods: {
-
-
-
-
         GetEntities(pageNo) {
             this.pageNo = pageNo;
             if (this.pageNo === undefined) {
@@ -67,13 +63,11 @@ export default {
                     this.pages = 0;
                     return err;
                 });
-
         },
         AddEntitesComponent() {
             this.state = 1
         },
         UpdateCandidatesComponent(candidateId) {
-
             this.state = 2;
             this.CandidateId = candidateId;
         },

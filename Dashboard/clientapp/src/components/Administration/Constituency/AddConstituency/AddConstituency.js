@@ -58,7 +58,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: '<strong>' + response.data.responseMsg.message + '</strong>',
                                 type: 'success'
                             });
                         })

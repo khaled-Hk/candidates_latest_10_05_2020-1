@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
-
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -43,16 +43,19 @@ namespace Dashboard.Controllers
         {
             try
             {
-
-                 var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(404, new { message = "الرجاء تفعيل الضبط الانتخابي" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 var OfficeCount = db.Offices.Where(x => x.Status != 9).Count();
 
-                var OfficesList = db.Offices.Where(x=>x.Status!=9 && x.ProfileId == Profile.ProfileId)
+                var OfficesList = db.Offices.Where(x=>x.Status!=9 && x.ProfileId == UP.ProfileId)
                     .OrderByDescending(x=> x.CreatedOn)
                     .Select(x=> new
                     {
@@ -80,7 +83,16 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var offices = db.Offices.Select(s => new { label = s.ArabicName, value = s.OfficeId }).ToList();
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <=0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <=0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+                var offices = db.Offices.Where(x=>x.ProfileId== UP.ProfileId).Select(s => new { label = s.ArabicName, value = s.OfficeId }).ToList();
                 return Ok(new {offices});
             }catch(Exception ex)
             {
@@ -93,11 +105,14 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 var office = db.Offices.Where(x => x.OfficeId == id).SingleOrDefault();
@@ -108,7 +123,7 @@ namespace Dashboard.Controllers
                 }
 
                 office.Status = 9;
-                office.ModifiedBy = userId;
+                office.ModifiedBy = UP.UserId;
                 office.ModifiedOn = DateTime.Now;
 
                 db.SaveChanges();
@@ -125,35 +140,25 @@ namespace Dashboard.Controllers
         {
             try
             {
-           
-                
-                if (OfficeData == null)
-                {
-                    return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
-                }
 
-                var userId = this.help.GetCurrentUser(HttpContext);
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
-
-                if (Profile == null)
+                if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, "الملف غير موجود" );
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
-
-                var IsExist = db.Offices.Where(x => x.Status != 9 && x.ArabicName == OfficeData.ArabicName).SingleOrDefault();
 
 
                 Offices offices = new Offices();
                 offices.ArabicName = OfficeData.ArabicName;
                 offices.EnglishName = OfficeData.EnglishName;
                 offices.Description = OfficeData.Description;
-                offices.ProfileId = Profile.ProfileId;
-                offices.CreatedBy = userId;
+                offices.ProfileId = UP.ProfileId;
+                offices.CreatedBy = UP.UserId;
+                offices.Status = 1;
                 offices.CreatedOn = DateTime.Now;
                 db.Offices.Add(offices);
                 db.SaveChanges();

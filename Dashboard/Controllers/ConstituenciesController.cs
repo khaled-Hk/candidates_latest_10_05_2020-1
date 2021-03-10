@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
+using static Services.Helper;
 
 namespace Vue.Controllers
 {
@@ -27,14 +28,18 @@ namespace Vue.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return Ok(new { ResponseCode = 9, ResponseMsg = "الرجاء تفعيل الضبط الانتخابي" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
                 IQueryable<Constituencies> ConstituenciesQuery;
                 ConstituenciesQuery = from p in db.Constituencies
-                                      where p.Status != 9 && p.ProfileId == Profile.ProfileId
+                                      where p.Status != 9 && p.ProfileId == UP.ProfileId
                                       select p;
 
                 var ConstituenciesCount = (from p in ConstituenciesQuery
@@ -49,7 +54,7 @@ namespace Vue.Controllers
                                             p.Status,
                                             p.ArabicName,
                                             p.EnglishName,
-
+                                            Region=p.Region.ArabicName
                                         }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
                 
                 return Ok(new { ResponseCode = 0, ResponseMsg = new { Constituencies = ConstituencyList, count = ConstituenciesCount } });
@@ -69,11 +74,18 @@ namespace Vue.Controllers
                 {
                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
                 }
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return Ok(new { ResponseCode = 9, ResponseMsg = "الملف غير موجود" });
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
                 }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                }
+
+
                 if (constituency.RegionId == null)
                 {
                     return BadRequest(new { message = "الرجاء إختيار المنطقة" });
@@ -96,10 +108,10 @@ namespace Vue.Controllers
                     RegionId = constituency.RegionId,
                     Description = constituency.Description,
                     OfficeId = constituency.OfficeId,
-                    CreatedBy = constituency.CreatedBy,
+                    CreatedBy = UP.UserId,
                     CreatedOn = DateTime.Now,
                     Status = 1,
-                    ProfileId= Profile.ProfileId
+                    ProfileId= UP.ProfileId
                 };
 
                 db.Constituencies.Add(newConstituency);
@@ -112,6 +124,7 @@ namespace Vue.Controllers
             }
         }
 
+        
         [HttpDelete("DeleteConstituency/{ConstituencyId}")]
         public IActionResult DeleteConstituency([FromRoute] long? ConstituencyId)
         {
@@ -204,7 +217,16 @@ namespace Vue.Controllers
         {
             try
             {
-                var selectConstituencies = db.Constituencies.Where(x => x.Status == 1).Select(obj => new { obj.ConstituencyId, obj.ArabicName, obj.EnglishName, obj.RegionId, obj.OfficeId, obj.CreatedOn}).ToList();
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+                var selectConstituencies = db.Constituencies.Where(x => x.Status == 1 && x.ProfileId==UP.ProfileId).Select(obj => new { obj.ConstituencyId, obj.ArabicName, obj.EnglishName, obj.RegionId, obj.OfficeId, obj.CreatedOn}).ToList();
                 var constituencies = (from sc in selectConstituencies join r in db.Regions on sc.RegionId equals r.RegionId where r.Status == 1 select new { sc.ConstituencyId, sc.EnglishName, sc.ArabicName, sc.RegionId, regionName = r.ArabicName, sc.OfficeId, sc.CreatedOn }).ToList();
                 return Ok(new { Constituencies = constituencies });
             }
@@ -223,7 +245,18 @@ namespace Vue.Controllers
                 {
                     return BadRequest("الرجاء إختيار المنطقة");
                 }
-                var selectConstituencies = db.Constituencies.Where(x => x.Status == 1 && x.RegionId == RegionId).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
+                var selectConstituencies = db.Constituencies.Where(x => x.Status == 1 && x.RegionId == RegionId && x.ProfileId == UP.ProfileId ).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
                 return Ok(new { Constituencies = selectConstituencies });
             }
             catch (Exception ex)
@@ -242,9 +275,19 @@ namespace Vue.Controllers
                     return BadRequest("الرجاء إختيار الدائرة الرئيسية");
                 }
 
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
 
                 var ConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status != 9
-                    && x.ConstituencyId == ConstituencyId)
+                    && x.ConstituencyId == ConstituencyId && x.ProfileId ==UP.ProfileId)
                     .Select(obj => new{
                         value = obj.ConstituencyId,
                         label = obj.ArabicName
@@ -278,7 +321,18 @@ namespace Vue.Controllers
                 {
                     return BadRequest("الرجاء إختيار المنطقة");
                 }
-                var selectConstituency = db.Constituencies.Where(x => x.ConstituencyId == constituencyId && x.Status == 1 ).Select(obj => new { RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
+                var selectConstituency = db.Constituencies.Where(x => x.ConstituencyId == constituencyId && x.Status == 1 && x.ProfileId== UP.ProfileId).Select(obj => new { RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
                 return Ok(new { Constituency = selectConstituency });
             }
             catch (Exception ex)
@@ -296,7 +350,18 @@ namespace Vue.Controllers
                 {
                     return BadRequest("الرجاء إختيار المنطقة");
                 }
-                var selectConstituency = db.Constituencies.Where(x => x.RegionId == regionId && x.Status == 1).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
+                var selectConstituency = db.Constituencies.Where(x => x.RegionId == regionId && x.Status == 1 && x.ProfileId == UP.ProfileId).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
                 return Ok(new { Constituency = selectConstituency });
             }
             catch (Exception ex)
@@ -310,9 +375,19 @@ namespace Vue.Controllers
         {
             try
             {
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
                 IQueryable<Constituencies> ConstituencyQuery;
                 ConstituencyQuery = from p in db.Constituencies
-                                where p.Status != 9
+                                where p.Status != 9 && p.ProfileId== UP.ProfileId
                                 select p;
 
 

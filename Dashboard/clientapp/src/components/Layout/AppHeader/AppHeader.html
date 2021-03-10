@@ -23,11 +23,13 @@
             <form style="padding-right:5px;">
                 <div class="input-group no-border">
                     <el-alert title=""
-                              type="warning" v-if="ActiveProfile!=null" style="margin-left: 11px;">
-                        <b>الانتخابات المفعلة : {{ActiveProfile.name}} / {{ActiveProfile.startDate | moment}}</b>
+                              type="warning" v-if="ActiveProfile!=0" style="margin-left: 11px;" >
+                        <b v-for="x in ActiveProfile">الانتخابات المفعلة : {{x.name}} / {{x.startDate | moment}}
+<br />
+</b>
                     </el-alert>
                     <el-alert title=""
-                              type="warning" v-if="ActiveProfile==null" style="margin-left: 11px;">
+                              type="warning" v-if="ActiveProfile==0" style="margin-left: 11px;">
                         <b>لاتوجد انتخابات</b>
                     </el-alert>
                 </div>

@@ -33,6 +33,18 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var UserId = this.help.GetCurrentUser(HttpContext);
+                if (UserId<=0)
+                {
+                    return StatusCode(404, "غير مسموح بالدخول");
+                }
+                var ProfileUserid = db.Users.Where(x => x.Id == UserId).SingleOrDefault();
+                long? ProfileUserId = 0;
+                if (ProfileUserid != null)
+                {
+                    ProfileUserId = ProfileUserid.ProfileRuningId;
+                }
+                
                 IQueryable<Profile> ProfilesQuery;
                 ProfilesQuery = from p in db.Profile
                              where p.Status != 9
@@ -51,6 +63,7 @@ namespace Dashboard.Controllers
                                     p.StartDate,
                                     p.EndDate,
                                     p.IsActivate,
+                                    Runing=(p.ProfileId== ProfileUserId ? true:false),
                                     p.ProfileType,
                                     p.CreatedOn,
                                     p.Status,
@@ -72,6 +85,7 @@ namespace Dashboard.Controllers
             try
             {
                 IQueryable<Profile> ProfilesQuery;
+                
                 ProfilesQuery = from p in db.Profile
                                 where p.IsActivate == 1
                                 select p;
@@ -89,14 +103,14 @@ namespace Dashboard.Controllers
                                       p.CreatedOn,
                                       p.Status,
                                       p.ProfileId
-                                  }).SingleOrDefault();
+                                  }).ToList();
 
                 if (ProfilList == null)
                 {
                     return Ok(new { Id = 0, Profile = ProfilList });
                 }
 
-                return Ok(new { Id = ProfilList.ProfileId, Profile = ProfilList });
+                return Ok(new { Profile = ProfilList });
             }
             catch (Exception e)
             {
@@ -109,9 +123,19 @@ namespace Dashboard.Controllers
         {
             try
             {
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var UserPalyProfile = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                
+
                 IQueryable<Profile> ProfilesQuery;
                 ProfilesQuery = from p in db.Profile
-                                where p.Status == 1
+                                where p.ProfileId == UserPalyProfile.ProfileRuningId
                                 select p;
 
                 var ProfilList = (from p in ProfilesQuery
@@ -220,7 +244,7 @@ namespace Dashboard.Controllers
                 Profile.ModifiedOn = DateTime.Now;
                 db.SaveChanges();
 
-                var Profilelist = db.Profile.Where(x=>x.ProfileId != Profile.ProfileId).ToList();
+                var Profilelist = db.Profile.Where(x=>x.ProfileId != Profile.ProfileId && x.ProfileType==Profile.ProfileType).ToList();
                 foreach(var p in Profilelist)
                 {
                     p.IsActivate = 0;
@@ -281,26 +305,15 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                var Profile = (from p in db.Profile
-                               where p.ProfileId == ProfileId && p.Status == 2
-                               select p).SingleOrDefault();
-
-                if (Profile == null)
+                var User = db.Users.Where(p => p.Id == userId).SingleOrDefault();
+                if (User == null)
                 {
-                    return NotFound("خــطأ : لا يمكن اجراء العملية الملف غير موجود");
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                Profile.Status = 1;
-                Profile.ModifiedBy = userId;
-                Profile.ModifiedOn = DateTime.Now;
-                db.SaveChanges();
-
-                var Profilelist = db.Profile.Where(x => x.ProfileId != Profile.ProfileId).ToList();
-                foreach (var p in Profilelist)
-                {
-                    p.Status = 2;
-                    db.Profile.Update(p);
-                }
+                User.ProfileRuningId = ProfileId;
+                User.ModifiedOn = DateTime.Now;
+                User.ModifiedBy = userId;
                 db.SaveChanges();
                 return Ok("تم تشغيل الضبط الانتخابي المطلوب بنجاح");
             }
@@ -322,20 +335,17 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                var Profile = (from p in db.Profile
-                               where p.ProfileId == ProfileId && p.Status == 1
-                               select p).SingleOrDefault();
-
-                if (Profile == null)
+                var User = db.Users.Where(p => p.Id == userId).SingleOrDefault();
+                if (User == null)
                 {
-                    return NotFound("خــطأ : لا يمكن اجراء العملية الملف غير موجود");
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                Profile.Status = 2;
-                Profile.ModifiedBy = userId;
-                Profile.ModifiedOn = DateTime.Now;
-
+                User.ProfileRuningId = null;
+                User.ModifiedOn = DateTime.Now;
+                User.ModifiedBy = userId;
                 db.SaveChanges();
+
                 return Ok("تم إيقـاف الضبط الانتخابي المطلوب بنجاح");
             }
             catch (Exception e)

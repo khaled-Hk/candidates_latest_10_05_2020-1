@@ -7,7 +7,7 @@ export default {
     },
     created() {
        
-        this.getStatistics();
+        //this.getStatistics();
     },
     data() {
         return {

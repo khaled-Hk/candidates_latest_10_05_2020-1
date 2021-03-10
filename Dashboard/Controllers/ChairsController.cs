@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Services;
-
+using static Services.Helper;
 
 namespace Dashboard.Controllers
 {
@@ -47,10 +47,19 @@ namespace Dashboard.Controllers
         {
             try
             {
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                }
 
-                var Count = db.Chairs.Where(x => x.Status != 9).Count();
+                var Count = db.Chairs.Where(x => x.Status != 9 && x.ProfileId == UP.ProfileId).Count();
 
-                var Info = db.Chairs.Where(x=>x.Status!=9)
+                var Info = db.Chairs.Where(x=>x.Status!=9 && x.ProfileId == UP.ProfileId)
                     .OrderByDescending(x=> x.CreatedOn)
                     .Select(x=> new
                     {
@@ -80,14 +89,17 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
-                var Chair = db.Chairs.Where(x => x.ChairId == id).SingleOrDefault();
+                var Chair = db.Chairs.Where(x => x.ChairId == id && x.ProfileId == UP.ProfileId).SingleOrDefault();
 
                 if (Chair == null)
                 {
@@ -95,7 +107,7 @@ namespace Dashboard.Controllers
                 }
 
                 Chair.Status = 9;
-                Chair.ModifiedBy = userId;
+                Chair.ModifiedBy = UP.UserId;
                 Chair.ModifiedOn = DateTime.Now;
 
                 db.SaveChanges();
@@ -117,11 +129,14 @@ namespace Dashboard.Controllers
                     return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
-                var userId = this.help.GetCurrentUser(HttpContext);
-
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
                 Chairs charis = new Chairs();
@@ -132,7 +147,8 @@ namespace Dashboard.Controllers
                 charis.GeneralChairRemaining = int.Parse(form.generalChairs);
                 charis.PrivateChairRemaining = int.Parse(form.privateChairs);
                 charis.RelativeChairRemaining = int.Parse(form.RelativeChairs);
-                charis.CreatedBy = userId;
+                charis.CreatedBy = UP.UserId;
+                charis.ProfileId = UP.ProfileId;
                 charis.CreatedOn = DateTime.Now;
                 db.Chairs.Add(charis);
                 db.SaveChanges();
@@ -145,8 +161,21 @@ namespace Dashboard.Controllers
             }
         }
 
+        public class ChairsDetailsObj
+        {
+            public long constituencyId { get; set; }
+            public string generalChairs { get; set; }
+            public string privateChairs { get; set; }
+            public string RelativeChairs { get; set; }
+
+            public long? ConstituencyDetailId { get; set; }
+            public long? ChairId { get; set; }
+
+
+        }
+
         [HttpPost("AddChairsDetails")]
-        public IActionResult AddChairsDetails([FromBody] ChairsObj form)
+        public IActionResult AddChairsDetails([FromBody] ChairsDetailsObj form)
         {
             try
             {
@@ -155,10 +184,17 @@ namespace Dashboard.Controllers
 
                 var userId = this.help.GetCurrentUser(HttpContext);
 
-                if (userId <= 0)
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                }
 
-                var chair = db.Chairs.Where(x => x.ChairId == form.ChairId && x.Status != 9).SingleOrDefault();
+                var chair = db.Chairs.Where(x => x.ChairId == form.ChairId && x.Status != 9 && x.ProfileId == UP.ProfileId).SingleOrDefault();
                 if(chair==null)
                     return StatusCode(401, "لم يتم العتور علي المقعد الرجاء اعادة المحاولة");
 

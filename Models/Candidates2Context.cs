@@ -288,10 +288,10 @@ namespace Models
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Chair)
-                    .WithMany(p => p.ChairDetails)
-                    .HasForeignKey(d => d.ChairId)
-                    .HasConstraintName("FK_ChairDetails_Chairs");
+                //entity.HasOne(d => d.Chair)
+                //    .WithMany(p => p.ChairDetails)
+                //    .HasForeignKey(d => d.ChairId)
+                //    .HasConstraintName("FK_ChairDetails_Chairs");
             });
 
             modelBuilder.Entity<Chairs>(entity =>

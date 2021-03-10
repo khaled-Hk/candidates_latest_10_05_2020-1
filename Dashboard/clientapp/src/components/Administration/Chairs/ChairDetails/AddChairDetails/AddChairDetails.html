@@ -39,6 +39,7 @@
                                 <el-form-item prop="ConstituencyId">
                                     <label>الدائرة الرئيسية</label>
                                     <div class="form-group">
+                                      
                                         <el-select placeholder="إختار الدائرة الرئيسية" v-model="ruleForm.ConstituencyId" @change="GetConstituenciesDetalsChairs" filterable>
                                             <el-option v-for="item in Constituencies"
                                                        :key="item.value"
@@ -55,9 +56,9 @@
                                     <div class="form-group">
                                         <el-select placeholder="إختار الدائرة الفرعية" v-model="ruleForm.ConstituencyDetailId" filterable>
                                             <el-option v-for="item in ConstituencyDetails"
-                                                       :key="item.value"
-                                                       :label="item.label"
-                                                       :value="item.value">
+                                                       :key="item.constituencyId"
+                                                       :label="item.arabicName"
+                                                       :value="item.constituencyId">
                                             </el-option>
                                         </el-select>
                                     </div>

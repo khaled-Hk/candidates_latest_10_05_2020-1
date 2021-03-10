@@ -23,5 +23,6 @@ namespace Models
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public long? ModifiedBy { get; set; }
+        public long? ProfileRuningId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,42 @@ namespace Services
 {
     public class Helper
     {
+        public class UserProfile
+        {
+            public long UserId { get; set; }
+            public long ProfileId { get; set; }
+        }
+        public UserProfile GetProfileId(HttpContext httpcontext, CandidatesContext db)
+        {
+            var userId = this.GetCurrentUser(httpcontext);
+            long UserId, ProfileId;
+            if (userId <= 0)
+            {
+                UserId = 0;
+            }
+            else
+            {
+                UserId = userId;
+            }
+
+            var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+            if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
+            {
+                ProfileId = 0;
+            }else
+            {
+                ProfileId = (long)user.ProfileRuningId;
+            }
+
+            UserProfile UP = new UserProfile()
+            {
+                ProfileId = ProfileId,
+                UserId = UserId
+            };
+
+            return UP;
+        }
+
         public long GetCurrentUser(HttpContext HttpUser)
         {
             try

@@ -49,21 +49,9 @@ export default {
             this.loading = true;
             this.$http.GetConstituencyPagination(this.pageNo, this.pageSize)
                 .then(response => {
-                    if (response.data.responseCode == 0) {
                         this.loading = false;
                         this.constituencies = response.data.responseMsg.constituencies;
                         this.pages = response.data.responseMsg.count;
-                    }
-
-                    if (response.data.responseCode == 9) {
-                        this.loading = false;
-                        this.constituencies = [];
-                        this.$message({
-                            type: 'error',
-                            message: response.data.responseMsg
-                        });
-                    }
-                    
                 })
                 .catch((err) => {
                     this.loading = false;
@@ -72,9 +60,10 @@ export default {
                     return err;
                 });
         },
+
+
         Delete(constituencyId)
         {
-           
             this.$confirm('هل حقا تريد مسح المنطقة . متـابعة ؟', 'تـحذيـر', {
                 confirmButtonText: 'نـعم',
                 cancelButtonText: 'إلغاء',

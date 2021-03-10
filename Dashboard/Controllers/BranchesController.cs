@@ -8,8 +8,8 @@ using Services;
 
 namespace Vue.Controllers
 {
-    [ValidateAntiForgeryToken]
     [Produces("application/json")]
+    [ValidateAntiForgeryToken]
     [Route("Api/Admin/Branches")]
     public class BranchesController : Controller
     {

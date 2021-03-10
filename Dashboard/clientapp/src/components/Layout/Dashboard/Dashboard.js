@@ -19,9 +19,6 @@ export default {
   
     methods: {
         href(url, id) {
-            //this.$set(this.menuFlag, 0, '');
-            //this.$set(this.menuFlag, 1, '');
-            //this.$set(this.menuFlag, 4, '');
             for (var i = 0; i < 12; i++) {
                 if (i == id) {
                     this.$set(this.menuFlag, id, 'active');
@@ -31,10 +28,11 @@ export default {
             }
             this.$router.push(url);
         },
+
         CheckLoginStatus() {
             try {
-                this.loginDetails = JSON.parse(sessionStorage.getItem('currentUser'));
-                //this.loginDetails = this.decrypt(sessionStorage.getItem('currentUser'), sessionStorage.getItem('SECRET_KEY'));
+                this.loginDetails = JSON.parse(localStorage.getItem('currentUser'));
+               
                 if (this.loginDetails == null) {
                     window.location.href = '/Security/Login';
                 }

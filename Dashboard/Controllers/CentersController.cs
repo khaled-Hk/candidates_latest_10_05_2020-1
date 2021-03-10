@@ -10,6 +10,7 @@ using Services;
 
 namespace Dashboard.Controllers
 {
+    [Produces("application/json")]
     [ValidateAntiForgeryToken]
     [Route("api/Admin/[controller]")]
     [ApiController]
@@ -24,14 +25,7 @@ namespace Dashboard.Controllers
             help = new Helper();
         }
 
-        // GET: api/Centers
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Centers>>> GetCenters()
-        //{
-        //    return await db.Centers.ToListAsync();
-        //}
 
-        // GET: api/Centers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Centers>> GetCenters(long id)
         {
@@ -77,13 +71,6 @@ namespace Dashboard.Controllers
             return NoContent();
         }
 
-        // POST: api/Centers
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        
-
-       
-        
 
         private bool CentersExists(long id)
         {
@@ -186,15 +173,22 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 IQueryable<Centers> CentersQuery;
                 CentersQuery = from p in db.Centers
-                                           where p.ProfileId == Profile.ProfileId && p.Status != 9
+                                           where p.ProfileId == user.ProfileRuningId && p.Status != 9
                                            select p;
 
 
@@ -203,7 +197,7 @@ namespace Dashboard.Controllers
 
                 var CenterList = (from p in CentersQuery
                                   join sc in db.ConstituencyDetails on p.ConstituencDetailId equals sc.ConstituencyDetailId
-                                  where sc.ProfileId == Profile.ProfileId && sc.Status != 9
+                                  where sc.ProfileId == user.ProfileRuningId && sc.Status != 9
 
                                   orderby p.CreatedOn descending
                                                select new
@@ -272,17 +266,24 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (centerId == null)
                 {
                     return BadRequest("الرجاء إختيار المركز");
                 }
-                var selectCenter = db.Centers.Where(x => x.CenterId == centerId && x.Status == 1 && x.ProfileId == Profile.ProfileId ).Select(obj => new { ConstituencyDetailId = obj.ConstituencDetailId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName, obj.Description, obj.Latitude, obj.Longitude }).FirstOrDefault();
+                var selectCenter = db.Centers.Where(x => x.CenterId == centerId && x.Status == 1 && x.ProfileId == user.ProfileRuningId).Select(obj => new { ConstituencyDetailId = obj.ConstituencDetailId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName, obj.Description, obj.Latitude, obj.Longitude }).FirstOrDefault();
                 return Ok(new { Center = selectCenter });
             }
             catch (Exception ex)
@@ -325,13 +326,20 @@ namespace Dashboard.Controllers
         {
             try
             {
-                var Profile = db.Profile.Where(x => x.Status == 1).SingleOrDefault();
-                if (Profile == null)
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
                 {
-                    return StatusCode(404, new { message = "الملف غير موجود" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                var selectCenters = db.Centers.Where(x => x.Status == 1 && x.ProfileId == Profile.ProfileId).Select(obj => new { value = obj.ConstituencDetailId, label = obj.ArabicName }).ToList();
+                var user = db.Users.Where(x => x.Id == userId).SingleOrDefault();
+                if (user.ProfileRuningId <= 0 || user.ProfileRuningId == null)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
+                var selectCenters = db.Centers.Where(x => x.Status == 1 && x.ProfileId == user.ProfileRuningId).Select(obj => new { value = obj.ConstituencDetailId, label = obj.ArabicName }).ToList();
                 return Ok(new { Centers = selectCenters });
             }
             catch (Exception ex)

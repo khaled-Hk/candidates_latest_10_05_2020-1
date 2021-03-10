@@ -143,7 +143,7 @@ export default {
     },
 
     GetConstituenciesDetalsChairs(ConstituencyId) {
-        return axios.get(`/Api/Admin/Constituencies/GetConstituency/${ConstituencyId}`);
+        return axios.get(`/Api/Admin/ConstituencyDetails/GetConstituencyDetail/${ConstituencyId}`);
     },
     GetAConstituencyBasedOn(regionId) {
         return axios.get(`/Api/Admin/Constituencies/GetAConstituency/${regionId}`);
@@ -360,6 +360,10 @@ export default {
 
     AddChairs(form) {
         return axios.post(`/Api/Admin/Chairs/Add`, form);
+    },
+
+    AddChairsDetails(form) {
+        return axios.post(`/Api/Admin/Chairs/AddChairsDetails`, form);
     },
 
     //************************ Endorsements **************************

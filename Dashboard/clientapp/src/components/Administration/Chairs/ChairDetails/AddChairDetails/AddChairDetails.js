@@ -104,18 +104,20 @@ export default {
             this.$http.GetConstituenciesDetalsChairs(this.ruleForm.ConstituencyId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.ConstituencyDetails = response.data.constituencyDetails;
-                    this.ChairsDetails = response.data.chairsDetails;
-                    this.ruleForm.ChairId = this.ChairsDetails.chairId;
+                /* eslint-disable no-debugger */
+                    debugger;
+                    this.ConstituencyDetails = response.data.constituencyDetail;
+                    //this.ChairsDetails = response.data.chairsDetails;
+                    //this.ruleForm.ChairId = this.ChairsDetails.chairId;
                 })
-                .catch((err) => {
+                .catch(() => {
                     this.$blockUI.Stop();
-                    this.$notify({
-                        title: 'حدث خطأ  ',
-                        dangerouslyUseHTMLString: true,
-                        type: 'error',
-                        message: err.response.data.message
-                    });
+                    //this.$notify({
+                    //    title: 'حدث خطأ  ',
+                    //    dangerouslyUseHTMLString: true,
+                    //    type: 'error',
+                    //    message: err.response.data.message
+                    //});
                 });
         },
 

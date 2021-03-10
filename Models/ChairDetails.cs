@@ -20,8 +20,9 @@ namespace Models
         public long? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public short? Status { get; set; }
+        public long? ProfileId { get; set; }
 
-        public virtual Chairs Chair { get; set; }
+        public virtual Profile Profile { get; set; }
         public virtual ICollection<ConstituencyDetailChairs> ConstituencyDetailChairs { get; set; }
     }
 }

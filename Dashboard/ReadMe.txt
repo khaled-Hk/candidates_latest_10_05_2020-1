@@ -1,4 +1,18 @@
-﻿Programming languages : 
+﻿
+Delete All Tables 
+--EXEC sp_MSForEachTable 'DISABLE TRIGGER ALL ON ?'
+--GO
+--EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
+--GO
+--EXEC sp_MSForEachTable 'DELETE FROM ?'
+--GO
+--EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'
+--GO
+--EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
+--GO
+
+
+Programming languages : 
 # Dotnet Core 3.1 
 # Vuejs Stable release	2.6.10 / December 13, 2019
 # element-ui for frontend UI
@@ -14,6 +28,7 @@ Scaffold-DbContext "Server=DESKTOP-4AI87L8\SQLEXPRESS;Database=Candidates;Truste
 
 Scaffold-DbContext "server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
 
+Scaffold-DbContext "Server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "" -F
 
 Add External Models
 

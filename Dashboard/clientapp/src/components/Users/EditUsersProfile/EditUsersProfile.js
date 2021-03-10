@@ -116,8 +116,8 @@ export default {
     methods: {
         CheckLoginStatus() {
             try {
-                this.loginDetails = JSON.parse(sessionStorage.getItem('currentUser'));
-                //this.loginDetails = this.decrypt(sessionStorage.getItem('currentUser'), sessionStorage.getItem('SECRET_KEY'));
+                this.loginDetails = JSON.parse(localStorage.getItem('currentUser'));
+              
                 if (this.loginDetails != null) {
                     this.ruleForm.FullName = this.loginDetails.fullName;
                     this.ruleForm.Phone = this.loginDetails.phone;
@@ -229,7 +229,7 @@ export default {
 
                             this.loginDetails.gender = this.ruleForm.Gender;
                             this.loginDetails.dateOfBirth = this.ruleForm.DateOfBirth;
-                            sessionStorage.setItem('currentUser', JSON.stringify(this.loginDetails));
+                            localStorage.setItem('currentUser', JSON.stringify(this.loginDetails));
 
 
 

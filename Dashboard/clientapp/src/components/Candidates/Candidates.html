@@ -15,8 +15,8 @@
                 <div class="card cardRTL">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-2"> <h4 class="card-title">المرشحين</h4></div>
-                            <div class="col-md-8">
+                            <div class="col-md-4"> <h4 class="card-title">الـمرشحين - القوائم الاولية</h4></div>
+                            <div class="col-md-6">
                             </div>
                             <div class="col-md-2">  <button class="btn btn-primary" @click.prevent="AddCandidatesComponent()">إضافة مرشح</button></div>
                         </div>
@@ -78,7 +78,6 @@
                                     <td>{{R.subconstituencyName}}</td>
                                     <td>{{R.createdOn | moment}}</td>
                                     <td class="text-left">
-
                                         <a href="#" title="تعديل بيانات المرشح" @click.prevent="UpdateCandidatesComponent(R.candidateId)">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
@@ -99,11 +98,8 @@
                                         </a>
                                     </td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                         <div style="text-align: center;padding-bottom:11px" v-if="candidates!=0">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination pagination-primary">

@@ -6,8 +6,7 @@ export default {
       
     },
     created() {
-       
-        //this.getStatistics();
+        this.getStatistics();
     },
     data() {
         return {
@@ -18,10 +17,8 @@ export default {
         getStatistics() {
             this.$blockUI.Start();
             this.$http.GetStatistics().then(response => {
-
                 this.statistics = response.data;
                 this.$blockUI.Stop();
-                
             }).catch(e => {
                 alert(JSON.stringify(e.message))
             })

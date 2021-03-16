@@ -34,7 +34,7 @@ export default {
             this.$http.GetRepresentativesByEntityId(id)
                 .then(response => {
                     this.loading = false;
-                    this.representatives = response.data.representatives;
+                    this.representatives = response.data;
                 })
                 .catch((err) => {
                     this.loading = false;

@@ -28,7 +28,7 @@ export default {
                 Owner: null,
                 Email: null,
                 Address: null,
-                ProfileId: null,
+              
             },
             rules: {
                 Name: [
@@ -63,10 +63,7 @@ export default {
                     { required: true, pattern: /\S+@\S+\.\S+/, message: 'الرجاء إدخال البريد بطريقة الصحيحه', trigger: 'blur' }
                 ], 
                 
-                ProfileId: [
-                    { required: true, message: 'الرجاء اختيار الملف الانتخابي', trigger: 'blur' },
-                ],
-               
+              
             }
         };
     },

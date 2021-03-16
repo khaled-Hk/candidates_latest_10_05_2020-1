@@ -39,7 +39,7 @@ export default {
                 if (error)
                     this.$message({
                         type: 'error',
-                        message: error.response.data.message
+                        message: error.response.data
                     });
                 this.endorsements = [];
                 return error;
@@ -72,7 +72,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }

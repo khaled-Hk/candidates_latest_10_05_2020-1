@@ -72,7 +72,7 @@ export default {
                         title: 'خطأ بعملية جلب المرشحين',
                         dangerouslyUseHTMLString: true,
                         type: 'error',
-                        message: err.message
+                        message: err.response.data
                     });
                     this.pages = 0;
                     this.$blockUI.Stop();
@@ -87,7 +87,7 @@ export default {
             this.$http.GetConstituencyDetails()
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.ConstituencyDetails = response.data.constituencyDetails;
+                    this.ConstituencyDetails = response.data;
                 })
                 .catch((err) => {
                     this.$blockUI.Stop();

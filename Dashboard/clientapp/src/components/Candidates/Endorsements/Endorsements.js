@@ -50,7 +50,7 @@ export default {
                 if (error)
                     this.$message({
                         type: 'error',
-                        message: error.response.data.message
+                        message: error.response.data
                     });
                     this.endorsements = [];
                 return error;

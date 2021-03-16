@@ -65,40 +65,40 @@ namespace Vue.Controllers
             }
         }
 
-        [HttpPost("CreateConstituency")]
+        [HttpPost("Add")]
         public IActionResult CreateConstituency([FromBody] Constituencies constituency)
         {
             try
             {
                 if (constituency == null)
                 {
-                   return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                   return BadRequest( "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
                 if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401,  "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
                 if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                    return StatusCode(401,  "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
 
                 if (constituency.RegionId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة" });
+                    return BadRequest( "الرجاء إختيار المنطقة");
                 }
 
                 if (string.IsNullOrEmpty(constituency.ArabicName) || string.IsNullOrWhiteSpace(constituency.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالعربي" });
+                    return BadRequest( "الرجاء إدخال اسم المنطقة بالعربي");
                 }
 
                 if (string.IsNullOrEmpty(constituency.EnglishName) || string.IsNullOrWhiteSpace(constituency.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالانجليزي" });
+                    return BadRequest( "الرجاء إدخال اسم المنطقة بالانجليزي");
                 }
 
                 var newConstituency = new Constituencies
@@ -120,12 +120,12 @@ namespace Vue.Controllers
             }
             catch
             {
-                return StatusCode(500, new { message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً");
             }
         }
 
         
-        [HttpDelete("DeleteConstituency/{ConstituencyId}")]
+        [HttpDelete("{ConstituencyId}/Delete")]
         public IActionResult DeleteConstituency([FromRoute] long? ConstituencyId)
         {
             try
@@ -133,14 +133,14 @@ namespace Vue.Controllers
                 
                 if (ConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة" });
+                    return BadRequest("الرجاء إختيار المنطقة" );
                 }
 
                 var constituency = db.Constituencies.Where(x => x.ConstituencyId == ConstituencyId).FirstOrDefault();
 
                 if(constituency == null)
                 {
-                    return BadRequest(new { message = "المنطفة الرئيسية التي تم إختيارها غير متوفرة" });
+                    return BadRequest( "المنطفة الرئيسية التي تم إختيارها غير متوفرة" );
                 }
 
                 constituency.Status = 9;
@@ -149,48 +149,48 @@ namespace Vue.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { constituencyId = ConstituencyId, message = string.Format("تم حذف الدائر الرئيسية {0} بنجاح", constituency.ArabicName) });
+                return Ok(string.Format("تم حذف الدائر الرئيسية {0} بنجاح", constituency.ArabicName));
             }
             catch
             {
-                return StatusCode(500, new { message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,"حدث خطاء، حاول مجدداً" );
             }
         }
 
-        [HttpPut("UpdateConstituency")]
+        [HttpPut]
         public IActionResult UpdateConstituency([FromBody] Constituencies constituency)
         {
             try
             {
                 if (constituency == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" );
                 }
                 if (constituency.RegionId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة" });
+                    return BadRequest("الرجاء إختيار المنطقة" );
                 }
 
                 if (string.IsNullOrEmpty(constituency.ArabicName) || string.IsNullOrWhiteSpace(constituency.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالعربي" });
+                    return BadRequest( "الرجاء إدخال اسم المنطقة بالعربي" );
                 }
 
                 if (string.IsNullOrEmpty(constituency.EnglishName) || string.IsNullOrWhiteSpace(constituency.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالانجليزي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة بالانجليزي" );
                 }
 
                 if (constituency.ConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الرئيسية" });
+                    return BadRequest( "الرجاء إختيار المنطقة الرئيسية" );
                 }
 
                 var selectedConstituency = db.Constituencies.Where(x => x.ConstituencyId == constituency.ConstituencyId).FirstOrDefault();
 
                 if (selectedConstituency == null)
                 {
-                    return BadRequest(new { message = "المنطفة التي تم إختيارها غير متوفرة" });
+                    return BadRequest("المنطفة التي تم إختيارها غير متوفرة" );
                 }
                 selectedConstituency.ArabicName = constituency.ArabicName;
                 selectedConstituency.EnglishName = constituency.EnglishName;
@@ -204,15 +204,15 @@ namespace Vue.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { constituencyId = selectedConstituency.ConstituencyId, message = string.Format("تم تحديث الدائر الرئيسية {0} بنجاح", selectedConstituency.ArabicName) });
+                return Ok(string.Format("تم تحديث الدائر الرئيسية {0} بنجاح", selectedConstituency.ArabicName));
             }
             catch
             {
-                return StatusCode(500, new { message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  "حدث خطاء، حاول مجدداً" );
             }
         }
 
-        [HttpGet("GetAllConstituencies")]
+        [HttpGet]
         public IActionResult GetAllConstituencies()
         {
             try
@@ -228,15 +228,15 @@ namespace Vue.Controllers
                 }
                 var selectConstituencies = db.Constituencies.Where(x => x.Status == 1 && x.ProfileId==UP.ProfileId).Select(obj => new { obj.ConstituencyId, obj.ArabicName, obj.EnglishName, obj.RegionId, obj.OfficeId, obj.CreatedOn}).ToList();
                 var constituencies = (from sc in selectConstituencies join r in db.Regions on sc.RegionId equals r.RegionId where r.Status == 1 select new { sc.ConstituencyId, sc.EnglishName, sc.ArabicName, sc.RegionId, regionName = r.ArabicName, sc.OfficeId, sc.CreatedOn }).ToList();
-                return Ok(new { Constituencies = constituencies });
+                return Ok(constituencies );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً" );
             }
         }
 
-        [HttpGet("GetConstituenciesBasedOn/{RegionId}")]
+        [HttpGet("{RegionId}/Region")]
         public IActionResult GetConstituenciesBasedOn([FromRoute] long? RegionId)
         {
             try
@@ -257,15 +257,15 @@ namespace Vue.Controllers
                 }
 
                 var selectConstituencies = db.Constituencies.Where(x => x.Status == 1 && x.RegionId == RegionId && x.ProfileId == UP.ProfileId ).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
-                return Ok(new { Constituencies = selectConstituencies });
+                return Ok(selectConstituencies);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  ex.Message);
             }
         }
 
-        [HttpGet("GetConstituenciesDetalsChairs/{ConstituencyId}")]
+        [HttpGet("{ConstituencyId}/chairs")]
         public IActionResult GetConstituenciesDetalsChairs([FromRoute] long? ConstituencyId)
         {
             try
@@ -308,11 +308,11 @@ namespace Vue.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpGet("GetConstituency/{constituencyId}")]
+        [HttpGet("Get/{constituencyId}")]
         public IActionResult GetConstituencyBasedOn([FromRoute] long? constituencyId)
         {
             try
@@ -333,15 +333,15 @@ namespace Vue.Controllers
                 }
 
                 var selectConstituency = db.Constituencies.Where(x => x.ConstituencyId == constituencyId && x.Status == 1 && x.ProfileId== UP.ProfileId).Select(obj => new { RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
-                return Ok(new { Constituency = selectConstituency });
+                return Ok( selectConstituency);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpGet("GetAConstituency/{regionId}")]
+        [HttpGet("Get/{regionId}/Region")]
         public IActionResult GetAConstituencyBasedOn([FromRoute] long? regionId)
         {
             try
@@ -362,62 +362,62 @@ namespace Vue.Controllers
                 }
 
                 var selectConstituency = db.Constituencies.Where(x => x.RegionId == regionId && x.Status == 1 && x.ProfileId == UP.ProfileId).Select(obj => new { value = obj.ConstituencyId, label = obj.ArabicName }).ToList();
-                return Ok(new { Constituency = selectConstituency });
+                return Ok( selectConstituency );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.Message );
             }
         }
 
-        [HttpGet("ConstituencyPagination")]
-        public IActionResult ConstituencyPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
-        {
-            try
-            {
-                UserProfile UP = this.help.GetProfileId(HttpContext, db);
-                if (UP.UserId <= 0)
-                {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
-                }
-                if (UP.ProfileId <= 0)
-                {
-                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
-                }
+        //[HttpGet("Get")]
+        //public IActionResult ConstituencyPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
+        //{
+        //    try
+        //    {
+        //        UserProfile UP = this.help.GetProfileId(HttpContext, db);
+        //        if (UP.UserId <= 0)
+        //        {
+        //            return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+        //        }
+        //        if (UP.ProfileId <= 0)
+        //        {
+        //            return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+        //        }
 
-                IQueryable<Constituencies> ConstituencyQuery;
-                ConstituencyQuery = from p in db.Constituencies
-                                where p.Status != 9 && p.ProfileId== UP.ProfileId
-                                select p;
-
-
-                var ConstituenciesCount = (from p in ConstituencyQuery
-                                           select p).Count();
-
-                var ConstituenciesList = (from p in ConstituencyQuery
-                                          join r in db.Regions on p.RegionId equals r.RegionId
-                                          orderby p.CreatedOn descending
-                                  select new
-                                  {
-                                      p.ConstituencyId,
-                                      p.ArabicName,
-                                      p.EnglishName,
-                                      regionName = r.ArabicName,
-                                      p.RegionId,
-                                      p.OfficeId,
-                                      p.CreatedOn,
-                                      p.Status
+        //        IQueryable<Constituencies> ConstituencyQuery;
+        //        ConstituencyQuery = from p in db.Constituencies
+        //                        where p.Status != 9 && p.ProfileId== UP.ProfileId
+        //                        select p;
 
 
-                                  }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+        //        var ConstituenciesCount = (from p in ConstituencyQuery
+        //                                   select p).Count();
 
-                return Ok(new { Constituencies = ConstituenciesList, count = ConstituenciesCount });
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.Message);
-            }
-        }
+        //        var ConstituenciesList = (from p in ConstituencyQuery
+        //                                  join r in db.Regions on p.RegionId equals r.RegionId
+        //                                  orderby p.CreatedOn descending
+        //                          select new
+        //                          {
+        //                              p.ConstituencyId,
+        //                              p.ArabicName,
+        //                              p.EnglishName,
+        //                              regionName = r.ArabicName,
+        //                              p.RegionId,
+        //                              p.OfficeId,
+        //                              p.CreatedOn,
+        //                              p.Status
+
+
+        //                          }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+        //        return Ok(new { Constituencies = ConstituenciesList, count = ConstituenciesCount });
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return StatusCode(500, e.Message);
+        //    }
+        //}
 
 
 

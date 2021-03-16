@@ -46,7 +46,7 @@ export default {
                     //this.$parent.GetRegions();
 
                     this.$blockUI.Stop();
-                    this.constituencyDetails = response.data.constituencyDetails;
+                    this.constituencyDetails = response.data;
 
                 })
 

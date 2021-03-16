@@ -43,7 +43,7 @@ namespace Vue.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  ex.Message);
             }
         }
 
@@ -234,19 +234,19 @@ namespace Vue.Controllers
 
                 if(profile == null)
                 {
-                    return BadRequest(new { message =" لا يوجد ملف إنتخابي مفعل"});
+                    return NotFound(" لا يوجد ملف إنتخابي مفعل");
                 }
 
                 if (candidateRepresentative == null)
                 {
-                    return BadRequest(new { message = "حذث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
 
                 if (userId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401,  "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" );
                 }
                 var candidate = db.Candidates.Where(x => x.Nid == candidateRepresentative.candidateNid).FirstOrDefault();
                 candidateRepresentative.candidateRepresentatives.CandidateId = candidate.CandidateId;
@@ -254,62 +254,62 @@ namespace Vue.Controllers
 
                 if (candidateRepresentative.candidateRepresentatives.CandidateId == 0 || candidateRepresentative.candidateRepresentatives.CandidateId == null)
                 {
-                    return StatusCode(404, new { message = "الرجاء إختيار المرشح" });
+                    return StatusCode(404, "الرجاء إختيار المرشح" );
                 }
 
                 if (string.IsNullOrEmpty(candidateRepresentative.candidateRepresentatives.Nid))
                 {
-                    return StatusCode(404, new { message = "الرجاء إدخال الرقم الوطني" });
+                    return StatusCode(404, "الرجاء إدخال الرقم الوطني");
                 }
 
                 if (candidateRepresentative.candidateRepresentatives.Nid.Trim().Length != 12)
                 {
-                    return StatusCode(404, new { message = "يجب أن يكون طول الرقم الوطني 12 رقماً" });
+                    return StatusCode(404, "يجب أن يكون طول الرقم الوطني 12 رقماً" );
                 }
 
                 if (string.IsNullOrWhiteSpace(candidateRepresentative.candidateRepresentatives.Email))
                 {
-                    return StatusCode(404, new { message = "الرجاء إدخال البريد الالكتروني" });
+                    return StatusCode(404, "الرجاء إدخال البريد الالكتروني" );
                 }
                 if (!Common.Validation.IsValidEmail(candidateRepresentative.candidateRepresentatives.Email))
                 {
-                    return StatusCode(404, new { message = "الرجاء التأكد من البريد الإلكتروني" });
+                    return StatusCode(404, "الرجاء التأكد من البريد الإلكتروني" );
                 }
                 if (string.IsNullOrWhiteSpace(candidateRepresentative.candidateRepresentatives.Phone))
                 {
-                    return StatusCode(404, new { message = "الرجاء إدخال رقم الهاتف" });
+                    return StatusCode(404, "الرجاء إدخال رقم الهاتف" );
                 }
                 if (candidateRepresentative.candidateRepresentatives.Phone.Length < 9)
                 {
-                    return StatusCode(404, new { message = "الرجاء إدخال الهـاتف بطريقة الصحيحة !!" });
+                    return StatusCode(404,"الرجاء إدخال الهـاتف بطريقة الصحيحة !!" );
                 }
                 candidateRepresentative.candidateRepresentatives.Phone = candidateRepresentative.candidateRepresentatives.Phone.Substring(candidateRepresentative.candidateRepresentatives.Phone.Length - 9);
 
                 if (candidateRepresentative.candidateRepresentatives.Phone.Substring(0, 2) != "91" && candidateRepresentative.candidateRepresentatives.Phone.Substring(0, 2) != "92" && candidateRepresentative.candidateRepresentatives.Phone.Substring(0, 2) != "94" && candidateRepresentative.candidateRepresentatives.Phone.Substring(0, 2) != "93" && candidateRepresentative.candidateRepresentatives.Phone.Substring(0, 2) != "95")
                 {
-                    return StatusCode(404, new { message = "يجب ان يكون الهاتف يبدأ ب (91,92,93,94,95)   ليبيانا او المدار !!" });
+                    return StatusCode(404, "يجب ان يكون الهاتف يبدأ ب (91,92,93,94,95)   ليبيانا او المدار !!" );
                 }
 
 
                 var NIDExist = db.CandidateRepresentatives.Where(x => x.Nid == candidateRepresentative.candidateRepresentatives.Nid).SingleOrDefault();
                 if (NIDExist != null)
-                    return BadRequest(new { message = "الرقم الوطني موجود مسبقا الرجاء إعادة الادخال" });
+                    return BadRequest("الرقم الوطني موجود مسبقا الرجاء إعادة الادخال" );
 
                 var PhoneExist = db.CandidateRepresentatives.Where(x => x.Phone == candidateRepresentative.candidateRepresentatives.Phone).SingleOrDefault();
                 if (PhoneExist != null)
-                    return BadRequest(new { message = "رقم الهاتف موجود مسبقا الرجاء إعادة الادخال" });
+                    return BadRequest( "رقم الهاتف موجود مسبقا الرجاء إعادة الادخال" );
 
                 var EmailExist = db.CandidateRepresentatives.Where(x => x.Email == candidateRepresentative.candidateRepresentatives.Email).SingleOrDefault();
                 if (EmailExist != null)
-                    return BadRequest(new { message = "البريد الإلكتروني موجود مسبقا الرجاء إعادة الادخال" });
+                    return BadRequest("البريد الإلكتروني موجود مسبقا الرجاء إعادة الادخال" );
 
                 if (string.IsNullOrWhiteSpace(candidateRepresentative.candidateRepresentatives.BirthDate.ToString()))
                 {
-                    return BadRequest(new { message = "الرجاء دخال تاريخ الميلاد " });
+                    return BadRequest("الرجاء دخال تاريخ الميلاد " );
                 }
                 if ((DateTime.Now.Year - candidateRepresentative.candidateRepresentatives.BirthDate.GetValueOrDefault().Year) < 18)
                 {
-                    return BadRequest(new { message = "يجب ان يكون عمر الممثل اكبر من 18" });
+                    return BadRequest("يجب ان يكون عمر الممثل اكبر من 18" );
                 }
 
 
@@ -324,11 +324,11 @@ namespace Vue.Controllers
                 db.Candidates.Update(candidate);
                 db.SaveChanges();
 
-                return Ok(new { message = " تم اضافة الممثل  بنـجاح", level = candidate.Levels });
+                return Ok( " تم اضافة الممثل  بنـجاح");
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.InnerException.Message);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -339,7 +339,7 @@ namespace Vue.Controllers
             {
                 if(candidateId == 0 || candidateId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المرشح"});
+                    return BadRequest("الرجاء إختيار المرشح");
                 }
 
                 var representatives = db.CandidateRepresentatives.Where(x => x.CandidateId == candidateId).Select(x => new {
@@ -352,11 +352,11 @@ namespace Vue.Controllers
                     x.CreatedOn,
                     x.BirthDate,
                 }).ToList();
-                return Ok(new { representatives });
+                return Ok( representatives );
             }
             catch(Exception e)
             {
-                return BadRequest(new { message = e.InnerException.Message});
+                return BadRequest(e.Message);
             }
         }
 

@@ -31,11 +31,11 @@ namespace Dashboard.Controllers
             UserProfile UP = this.help.GetProfileId(HttpContext, db);
             if (UP.UserId <= 0)
             {
-                return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
             }
             if (UP.ProfileId <= 0)
             {
-                return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
             }
 
             var constituencyDetails = await db.ConstituencyDetails.FindAsync(id);
@@ -102,7 +102,7 @@ namespace Dashboard.Controllers
             return constituencyDetails;
         }
 
-        [HttpPost("CreateConstituencyDetails")]
+        [HttpPost]
         public IActionResult CreateConstituency([FromBody] ConstituencyDetails constituencyDetails)
         {
             try
@@ -110,36 +110,36 @@ namespace Dashboard.Controllers
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
                 if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
                 if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (constituencyDetails == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 if (constituencyDetails.RegionId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة" });
+                    return BadRequest("الرجاء إختيار المنطقة");
                 }
 
                 if (constituencyDetails.ConstituencyId == 0)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الرئيسية" });
+                    return BadRequest("الرجاء إختيار المنطقة الرئيسية");
                 }
 
                 if (string.IsNullOrEmpty(constituencyDetails.ArabicName) || string.IsNullOrWhiteSpace(constituencyDetails.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة الفرعية بالعربي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة الفرعية بالعربي");
                 }
 
                 if (string.IsNullOrEmpty(constituencyDetails.EnglishName) || string.IsNullOrWhiteSpace(constituencyDetails.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة الفرعية بالانجليزي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة الفرعية بالانجليزي");
                 }
 
                 var newConstituencyDetails = new ConstituencyDetails
@@ -164,7 +164,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,ex.Message);
             }
         }
 
@@ -174,14 +174,14 @@ namespace Dashboard.Controllers
         }
 
 
-        [HttpDelete("DeleteConstituencyDetails/{ConstituencyDetailsId}")]
-        public IActionResult DeleteConstituency([FromRoute] long? ConstituencyDetailsId)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteConstituency([FromRoute] long? id)
         {
             try
             {
-                if (ConstituencyDetailsId == null)
+                if (id == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة" });
+                    return BadRequest("الرجاء إختيار المنطقة");
                 }
                 var userId = this.help.GetCurrentUser(HttpContext);
 
@@ -190,11 +190,11 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
 
-                var constituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == ConstituencyDetailsId).FirstOrDefault();
+                var constituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == id).FirstOrDefault();
 
                 if (constituencyDetail == null)
                 {
-                    return BadRequest(new { message = "المنطفة الفرعية التي تم إختيارها غير متوفرة" });
+                    return BadRequest("المنطفة الفرعية التي تم إختيارها غير متوفرة");
                 }
 
                 constituencyDetail.Status = 9;
@@ -205,22 +205,22 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { constituencyDetailId = constituencyDetail.ConstituencyDetailId, message = string.Format("تم حذف الدائر الرئيسية {0} بنجاح", constituencyDetail.ArabicName) });
+                return Ok(string.Format("تم حذف الدائر الرئيسية {0} بنجاح", constituencyDetail.ArabicName));
             }
             catch
             {
-                return StatusCode(500, new { message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً");
             }
         }
 
-        [HttpPut("UpdateConstituencyDetails")]
+        [HttpPut]
         public IActionResult UpdateConstituency([FromBody] ConstituencyDetails constituencyDetails)
         {
             try
             {
                 if (constituencyDetails == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
                 var userId = this.help.GetCurrentUser(HttpContext);
 
@@ -231,34 +231,34 @@ namespace Dashboard.Controllers
 
                 if (constituencyDetails.ConstituencyDetailId == null || constituencyDetails.ConstituencyDetailId == 0)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الفرعية" });
+                    return BadRequest("الرجاء إختيار المنطقة الفرعية");
                 }
 
                 if (constituencyDetails.RegionId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة" });
+                    return BadRequest("الرجاء إختيار المنطقة");
                 }
 
                 if (string.IsNullOrEmpty(constituencyDetails.ArabicName) || string.IsNullOrWhiteSpace(constituencyDetails.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالعربي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة بالعربي");
                 }
 
                 if (string.IsNullOrEmpty(constituencyDetails.EnglishName) || string.IsNullOrWhiteSpace(constituencyDetails.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالانجليزي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة بالانجليزي");
                 }
 
                 if (constituencyDetails.ConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الرئيسية" });
+                    return BadRequest("الرجاء إختيار المنطقة الرئيسية");
                 }
 
                 var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyDetailId == constituencyDetails.ConstituencyDetailId).FirstOrDefault();
 
                 if (selectedConstituencyDetails == null)
                 {
-                    return BadRequest(new { message = "المنطفة التي تم إختيارها غير متوفرة" });
+                    return BadRequest("المنطفة التي تم إختيارها غير متوفرة");
                 }
                 selectedConstituencyDetails.ArabicName = constituencyDetails.ArabicName;
                 selectedConstituencyDetails.EnglishName = constituencyDetails.EnglishName;
@@ -272,15 +272,15 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { ConstituencyDetailId = selectedConstituencyDetails.ConstituencyDetailId, message = string.Format("تم تحديث الدائر الفرعية {0} بنجاح", selectedConstituencyDetails.ArabicName) });
+                return Ok(string.Format("تم تحديث الدائر الفرعية {0} بنجاح", selectedConstituencyDetails.ArabicName));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpGet("GetAllConstituencyDetails")]
+        [HttpGet("All")]
         public IActionResult GetAllConstituencyDetails()
         {
             try
@@ -288,59 +288,59 @@ namespace Dashboard.Controllers
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
                 if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
                 if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 var selectConstituencyDetails = db.ConstituencyDetails.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
-                return Ok(new { ConstituencyDetails = selectConstituencyDetails });
+                return Ok(selectConstituencyDetails);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,ex.Message);
             }
         }
 
-        [HttpGet("GetConstituencyDetail/{constituencyDetailId}")]
-        public IActionResult GetConstituencyDetailBasedOn([FromRoute] long? constituencyDetailId)
+        [HttpGet("Get/{id}")]
+        public IActionResult GetConstituencyDetailBasedOn([FromRoute] long? id)
         {
             try
             {
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
                 if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
                 if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
-                if (constituencyDetailId == null)
+                if (id == null)
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectConstituencyDetail = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyDetailId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { obj.ConstituencyId, RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).ToList();
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x =>  x.ProfileId == UP.ProfileId && x.Status == 1 &&  x.ConstituencyDetailId == id).Select(obj => new { obj.ConstituencyId, RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).ToList();
 
 
-                var chairsDetails = db.Chairs.Where(x => x.ConstituencyId == constituencyDetailId).SingleOrDefault();
+                var chairsDetails = db.Chairs.Where(x => x.ConstituencyId == id).SingleOrDefault();
 
                 //if (selectConstituencyDetail == null)
-                //    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
+                //    return BadRequest("لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
                 return Ok(new { ConstituencyDetail = selectConstituencyDetail, chairsDetails = chairsDetails });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  ex.Message);
             }
 
 
         }
 
-        [HttpGet("GetConstituencyDetails/{constituencyId}")]
+        [HttpGet("Get/Constituency/{constituencyId}")]
         public IActionResult GetConstituencyDetailsBasedOn([FromRoute] long? constituencyId)
         {
             try
@@ -348,11 +348,11 @@ namespace Dashboard.Controllers
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
                 if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
                 if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 if (constituencyId == null)
@@ -362,18 +362,18 @@ namespace Dashboard.Controllers
                 var selectedConstituencyDetails = db.ConstituencyDetails.Where(x => x.ConstituencyId == constituencyId && x.ProfileId == UP.ProfileId && x.Status == 1).Select(obj => new { value = obj.ConstituencyDetailId, label = obj.ArabicName }).ToList();
 
                 if (selectedConstituencyDetails.Count == 0)
-                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها" });
-                return Ok(new { ConstituencyDetails = selectedConstituencyDetails });
+                    return BadRequest("لا يوجد بيانات بالدائرة الرئيسية التي تم إختيارها");
+                return Ok( selectedConstituencyDetails );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.Message);
             }
 
 
         }
 
-        [HttpGet("ConstituencyDetailsPagination")]
+        [HttpGet]
         public IActionResult ConstituencyDetailsPagination([FromQuery] int pageNo, [FromQuery] int pageSize)
         {
             try
@@ -381,11 +381,11 @@ namespace Dashboard.Controllers
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
                 if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
                 }
                 if (UP.ProfileId <= 0)
                 {
-                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
 
                 IQueryable<ConstituencyDetails> ConstituencyDetailsQuery;

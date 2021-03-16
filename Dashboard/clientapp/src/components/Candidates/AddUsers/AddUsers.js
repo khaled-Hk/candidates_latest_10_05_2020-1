@@ -234,7 +234,7 @@
                 .then(response => {
                     this.$message({
                         type: 'info',
-                        message: response.data.message
+                        message: response.data
                     });
                     this.resetform();
                     this.$blockUI.Stop();
@@ -243,7 +243,7 @@
                     this.$blockUI.Stop();
                     this.$message({
                         type: 'error',
-                        message: err.response.data.message
+                        message: err.response.data
                     });
                 });
         },

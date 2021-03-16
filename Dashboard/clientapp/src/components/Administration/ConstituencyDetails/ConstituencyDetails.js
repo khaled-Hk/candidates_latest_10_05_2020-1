@@ -76,7 +76,7 @@ export default {
                         this.$notify({
                             title: 'تم المسـح بنجاح',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong>' + response.data.message + '</strong>',
+                            message: '<strong>' + response.data + '</strong>',
                             type: 'success'
                         });
 
@@ -86,7 +86,7 @@ export default {
                         this.$blockUI.Stop();
                         this.$message({
                             type: 'error',
-                            message: err.response.data.message
+                            message: err.response.data
                         });
                     });
             })

@@ -71,7 +71,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: '<strong>' + response.data + '</strong>',
                                 type: 'success'
                             });
                             this.$parent.state = 0;
@@ -82,7 +82,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }

@@ -65,7 +65,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: '<strong>' + response.data + '</strong>',
                                 type: 'success'
                             });
                         })
@@ -75,7 +75,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }
@@ -105,7 +105,7 @@ export default {
                 .then(response => {
 
                     this.$blockUI.Stop();
-                    this.Constituencies = response.data.constituencies;
+                    this.Constituencies = response.data;
 
 
 
@@ -116,7 +116,7 @@ export default {
                         title: 'حدث خطأ  ',
                         dangerouslyUseHTMLString: true,
                         type: 'error',
-                        message: err.response.data.message
+                        message: err.response.data
                     });
                 });
 

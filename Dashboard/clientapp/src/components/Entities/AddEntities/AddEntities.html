@@ -22,21 +22,7 @@
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
                         <div class="row">
 
-                            <div class="col-md-6">
-                                <el-form-item prop="ProfileType">
-                                    <label>الملف الانتخابي</label>
-                                    <div class="form-group">
-                                        <el-select @change="GetAllProfiles"
-                                                   v-model="ruleForm.ProfileId" placeholder="اختر الملف الانتخابي">
-                                            <el-option v-for="item in Profiles"
-                                                       :key="item.profileId"
-                                                       :label="item.name"
-                                                       :value="item.profileId">
-                                            </el-option>
-                                        </el-select>
-                                    </div>
-                                </el-form-item>
-                            </div>
+
                             <div class="col-md-6">
                                 <el-form-item prop="Name">
                                     <label>اسم الكيان</label>
@@ -45,9 +31,6 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                        </div>
-                        <div class="row">
-
                             <div class="col-md-6">
                                 <el-form-item prop="Number">
                                     <label>رقم الكيان</label>
@@ -56,11 +39,23 @@
                                     </div>
                                 </el-form-item>
                             </div>
+                        </div>
+                        <div class="row">
+
+                          
                             <div class="col-md-6">
                                 <el-form-item>
                                     <label>الوصف</label>
                                     <div class="form-group">
                                         <el-input placeholder="إدخل الوصف" v-model="ruleForm.Descriptions"></el-input>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                            <div class="col-md-6">
+                                <el-form-item prop="Owner">
+                                    <label>المسئول</label>
+                                    <div class="form-group">
+                                        <el-input placeholder="إدخل اسم المسئول" v-model="ruleForm.Owner"></el-input>
                                     </div>
                                 </el-form-item>
                             </div>
@@ -70,15 +65,8 @@
 
 
                         <div class="row">
-                            <div class="col-md-4">
-                                <el-form-item prop="Owner">
-                                    <label>المسئول</label>
-                                    <div class="form-group">
-                                        <el-input placeholder="إدخل اسم المسئول" v-model="ruleForm.Owner"></el-input>
-                                    </div>
-                                </el-form-item>
-                            </div>
-                            <div class="col-md-4">
+                          
+                            <div class="col-md-6">
                                 <el-form-item prop="Phone">
                                     <label>رقم الهاتف</label>
                                     <div class="form-group">
@@ -86,7 +74,7 @@
                                     </div>
                                 </el-form-item>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <el-form-item prop="Email">
                                     <label>البريد الإلكتروني</label>
                                     <div class="form-group">

@@ -36,7 +36,7 @@ export default {
             this.$http.GetCandidateRepresentatives(this.$parent.CandidateId)
                 .then(response => {
                     this.loading = false;
-                    this.representatives = response.data.representatives;
+                    this.representatives = response.data;
              
                 })
                 .catch((err) => {

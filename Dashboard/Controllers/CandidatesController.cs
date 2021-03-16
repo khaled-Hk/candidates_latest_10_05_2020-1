@@ -33,7 +33,7 @@ namespace Dashboard.Controllers
             help = new Helper();
         }
 
-        [HttpGet("GetCandidatesByEntityId/{id}")]
+        [HttpGet("{id}/Entity")]
         public IActionResult GetCandidatesByEntityId([FromRoute]long? id)
         {
             try
@@ -76,12 +76,12 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً" );
             }
 
         }
 
-        [HttpGet("GetCandidate/{CandidateId}")]
+        [HttpGet("Get/{CandidateId}")]
         public IActionResult GetCandidate([FromRoute]long? CandidateId)
         {
             try
@@ -98,7 +98,7 @@ namespace Dashboard.Controllers
 
                 if (CandidateId == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في إستقبال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في إستقبال البيانات الرجاء إعادة الادخال" );
                 }
 
                 var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId && x.ProfileId == UP.ProfileId)
@@ -106,7 +106,7 @@ namespace Dashboard.Controllers
 
                 if (candidate == null)
                 {
-                    return BadRequest(new { message = "لا يوجد ناخب مسجل " });
+                    return BadRequest( "لا يوجد ناخب مسجل ");
                 }
                 var constituency = db.Constituencies.Where(x => x.ConstituencyId == candidate.ConstituencyId).SingleOrDefault();
                 var Region = db.Regions.Where(x => x.RegionId == constituency.RegionId).FirstOrDefault();
@@ -116,13 +116,13 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,"حدث خطاء، حاول مجدداً");
             }
 
         }
 
 
-        [HttpGet("GetCandidates")]
+        [HttpGet("Get")]
         public IActionResult GetCandidates([FromQuery]int pageNo, [FromQuery]int pageSize,long SubConstituencyId)
         {
             try
@@ -174,7 +174,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { message = e.Message });
+                return StatusCode(500,e.Message);
             }
         }
 
@@ -195,7 +195,7 @@ namespace Dashboard.Controllers
                 }
                 if (string.IsNullOrEmpty(nationalId) || string.IsNullOrWhiteSpace(nationalId))
                 {
-                    return BadRequest(new { message = "الرجاء التأكد من إدخال الرقم الوطني" });
+                    return BadRequest("الرجاء التأكد من إدخال الرقم الوطني");
                 }
 
                 //if (!int.TryParse(nationalId.Trim(), out _))
@@ -205,7 +205,7 @@ namespace Dashboard.Controllers
 
                 if (nationalId.Length != 12)
                 {
-                    return BadRequest(new { message = "الرقم الوطني يتكون من 12 رقماً" });
+                    return BadRequest("الرقم الوطني يتكون من 12 رقماً");
                 }
 
                 var candidate = db.Candidates.Where(x => x.Nid == nationalId && x.ProfileId== UP.ProfileId).FirstOrDefault();
@@ -222,7 +222,7 @@ namespace Dashboard.Controllers
                     };
                     db.Candidates.Add(candidate);
                     db.SaveChanges();
-                    return Ok(new { message = "", level = candidate.Levels, candidate.Nid });
+                    return Ok(new { level = candidate.Levels, candidate.Nid });
                 }
                 else
                 {
@@ -233,7 +233,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,"حدث خطاء، حاول مجدداً");
             }
         }
 
@@ -254,25 +254,25 @@ namespace Dashboard.Controllers
                 string codePhoneNumber = candidates.Phone.Substring(0, 3);
                 if (!codePhoneNumber.Equals("091") && !codePhoneNumber.Equals("092") && !codePhoneNumber.Equals("093") && !codePhoneNumber.Equals("094"))
                 {
-                    return BadRequest(new { message = "يجب أن يبدأ الرقم ب091 أو 092 أو 093 أو 094" });
+                    return BadRequest("يجب أن يبدأ الرقم ب091 أو 092 أو 093 أو 094" );
                 }
 
                 if (candidates.Phone.Length != 10)
                 {
-                    return BadRequest(new { message = "يجب أن يكون رقم الهاتف بطول 10 أرقام" });
+                    return BadRequest("يجب أن يكون رقم الهاتف بطول 10 أرقام" );
                 }
 
                 var phoneCount = db.Candidates.Where(x => x.Phone == candidates.Phone && x.ProfileId == UP.ProfileId).Count();
 
                 if (phoneCount > 0)
                 {
-                    return BadRequest(new { message = "لقد تم إستخدام هذا الرقم بالفعل من قبل مرشح أخر" });
+                    return BadRequest("لقد تم إستخدام هذا الرقم بالفعل من قبل مرشح أخر" );
                 }
                 return Ok(new { isVerifyCodeSent = true, message = "الرجاء إدخال رمز التحقق" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً");
             }
         }
 
@@ -316,7 +316,7 @@ namespace Dashboard.Controllers
                 if (candidate == null)
                 {
 
-                    return BadRequest(new { message = string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", obj.Nid) });
+                    return BadRequest( string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", obj.Nid));
 
                 }
                 else
@@ -332,11 +332,11 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً" );
             }
         }
 
-        [HttpPost("CandidateData")]
+        [HttpPost("Data")]
         public IActionResult CreateCandidate([FromBody] Candidates candidates)
         {
             try
@@ -360,7 +360,7 @@ namespace Dashboard.Controllers
 
                 if (candidates == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 var candidate = db.Candidates.Where(x => x.Nid == candidates.Nid).FirstOrDefault();
@@ -368,7 +368,7 @@ namespace Dashboard.Controllers
                 if (candidate == null)
                 {
 
-                    return BadRequest(new { message = string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", candidates.Nid) });
+                    return BadRequest(string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", candidates.Nid));
 
                 }
 
@@ -378,58 +378,58 @@ namespace Dashboard.Controllers
 
                 if (string.IsNullOrEmpty(candidates.FirstName) || string.IsNullOrWhiteSpace(candidates.FirstName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم الأول" });
+                    return BadRequest("الرجاء إدخال اسم الأول" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.FatherName) || string.IsNullOrWhiteSpace(candidates.FatherName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم الأب" });
+                    return BadRequest( "الرجاء إدخال اسم الأب" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.GrandFatherName) || string.IsNullOrWhiteSpace(candidates.GrandFatherName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم الجد" });
+                    return BadRequest( "الرجاء إدخال اسم الجد" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.SurName) || string.IsNullOrWhiteSpace(candidates.SurName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال القب" });
+                    return BadRequest("الرجاء إدخال القب" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.MotherName) || string.IsNullOrWhiteSpace(candidates.MotherName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال إسم الأم الثلاثي" });
+                    return BadRequest("الرجاء إدخال إسم الأم الثلاثي" );
                 }
 
 
 
                 if (candidates.Gender != 1 && candidates.Gender != 2)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار الجنس" });
+                    return BadRequest( "الرجاء إختيار الجنس" );
                 }
 
 
 
                 if (candidates.ConstituencyId == 0 || candidates.ConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار الدائرة الرئيسية" });
+                    return BadRequest("الرجاء إختيار الدائرة الرئيسية");
                 }
 
                 if (candidates.SubConstituencyId == 0 || candidates.SubConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار الدائرة الفرعية" });
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
 
 
 
                 if (string.IsNullOrEmpty(candidates.Email) || string.IsNullOrWhiteSpace(candidates.Email))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني" });
+                    return BadRequest("الرجاء إدخال البريد الإلكتروني" );
                 }
 
                 if (!IsItValidEmail(candidates.Email))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني بشكل صحيح" });
+                    return BadRequest("الرجاء إدخال البريد الإلكتروني بشكل صحيح");
 
                 }
 
@@ -440,7 +440,7 @@ namespace Dashboard.Controllers
 
                 if (period.Years < Profile.Age)
                 {
-                    return BadRequest(new { message = string.Format("يجب أن يكون عمر المترشح على الأقل {0}", Profile.Age) });
+                    return BadRequest( string.Format("يجب أن يكون عمر المترشح على الأقل {0}", Profile.Age));
                 }
 
 
@@ -469,7 +469,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً" );
             }
         }
 
@@ -487,7 +487,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("UpdateCandidate")]
+        [HttpPut]
         public IActionResult UpdateCandidate([FromBody] Candidates candidates)
         {
             try
@@ -502,7 +502,7 @@ namespace Dashboard.Controllers
 
                 if (candidates == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 var candidate = db.Candidates.Where(x => x.CandidateId == candidates.CandidateId).FirstOrDefault();
@@ -510,63 +510,63 @@ namespace Dashboard.Controllers
                 if (candidate == null)
                 {
 
-                    return BadRequest(new { message = string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", candidates.Nid) });
+                    return BadRequest(string.Format("لا يوجد ناخب مسجل تحت الرقم الوطني {0}", candidates.Nid));
 
                 }
 
                 if (string.IsNullOrEmpty(candidates.FirstName) || string.IsNullOrWhiteSpace(candidates.FirstName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم الأول" });
+                    return BadRequest("الرجاء إدخال اسم الأول");
                 }
 
                 if (string.IsNullOrEmpty(candidates.FatherName) || string.IsNullOrWhiteSpace(candidates.FatherName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم الأب" });
+                    return BadRequest("الرجاء إدخال اسم الأب" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.GrandFatherName) || string.IsNullOrWhiteSpace(candidates.GrandFatherName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم الجد" });
+                    return BadRequest("الرجاء إدخال اسم الجد" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.SurName) || string.IsNullOrWhiteSpace(candidates.SurName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال القب" });
+                    return BadRequest("الرجاء إدخال القب" );
                 }
 
                 if (string.IsNullOrEmpty(candidates.MotherName) || string.IsNullOrWhiteSpace(candidates.MotherName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال إسم الأم الثلاثي" });
+                    return BadRequest("الرجاء إدخال إسم الأم الثلاثي");
                 }
 
 
 
                 if (candidates.Gender != 1 && candidates.Gender != 2)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار الجنس" });
+                    return BadRequest( "الرجاء إختيار الجنس" );
                 }
 
 
 
                 if (candidates.ConstituencyId == 0 || candidates.ConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار الدائرة الرئيسية" });
+                    return BadRequest("الرجاء إختيار الدائرة الرئيسية");
                 }
 
                 if (candidates.SubConstituencyId == 0 || candidates.SubConstituencyId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار الدائرة الفرعية" });
+                    return BadRequest("الرجاء إختيار الدائرة الفرعية" );
                 }
 
 
                 if (string.IsNullOrEmpty(candidates.Email) || string.IsNullOrWhiteSpace(candidates.Email))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني" });
+                    return BadRequest( "الرجاء إدخال البريد الإلكتروني" );
                 }
 
                 if (!IsItValidEmail(candidates.Email))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال البريد الإلكتروني بشكل صحيح" });
+                    return BadRequest("الرجاء إدخال البريد الإلكتروني بشكل صحيح");
                 }
 
 
@@ -607,11 +607,11 @@ namespace Dashboard.Controllers
                 //    }
                 //}
 
-                return Ok(new { level = candidate.Levels, message = "تم تحديث المرشح بنجاح" });
+                return Ok( "تم تحديث المرشح بنجاح" );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً");
             }
         }
 
@@ -632,7 +632,7 @@ namespace Dashboard.Controllers
 
                if (file == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest( "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
                 var candidate = db.Candidates.Where(x => x.Nid == file.Nid && x.ProfileId == UP.ProfileId).FirstOrDefault();
 
@@ -656,7 +656,7 @@ namespace Dashboard.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً");
             }
         }
 
@@ -676,7 +676,7 @@ namespace Dashboard.Controllers
             public string PaymentReceipt{ get; set; }
         }
 
-        [HttpPost("CandidateAttachments")]
+        [HttpPost("Attachments")]
 
         public IActionResult AddCandidateAttachments([FromBody] CandidateDocument candidateDocument)
         {
@@ -812,18 +812,18 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.InnerException.Message);
+                return StatusCode(500, e.Message);
             }
         }
 
-        [HttpGet("CandidateId")]
+        [HttpGet]
         public IActionResult GetCandidateIdByNationalId([FromQuery] string nationalId)
         {
             try
             {
                 if (string.IsNullOrEmpty(nationalId))
                 {
-                    return BadRequest(new { message = "الرجاء قم بإدخال الرقم الوطني" });
+                    return BadRequest("الرجاء قم بإدخال الرقم الوطني");
                 }
 
                 var candidate = db.Candidates.Where(x => x.Nid == nationalId).Select(x => new { x.FirstName, x.FatherName, x.GrandFatherName, x.SurName, x.Levels, x.CandidateId }).SingleOrDefault();
@@ -833,11 +833,11 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { message = e.Message });
+                return StatusCode(500, e.Message );
             }
         }
 
-        [HttpGet("CompleteRegistration/{NationalId}")]
+        [HttpGet("Complete/{NationalId}")]
         public IActionResult CompleteRegistration([FromRoute] string NationalId)
         {
             try
@@ -858,7 +858,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.InnerException.Message);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -898,11 +898,11 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  "حدث خطاء، حاول مجدداً" );
             }
         }
 
-        [HttpPost("AddCandidateUser")]
+        [HttpPost("Add/User")]
         public IActionResult AddCandidateUser([FromBody] CandidateUsers user)
         {
             try
@@ -1006,15 +1006,15 @@ namespace Dashboard.Controllers
                 db.CandidateUsers.Add(cUser);
 
                 db.SaveChanges();
-                return Ok(new { message = "تم تسجيل المستخدم بنجاح " });
+                return Ok("تم تسجيل المستخدم بنجاح " );
             }
             catch (Exception e)
             {
-                return StatusCode(500, new { message = e.Message });
+                return StatusCode(500,  e.Message );
             }
         }
 
-        [HttpGet("GetCandidateUser/{candidateId}")]
+        [HttpGet("GetUser/{candidateId}")]
         public IActionResult GetCandidateUser([FromRoute]long? candidateId)
         {
             try

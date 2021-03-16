@@ -54,7 +54,7 @@ export default {
             this.$http.GetCandidatesByEntityId(id)
                 .then(response => {
                     this.loading = false;
-                    this.candidates = response.data.candidates;
+                    this.candidates = response.data;
                 })
                 .catch((err) => {
                     this.loading = false;

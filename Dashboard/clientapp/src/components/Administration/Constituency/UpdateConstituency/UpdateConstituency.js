@@ -60,7 +60,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: '<strong>' + response.data + '</strong>',
                                 type: 'success'
                             });
                         })
@@ -70,7 +70,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }
@@ -92,11 +92,9 @@ export default {
                         title: 'حدث خطأ',
                         dangerouslyUseHTMLString: true,
                         type: 'error',
-                        message: err.response.data.message
+                        message: err.response.data
                     });
                 });
-
-
         },
         GetConstituency() {
             this.$blockUI.Start();
@@ -106,7 +104,7 @@ export default {
                     //this.$parent.GetRegions();
 
                     this.$blockUI.Stop();
-                    let constituecny = response.data.constituency;
+                    let constituecny = response.data;
                     this.ruleForm.ArabicName = constituecny.arabicName
                     this.ruleForm.EnglishName = constituecny.englishName
                     this.ruleForm.RegionId = constituecny.regionId

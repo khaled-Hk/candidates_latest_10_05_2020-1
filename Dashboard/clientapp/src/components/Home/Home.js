@@ -17,10 +17,11 @@ export default {
         getStatistics() {
             this.$blockUI.Start();
             this.$http.GetStatistics().then(response => {
+                this.$blockUI.Stop();
                 this.statistics = response.data;
                 this.$blockUI.Stop();
-            }).catch(e => {
-                alert(JSON.stringify(e.message))
+            }).catch(() => {
+                this.$blockUI.Stop();
             })
         }
     }    

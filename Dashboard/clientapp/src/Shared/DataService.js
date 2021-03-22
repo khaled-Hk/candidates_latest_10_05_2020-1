@@ -133,106 +133,106 @@ export default {
     // ************************ Constituencies **************************
 
     GetConstituencies() {
-        return axios.get(`/Api/Admin/Constituencies/GetAllConstituencies`);
+        return axios.get(`/Api/Admin/Constituencies/Get`);
     },
     AddConstituency(constituency) {
-        return axios.post(`/api/Admin/Constituencies/CreateConstituency`, constituency);
+        return axios.post(`/api/Admin/Constituencies/Add`, constituency);
     },
     DeleteConstituency(constituencyId) {
-        return axios.delete(`/api/Admin/Constituencies/DeleteConstituency/${constituencyId}`);
+        return axios.delete(`/api/Admin/Constituencies/${constituencyId}/Delete`);
     },
     GetConstituenciesBasedOn(RegionId) {
-        return axios.get(`/Api/Admin/Constituencies/GetConstituenciesBasedOn/${RegionId}`);
+        return axios.get(`/Api/Admin/Constituencies/${RegionId}/Region`);
     },
     GetConstituencyBasedOn(constituencyId) {
-        return axios.get(`/Api/Admin/Constituencies/GetConstituency/${constituencyId}`);
+        return axios.get(`/Api/Admin/Constituencies/Get/${constituencyId}`);
     },
 
     GetConstituenciesDetalsChairs(ConstituencyId) {
-        return axios.get(`/Api/Admin/ConstituencyDetails/GetConstituencyDetail/${ConstituencyId}`);
+        return axios.get(`/Api/Admin/ConstituencyDetails/${ConstituencyId}/Chairs`);
     },
     GetAConstituencyBasedOn(regionId) {
-        return axios.get(`/Api/Admin/Constituencies/GetAConstituency/${regionId}`);
+        return axios.get(`/Api/Admin/Constituencies/Get/${regionId}/Region`);
     },
     GetConstituencyPagination(pageNo, pageSize) {
         return axios.get(`/Api/Admin/Constituencies/Get?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     UpdateConstituency(constituency) {
-        return axios.put(`/Api/Admin/Constituencies/UpdateConstituency/`, constituency);
+        return axios.put(`/Api/Admin/Constituencies/`, constituency);
     },
     // ************************ ConstituencyDetails **************************
     AddConstituencyDetails(constituencyDetials) {
-        return axios.post(`/api/Admin/ConstituencyDetails/CreateConstituencyDetails`, constituencyDetials);
+        return axios.post(`/api/Admin/ConstituencyDetails`, constituencyDetials);
     },
     GetConstituencyDetails() {
-        return axios.get(`/api/Admin/ConstituencyDetails/GetAllConstituencyDetails`);
+        return axios.get(`/api/Admin/ConstituencyDetails/All`);
     },
     DeleteConstituencyDetail(constituencyId) {
-        return axios.delete(`/api/Admin/ConstituencyDetails/DeleteConstituencyDetails/${constituencyId}`);
+        return axios.delete(`/api/Admin/ConstituencyDetails/${constituencyId}`);
     },
     GetConstituencyDetailsBasedOn(constituencyDetailsId) {
-        return axios.get(`/api/Admin/ConstituencyDetails/GetConstituencyDetail/${constituencyDetailsId}`);
+        return axios.get(`/api/Admin/ConstituencyDetails/Get/${constituencyDetailsId}`);
     },
     GetAllConstituencyDetailsBasedOn(constituencyId) {
-        return axios.get(`/api/Admin/ConstituencyDetails/GetConstituencyDetails/${constituencyId}`);
+        return axios.get(`/api/Admin/ConstituencyDetails/Get/Constituency/${constituencyId}`);
     },
     GetConstituencyDetailsPagination(pageNo, pageSize) {
-        return axios.get(`/api/Admin/ConstituencyDetails/ConstituencyDetailsPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
+        return axios.get(`/api/Admin/ConstituencyDetails?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     UpdateConstituencyDetail(constituencyDetail) {
-        return axios.put(`/api/Admin/ConstituencyDetails/UpdateConstituencyDetails`, constituencyDetail);
+        return axios.put(`/api/Admin/ConstituencyDetails`, constituencyDetail);
     },
 
     // ************************ Centers **************************
     AddCenter(center) {
-        return axios.post(`/api/Admin/Centers/CreateCenter`, center);
+        return axios.post(`/api/Admin/Centers`, center);
     },
     GetCentersPagination(pageNo, pageSize) {
-        return axios.get(`/api/Admin/Centers/CenterPagination?pageNo=${pageNo}&pageSize=${pageSize}`);
+        return axios.get(`/api/Admin/Centers/Get?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     DeleteCenter(centerId) {
-        return axios.delete(`/api/Admin/Centers/DeleteCenter/${centerId}`);
+        return axios.delete(`/api/Admin/Centers/${centerId}`);
     },
     GetCenter(centerId) {
-        return axios.get(`/api/Admin/Centers/GetCenter/${centerId}`);
+        return axios.get(`/api/Admin/Centers/Get/${centerId}`);
     },
     GetAllCenters() {
-        return axios.get(`/Api/Admin/Centers/GetCenters`);
+        return axios.get(`/Api/Admin/Centers/Get/All`);
     },
     GetCentersBasedOn(constituencyDetialId) {
         return axios.get(`/Api/Admin/Centers/GetCentersBasedOn/${constituencyDetialId}`);
     },
     UpdateCenter(center) {
-        return axios.put(`/api/Admin/Centers/UpdateCenter`, center);
+        return axios.put(`/api/Admin/Centers`, center);
     },
     // ************************ Stations **************************
     GetStations(centerId, pageNo, pageSize) {
-        return axios.get(`/api/Admin/Stations/GetStations?centerId=${centerId}&pageNo=${pageNo}&pageSize=${pageSize}`);
+        return axios.get(`/api/Admin/Stations/Get?centerId=${centerId}&pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     CreateStations(stations) {
-        return axios.post(`/api/Admin/Stations/CreateStations`, stations);
+        return axios.post(`/api/Admin/Stations/Add`, stations);
     },
     DeleteStation(stationId) {
-        return axios.delete(`/api/Admin/Stations/DeleteStation/${stationId}`);
+        return axios.delete(`/api/Admin/Stations/Delete/${stationId}`);
     },
     GetStationBasedOn(stationId) {
-        return axios.get(`/api/Admin/Stations/GetStationBasedOn/${stationId}`);
+        return axios.get(`/api/Admin/Stations/Get/${stationId}`);
     },
     UpdateStation(station) {
-        return axios.put(`/api/Admin/Stations/UpdateStation`, station);
+        return axios.put(`/api/Admin/Stations/Update`, station);
     },
     // ************************ Candidates **************************
     GetCandidate(CandidateId) {
-        return axios.get(`/api/Admin/Candidates/GetCandidate/${CandidateId}`);
+        return axios.get(`/api/Admin/Candidates/Get/${CandidateId}`);
     },
     GetCandidatesByEntityId(id) {
-        return axios.get(`/api/Admin/Candidates/GetCandidatesByEntityId/${id}`);
+        return axios.get(`/api/Admin/Candidates/${id}/Entity`);
     },
     AddCandidateToEntity(candidate) {
         return axios.post(`/api/Admin/Candidates/AddCandidateToEntity`, candidate);
     },
     GetCandidates(pageNo, pageSize,SubConstituencyId) {
-        return axios.get(`/api/Admin/Candidates/GetCandidates?pageNo=${pageNo}&pageSize=${pageSize}&SubConstituencyId=${SubConstituencyId}`);
+        return axios.get(`/api/Admin/Candidates/Get?pageNo=${pageNo}&pageSize=${pageSize}&SubConstituencyId=${SubConstituencyId}`);
     },
     RegisterCandidateLevelOne(nationalId) {
 
@@ -247,7 +247,7 @@ export default {
 
     },
     UploadCandidateData(object) {
-        return axios.post(`/api/Admin/Candidates/CandidateData`, object);
+        return axios.post(`/api/Admin/Candidates/Data`, object);
 
     },
     UploadFiles(object) {
@@ -255,23 +255,23 @@ export default {
 
     },
     UpdateCandidate(candidate) {
-        return axios.put(`/api/Admin/Candidates/UpdateCandidate`, candidate);
+        return axios.put(`/api/Admin/Candidates`, candidate);
     },
     UploadCandidateAttachments(candidate) {
-        return axios.post(`/api/Admin/Candidates/CandidateAttachments`, candidate);
+        return axios.post(`/api/Admin/Candidates/Attachments`, candidate);
     },
     GetCandidateInfo(NationalId) {
-        return axios.get(`/api/Admin/Candidates/CompleteRegistration/${NationalId}`);
+        return axios.get(`/api/Admin/Candidates/Complete/${NationalId}`);
     },
     AddCandidateUser(User) {
-        return axios.post('/Api/Admin/Candidates/AddCandidateUser', User);
+        return axios.post('/Api/Admin/Candidates/Add/User', User);
     },
     GetCandidateUser(candidateId) {
-        return axios.get(`/Api/Admin/Candidates/GetCandidateUser/${candidateId}`);
+        return axios.get(`/Api/Admin/Candidates/GetUser/${candidateId}`);
     },
     GetCandidateIdByNid(Nid) {
        
-        return axios.get(`/api/Admin/Candidates/CandidateId?nationalId=${Nid}`);
+        return axios.get(`/api/Admin/Candidates?nationalId=${Nid}`);
     },
     //DeleteCompany(CompanyId) {
     //    axios.defaults.headers.common['Authorization'] = 'Bearer ' + document.querySelector('meta[name="api-token"]').getAttribute('content');
@@ -330,7 +330,7 @@ export default {
         return axios.get(`/Api/Admin/Offices/Get?pageno=${pageNo}&pagesize=${pageSize}`);
     },
     deleteOffice(id) {
-        return axios.post(`/Api/Admin/Offices/${id}/deleteOffice`);
+        return axios.post(`/Api/Admin/Offices/${id}/Delete`);
     },
     AddOffice(OfficeData) {
         return axios.post(`/Api/Admin/Offices/Add`, OfficeData);
@@ -353,7 +353,7 @@ export default {
     },
 
     GetChairsDetails(pageNo, pageSize) {
-        return axios.get(`/Api/Admin/Chairs/GetChairsDetails?pageno=${pageNo}&pagesize=${pageSize}`);
+        return axios.get(`/Api/Admin/Chairs/Get/Details?pageno=${pageNo}&pagesize=${pageSize}`);
     },
 
     deleteChairs(id) {
@@ -361,7 +361,7 @@ export default {
     },
 
     deleteChairsDetails(id) {
-        return axios.post(`/Api/Admin/Chairs/${id}/deleteChairsDetails`);
+        return axios.post(`/Api/Admin/Chairs/${id}/Details/Delete`);
     },
 
     AddChairs(form) {
@@ -369,7 +369,7 @@ export default {
     },
 
     AddChairsDetails(form) {
-        return axios.post(`/Api/Admin/Chairs/AddChairsDetails`, form);
+        return axios.post(`/Api/Admin/Chairs/Add/Details`, form);
     },
 
     //************************ Endorsements **************************

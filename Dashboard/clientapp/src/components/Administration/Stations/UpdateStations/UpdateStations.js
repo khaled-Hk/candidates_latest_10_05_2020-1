@@ -59,7 +59,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: '<strong>' + response.data + '</strong>',
                                 type: 'success'
                             });
                         })
@@ -69,7 +69,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }
@@ -83,7 +83,7 @@ export default {
 
 
                     this.$blockUI.Stop();
-                    let station = response.data.station;
+                    let station = response.data;
                     this.ruleForm.ArabicName = station.arabicName
                     this.ruleForm.EnglishName = station.englishName
                     this.ruleForm.Description = station.description

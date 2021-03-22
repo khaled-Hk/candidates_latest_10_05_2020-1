@@ -105,7 +105,7 @@ export default {
             this.$http.GetAConstituencyBasedOn(this.regionId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.constituencies = response.data.constituency;
+                    this.constituencies = response.data;
                     
 
                 })
@@ -125,7 +125,7 @@ export default {
             this.$http.GetAllConstituencyDetailsBasedOn(this.constituencyId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.constituencyDetails = response.data.constituencyDetails;
+                    this.constituencyDetails = response.data;
 
 
                 })
@@ -144,7 +144,7 @@ export default {
             this.$http.GetCentersBasedOn(this.constituencyDetailId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.centers = response.data.centers;
+                    this.centers = response.data;
 
 
                 })
@@ -192,7 +192,7 @@ export default {
                         this.$notify({
                             title: 'تم المسـح بنجاح',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong>' + response.data.message + '</strong>',
+                            message: '<strong>' + response.data + '</strong>',
                             type: 'success'
                         });
 
@@ -202,7 +202,7 @@ export default {
                         this.$blockUI.Stop();
                         this.$message({
                             type: 'error',
-                            message: err.response.data.message
+                            message: err.response.data
                         });
                     });
             })

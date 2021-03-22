@@ -84,8 +84,8 @@ namespace Dashboard.Controllers
             }
         }
         
-        [HttpPost("{id}/delete")]
-        public IActionResult delete(long id)
+        [HttpPost("{id}/Delete")]
+        public IActionResult Delete(long id)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace Dashboard.Controllers
 
         }
 
-        [HttpPost("AddChairsDetails")]
+        [HttpPost("Add/Details")]
         public IActionResult AddChairsDetails([FromBody] ChairsDetailsObj form)
         {
             try
@@ -231,7 +231,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpGet("GetChairsDetails")]
+        [HttpGet("Get/Details")]
         public IActionResult GetChairsDetails(int pageNo, int pageSize)
         {
             try
@@ -261,7 +261,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPost("{id}/deleteChairsDetails")]
+        [HttpPost("{id}/Details/Delete")]
         public IActionResult deleteChairsDetails(long id)
         {
             try

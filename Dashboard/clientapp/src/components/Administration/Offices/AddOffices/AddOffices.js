@@ -58,7 +58,7 @@ export default {
             this.$http.GetAllBranches()
                 .then(response => {
                     this.loading = false;
-                    this.Branches = response.data.branches;
+                    this.Branches = response.data;
                 })
                 .catch((err) => {
                     this.loading = false;
@@ -71,7 +71,7 @@ export default {
             this.$http.GetAllProfiles()
                 .then(response => {
                     this.loading = false;
-                    this.Profiles = response.data.profile;
+                    this.Profiles = response.data;
                 })
                 .catch((err) => {
                     this.loading = false;

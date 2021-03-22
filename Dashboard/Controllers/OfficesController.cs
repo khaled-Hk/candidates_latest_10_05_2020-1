@@ -100,7 +100,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPost("{id}/deleteOffice")]
+        [HttpPost("{id}/Delete")]
         public IActionResult deleteOffice(long id)
         {
             try

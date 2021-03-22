@@ -4,9 +4,6 @@ export default {
     created() {
        
     },
-    components: {
-
-    },
     filters: {
         moment: function (date) {
             if (date === null) {
@@ -41,7 +38,7 @@ export default {
         submitForm(formName) {    
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    //AddProfiles
+                  
                     this.$blockUI.Start();
                     this.$http.AddRegions(this.ruleForm)
                         .then(response => {
@@ -51,7 +48,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data + '</strong>',
+                                message: `<strong>' ${response.data }</strong>`,
                                 type: 'success'
                             });  
                         })

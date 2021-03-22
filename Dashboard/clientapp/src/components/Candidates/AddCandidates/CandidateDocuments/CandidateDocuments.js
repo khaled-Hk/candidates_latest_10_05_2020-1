@@ -180,7 +180,7 @@ export default {
                             this.$notify({
                                 title: 'تم الرفع بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: `<strong>${response.data.message}</strong>`,
                                 type: 'success'
                             });
                         })
@@ -190,7 +190,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }

@@ -172,7 +172,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpGet("CenterPagination")]
+        [HttpGet("Get")]
         public IActionResult CenterPagination([FromQuery]int pageNo, [FromQuery] int pageSize)
         {
             try
@@ -226,7 +226,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpDelete("DeleteCenter/{CenterId}")]
+        [HttpDelete("{CenterId}")]
         public IActionResult DeleteConstituency([FromRoute] long? CenterId)
         {
             try
@@ -266,7 +266,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpGet("GetCenter/{centerId}")]
+        [HttpGet("Get/{centerId}")]
         public IActionResult GetCenterBasedOn([FromRoute] long? centerId)
         {
             try
@@ -333,7 +333,7 @@ namespace Dashboard.Controllers
 
         }
 
-        [HttpGet("GetCenters")]
+        [HttpGet("Get/All")]
         public IActionResult GetCenters()
         {
             try
@@ -363,7 +363,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("UpdateCenter")]
+        [HttpPut]
         public IActionResult UpdateCenter([FromBody] Centers center)
         {
             try

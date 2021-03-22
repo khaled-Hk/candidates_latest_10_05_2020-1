@@ -27,7 +27,7 @@ namespace Dashboard.Controllers
 
         // GET: api/Stations
        
-        [HttpGet("GetStations")]
+        [HttpGet("Get")]
         public IActionResult GetStationsBasedOn([FromQuery]int pageNo, [FromQuery] int pageSize, [FromQuery] long? centerId)
         {
             try
@@ -43,7 +43,7 @@ namespace Dashboard.Controllers
                 }
 
                 if (centerId == null)
-                    return BadRequest(new { message = "الرجاء إختيار المركز"});
+                    return BadRequest( "الرجاء إختيار المركز");
 
                 IQueryable<Stations> StationsQuery;
                 StationsQuery = from p in db.Stations
@@ -76,7 +76,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPost("CreateStations")]
+        [HttpPost("Add")]
         public IActionResult CreateStations([FromBody]Stations stations)
         {
             try
@@ -99,16 +99,16 @@ namespace Dashboard.Controllers
                 }
 
                 if (stations.CenterId == null)
-                    return BadRequest(new { message = "الرجاء إختيار المركز" });
+                    return BadRequest( "الرجاء إختيار المركز" );
 
                 if (string.IsNullOrEmpty(stations.ArabicName) || string.IsNullOrWhiteSpace(stations.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المحطة بالعربي" });
+                    return BadRequest( "الرجاء إدخال اسم المحطة بالعربي");
                 }
 
                 if (string.IsNullOrEmpty(stations.EnglishName) || string.IsNullOrWhiteSpace(stations.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المحطة بالانجليزي" });
+                    return BadRequest( "الرجاء إدخال اسم المحطة بالانجليزي" );
                 }
 
                 var newStation = new Stations
@@ -134,7 +134,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpDelete("DeleteStation/{StationId}")]
+        [HttpDelete("Delete/{StationId}")]
         public IActionResult DeleteConstituency([FromRoute] long? StationId)
         {
             try
@@ -142,7 +142,7 @@ namespace Dashboard.Controllers
 
                 if (StationId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المحطة" });
+                    return BadRequest( "الرجاء إختيار المحطة" );
                 }
 
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
@@ -159,7 +159,7 @@ namespace Dashboard.Controllers
 
                 if (station == null)
                 {
-                    return BadRequest(new { message = "المحطة التي تم إختيارها غير متوفرة" });
+                    return BadRequest( "المحطة التي تم إختيارها غير متوفرة" );
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
@@ -180,34 +180,34 @@ namespace Dashboard.Controllers
             }
             catch
             {
-                return StatusCode(500, new { message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  "حدث خطاء، حاول مجدداً");
             }
         }
 
-        [HttpPut("UpdateStation")]
+        [HttpPut("Update")]
         public IActionResult UpdateStation([FromBody] Stations stations)
         {
             try
             {
                 if (stations == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest( "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
                 }
 
                 if (stations.StationId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المحطة" });
+                    return BadRequest( "الرجاء إختيار المحطة" );
                 }
 
 
                 if (string.IsNullOrEmpty(stations.ArabicName) || string.IsNullOrWhiteSpace(stations.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المحطة بالعربي" });
+                    return BadRequest( "الرجاء إدخال اسم المحطة بالعربي" );
                 }
 
                 if (string.IsNullOrEmpty(stations.EnglishName) || string.IsNullOrWhiteSpace(stations.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المحطة بالانجليزي" });
+                    return BadRequest( "الرجاء إدخال اسم المحطة بالانجليزي" );
                 }
 
 
@@ -215,7 +215,7 @@ namespace Dashboard.Controllers
 
                 if (selectedStation == null)
                 {
-                    return BadRequest(new { message = "المحطة التي تم إختيارها غير متوفرة" });
+                    return BadRequest( "المحطة التي تم إختيارها غير متوفرة" );
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
@@ -239,11 +239,11 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpGet("GetStationBasedOn/{stationId}")]
+        [HttpGet("Get/{stationId}")]
         public IActionResult GetStationBasedOn([FromRoute] long? stationId)
         {
             try
@@ -265,11 +265,11 @@ namespace Dashboard.Controllers
                 var selectedStation = db.Stations.Where(x => x.ProfileId == UP.ProfileId && x.StationId == stationId && x.Status == 1).Select(obj => new { obj.ArabicName, obj.EnglishName, obj.Description }).FirstOrDefault();
 
                
-                return Ok(new { Station = selectedStation });
+                return Ok(selectedStation);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  ex.Message);
             }
 
 

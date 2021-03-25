@@ -1,15 +1,23 @@
-﻿
-Delete All Tables 
---EXEC sp_MSForEachTable 'DISABLE TRIGGER ALL ON ?'
---GO
---EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
---GO
---EXEC sp_MSForEachTable 'DELETE FROM ?'
---GO
---EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'
---GO
---EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
---GO
+﻿Clear all table 
+delete from offices
+delete from Branches
+delete from Centers
+delete from Profile
+delete from Stations
+delete from Candidates
+delete from CandidateContacts
+delete from CandidateRepresentatives
+delete from CandidateAttachments
+delete from ConstituencyDetailChairs
+delete from ConstituencyDetails
+delete from ChairDetails
+delete from Chairs
+delete from Constituencies
+delete from Regions
+delete from Endorsements
+delete from EntityUsers
+delete from EntityAttachments
+delete from Entities
 
 
 Programming languages : 

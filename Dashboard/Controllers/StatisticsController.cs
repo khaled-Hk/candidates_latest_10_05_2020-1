@@ -43,7 +43,14 @@ namespace Vue.Controllers
                 var independentCandidatesCount = db.Candidates.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId && x.EntityId == null).Count();
                 var candidatesCountByEntities = db.Candidates.Where(x => x.ProfileId == UP.ProfileId && x.Status == 1 && x.EntityId != null).Count();
                 var entitiesCount = db.Entities.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).Count();
-                return Ok(new { candidatesCount, independentCandidatesCount, candidatesCountByEntities, entitiesCount });
+
+                var ProfileCount = db.Profile.Where(x => x.Status != 9).Count();
+                var CentersCount = db.Centers.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).Count();
+                var StationsCount = db.Stations.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).Count();
+                var OfficeCount = db.Offices.Where(x => x.Status == 1 && x.ProfileId == UP.ProfileId).Count();
+
+
+                return Ok(new { candidatesCount, independentCandidatesCount, candidatesCountByEntities, entitiesCount , ProfileCount , CentersCount , StationsCount , OfficeCount });
             }
             catch(Exception ex)
             {

@@ -95,7 +95,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpDelete("{RegionId}/Delete")]
+        [HttpPost("{RegionId}/Delete")]
         public IActionResult Delete(long RegionId)
         {
             try
@@ -129,7 +129,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("{RegionId}/Disable")]
+        [HttpPost("{RegionId}/Disable")]
         public IActionResult DisableRegion(long RegionId)
         {
             try
@@ -163,7 +163,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("{RegionId}/Enable")]
+        [HttpPost("{RegionId}/Enable")]
         public IActionResult EnableRegion(long RegionId)
         {
             try

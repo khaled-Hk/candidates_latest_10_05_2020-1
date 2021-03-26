@@ -233,7 +233,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500,"حدث خطاء، حاول مجدداً");
+                return StatusCode(500,ex.Message);
             }
         }
 
@@ -487,7 +487,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost("Edit")]
         public IActionResult UpdateCandidate([FromBody] Candidates candidates)
         {
             try
@@ -812,7 +812,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message);
+                return StatusCode(500, e.InnerException.Message);
             }
         }
 
@@ -1079,7 +1079,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("{UserId}/Deactivate")]
+        [HttpPost("{UserId}/Deactivate")]
         public IActionResult Deactivate(long UserId)
         {
             try
@@ -1110,7 +1110,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("{UserId}/Activate")]
+        [HttpPost("{UserId}/Activate")]
         public IActionResult Activate(long UserId)
         {
             try
@@ -1141,7 +1141,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpDelete("{UserId}/deleteUser")]
+        [HttpPost("{UserId}/deleteUser")]
         public IActionResult deleteUser(long UserId)
         {
             try

@@ -66,7 +66,7 @@ export default {
                             this.$notify({
                                 title: 'تمت الاضافة بنجاح',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong>' + response.data.message + '</strong>',
+                                message: '<strong>' + response.data + '</strong>',
                                 type: 'success'
                             });
                         })
@@ -76,7 +76,7 @@ export default {
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,
                                 type: 'error',
-                                message: err.response.data.message
+                                message: err.response.data
                             });
                         });
                 }
@@ -87,7 +87,7 @@ export default {
             this.$http.GetAllOffices()
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.offices = response.data.offices;
+                    this.offices = response.data;
 
                 })
 
@@ -99,7 +99,7 @@ export default {
                 .then(response => {
 
                     this.$blockUI.Stop();
-                    this.constituencyDetails = response.data.constituencyDetails;
+                    this.constituencyDetails = response.data;
 
                 }).catch((err) => {
                     this.$blockUI.Stop();
@@ -107,7 +107,7 @@ export default {
                         title: 'حدث خطأ',
                         dangerouslyUseHTMLString: true,
                         type: 'error',
-                        message: err.response.data.message
+                        message: err.response.data
                     });
                 });
 

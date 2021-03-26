@@ -74,7 +74,7 @@ export default {
                         })
                         .catch((err) => {
                             this.$blockUI.Stop();
-                            alert(JSON.stringify(err))
+                            alert(JSON.stringify(err.response))
                             this.$notify({
                                 title: 'خطأ بعملية الاضافة',
                                 dangerouslyUseHTMLString: true,

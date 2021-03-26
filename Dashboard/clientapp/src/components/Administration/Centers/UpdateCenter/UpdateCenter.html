@@ -25,7 +25,7 @@
                                     <label>الدائرة الفرعية</label>
                                     <div class="form-group">
                                         <el-select placeholder="إختار الدائرة الفرعية" v-model="ruleForm.ConstituencDetailId" filterable>
-                                            <el-option v-for="item in offices"
+                                            <el-option v-for="item in constituencyDetails"
                                                        :key="item.value"
                                                        :label="item.label"
                                                        :value="item.value">
@@ -39,7 +39,7 @@
                                     <label>المكتب الإنتخابي</label>
                                     <div class="form-group">
                                         <el-select placeholder="إختار المكتب" v-model="ruleForm.OfficeId" filterable>
-                                            <el-option v-for="item in constituencyDetails"
+                                            <el-option v-for="item in offices"
                                                        :key="item.value"
                                                        :label="item.label"
                                                        :value="item.value">

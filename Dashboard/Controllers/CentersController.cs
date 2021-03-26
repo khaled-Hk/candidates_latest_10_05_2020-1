@@ -43,7 +43,7 @@ namespace Dashboard.Controllers
         // PUT: api/Centers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
+        [HttpPost("{id}")]
         public async Task<IActionResult> PutCenters(long id, Centers centers)
         {
             if (id != centers.CenterId)
@@ -78,7 +78,7 @@ namespace Dashboard.Controllers
             return db.Centers.Any(e => e.CenterId == id);
         }
 
-        [HttpPost("CreateCenter")]
+        [HttpPost("Add")]
         public IActionResult CreateCenter([FromBody] Centers center)
         {
             try
@@ -94,22 +94,22 @@ namespace Dashboard.Controllers
                 }
                 if (center == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest( "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" );
                 }
 
                 if (center.ConstituencDetailId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الفرعية" });
+                    return BadRequest("الرجاء إختيار المنطقة الفرعية");
                 }
 
                 if (string.IsNullOrEmpty(center.ArabicName) || string.IsNullOrWhiteSpace(center.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالعربي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة بالعربي");
                 }
 
                 if (string.IsNullOrEmpty(center.EnglishName) || string.IsNullOrWhiteSpace(center.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المنطقة بالانجليزي" });
+                    return BadRequest("الرجاء إدخال اسم المنطقة بالانجليزي");
                 }
 
                 
@@ -164,11 +164,11 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { newCenter.CenterId, message = string.Format("تم إضافة المركز  {0} بنجاح", newCenter.ArabicName) });
+                return Ok(string.Format("تم إضافة المركز  {0} بنجاح", newCenter.ArabicName));
             }
             catch(Exception ex)
             {
-                return StatusCode(500, new {ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.InnerException.Message);
             }
         }
 
@@ -226,7 +226,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpDelete("{CenterId}")]
+        [HttpPost("{CenterId}/Delete")]
         public IActionResult DeleteConstituency([FromRoute] long? CenterId)
         {
             try
@@ -234,14 +234,14 @@ namespace Dashboard.Controllers
 
                 if (CenterId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المركز" });
+                    return BadRequest( "الرجاء إختيار المركز" );
                 }
 
                 var center = db.Centers.Where(x => x.CenterId == CenterId).FirstOrDefault();
 
                 if (center == null)
                 {
-                    return BadRequest(new { message = "المركز التي تم إختياره غير متوفر" });
+                    return BadRequest( "المركز التي تم إختياره غير متوفر" );
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
@@ -258,11 +258,11 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { centerId = center.CenterId, message = string.Format("تم حذف مركز {0} بنجاح", center.ArabicName) });
+                return Ok(string.Format("تم حذف مركز {0} بنجاح", center.ArabicName));
             }
             catch
             {
-                return StatusCode(500, new { message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, "حدث خطاء، حاول مجدداً");
             }
         }
 
@@ -296,11 +296,11 @@ namespace Dashboard.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  ex.InnerException.Message);
             }
         } 
 
-        [HttpGet("GetCentersBasedOn/{constituencyDetailId}")]
+        [HttpGet("Get/ConstituencyDetails/{constituencyDetailId}")]
         public IActionResult GetCentersBasedOn([FromRoute] long? constituencyDetailId)
         {
             try
@@ -322,12 +322,12 @@ namespace Dashboard.Controllers
                 var selectedCenters = db.Centers.Where(x => x.ConstituencDetailId == constituencyDetailId && x.ProfileId == UP.ProfileId &&  x.Status == 1).Select(obj => new { value = obj.CenterId, label = obj.ArabicName }).ToList();
 
                 if (selectedCenters.Count == 0)
-                    return BadRequest(new { message = "لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها" });
-                return Ok(new { Centers = selectedCenters });
+                    return BadRequest("لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها" );
+                return Ok( selectedCenters );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.InnerException.Message);
             }
 
 
@@ -355,22 +355,22 @@ namespace Dashboard.Controllers
                 }
 
                 var selectCenters = db.Centers.Where(x => x.Status == 1 && x.ProfileId == user.ProfileRuningId).Select(obj => new { value = obj.ConstituencDetailId, label = obj.ArabicName }).ToList();
-                return Ok(new { Centers = selectCenters });
+                return Ok(selectCenters );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500,  ex.InnerException.Message);
             }
         }
 
-        [HttpPut]
+        [HttpPost("Edit")]
         public IActionResult UpdateCenter([FromBody] Centers center)
         {
             try
             {
                 if (center == null)
                 {
-                    return BadRequest(new { message = "حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" });
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال" );
                 }
 
                 UserProfile UP = this.help.GetProfileId(HttpContext, db);
@@ -385,45 +385,45 @@ namespace Dashboard.Controllers
 
                 if (center.ConstituencDetailId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الفرعية" });
+                    return BadRequest("الرجاء إختيار المنطقة الفرعية" );
                 }
 
                 if (center.Latitude == null || center.Latitude.Equals("0.0"))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال خط العرض" });
+                    return BadRequest( "الرجاء إدخال خط العرض" );
                 }
 
                 if (center.Longitude == null || center.Longitude.Equals("0.0"))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال خط الطول" });
+                    return BadRequest( "الرجاء إدخال خط الطول" );
                 }
 
                 if (center.ConstituencDetailId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المنطقة الفرعية" });
+                    return BadRequest("الرجاء إختيار المنطقة الفرعية" );
                 }
 
 
                 if (string.IsNullOrEmpty(center.ArabicName) || string.IsNullOrWhiteSpace(center.ArabicName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المركز بالعربي" });
+                    return BadRequest("الرجاء إدخال اسم المركز بالعربي" );
                 }
 
                 if (string.IsNullOrEmpty(center.EnglishName) || string.IsNullOrWhiteSpace(center.EnglishName))
                 {
-                    return BadRequest(new { message = "الرجاء إدخال اسم المركز بالانجليزي" });
+                    return BadRequest( "الرجاء إدخال اسم المركز بالانجليزي" );
                 }
 
                 if (center.CenterId == null)
                 {
-                    return BadRequest(new { message = "الرجاء إختيار المركز" });
+                    return BadRequest( "الرجاء إختيار المركز" );
                 }
 
                 var selectedCenter = db.Centers.Where(x => x.CenterId == center.CenterId && x.Status != 9).FirstOrDefault();
 
                 if (selectedCenter == null)
                 {
-                    return BadRequest(new { message = "المركز التي تم إختيارها غير متوفرة" });
+                    return BadRequest( "المركز التي تم إختيارها غير متوفرة");
                 }
 
                 var userId = this.help.GetCurrentUser(HttpContext);
@@ -447,11 +447,11 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { CenterId = selectedCenter.CenterId, message = string.Format("تم تحديث المركز {0} بنجاح", selectedCenter.ArabicName) });
+                return Ok(string.Format("تم تحديث المركز {0} بنجاح", selectedCenter.ArabicName));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex = ex.InnerException.Message, message = "حدث خطاء، حاول مجدداً" });
+                return StatusCode(500, ex.InnerException.Message);
             }
         }
     }

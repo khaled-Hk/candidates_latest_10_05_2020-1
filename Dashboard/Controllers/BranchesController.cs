@@ -110,7 +110,7 @@ namespace Vue.Controllers
             }
         }
 
-        [HttpDelete("{BranchId}/Delete")]
+        [HttpPost("{BranchId}/Delete")]
         public IActionResult Delete(long BranchId)
         {
             try

@@ -93,10 +93,10 @@ namespace Dashboard.Controllers
                     return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
                 }
                 var offices = db.Offices.Where(x=>x.ProfileId== UP.ProfileId).Select(s => new { label = s.ArabicName, value = s.OfficeId }).ToList();
-                return Ok(new {offices});
+                return Ok(offices);
             }catch(Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(ex.Message);
             }
         }
 

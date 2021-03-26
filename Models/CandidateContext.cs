@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Models
 {
-    public partial class CandidatesContext : DbContext
+    public partial class CandidateContext : DbContext
     {
-        public CandidatesContext()
+        public CandidateContext()
         {
         }
 
-        public CandidatesContext(DbContextOptions<CandidatesContext> options)
+        public CandidateContext(DbContextOptions<CandidateContext> options)
             : base(options)
         {
         }
@@ -43,13 +43,13 @@ namespace Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=95.216.93.102;database=Candidates;uid=Candidates;pwd=C@ndid@tes2020;");
+                optionsBuilder.UseSqlServer("Server= 95.216.93.102;Database=Candidate;User Id=Candidate;password=abdABD123!@#;Trusted_Connection=False;MultipleActiveResultSets=true;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:DefaultSchema", "Candidates");
+            modelBuilder.HasAnnotation("Relational:DefaultSchema", "Candidate");
 
             modelBuilder.Entity<Branches>(entity =>
             {
@@ -250,11 +250,6 @@ namespace Models
                 entity.Property(e => e.Qualification).HasMaxLength(200);
 
                 entity.Property(e => e.SurName).HasMaxLength(100);
-
-                entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.Candidates)
-                    .HasForeignKey(d => d.ProfileId)
-                    .HasConstraintName("FK_Candidates_Profile");
             });
 
             modelBuilder.Entity<Centers>(entity =>
@@ -309,10 +304,10 @@ namespace Models
 
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.ChairDetails)
-                    .HasForeignKey(d => d.ProfileId)
-                    .HasConstraintName("FK_ChairDetails_Chairs");
+                //entity.HasOne(d => d.Chair)
+                //    .WithMany(p => p.ChairDetails)
+                //    .HasForeignKey(d => d.ChairId)
+                //    .HasConstraintName("FK_ChairDetails_Chairs");
             });
 
             modelBuilder.Entity<Chairs>(entity =>
@@ -329,11 +324,6 @@ namespace Models
                     .WithMany(p => p.Chairs)
                     .HasForeignKey(d => d.ConstituencyId)
                     .HasConstraintName("FK_Chairs_Constituencies");
-
-                entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.Chairs)
-                    .HasForeignKey(d => d.ProfileId)
-                    .HasConstraintName("FK_Chairs_Profile");
             });
 
             modelBuilder.Entity<Constituencies>(entity =>
@@ -435,16 +425,6 @@ namespace Models
                     .HasColumnName("NID")
                     .HasMaxLength(13)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Candidate)
-                    .WithMany(p => p.Endorsements)
-                    .HasForeignKey(d => d.CandidateId)
-                    .HasConstraintName("FK_Endorsements_Candidates");
-
-                entity.HasOne(d => d.Profile)
-                    .WithMany(p => p.EndorsementsNavigation)
-                    .HasForeignKey(d => d.ProfileId)
-                    .HasConstraintName("FK_Endorsements_Profile");
             });
 
             modelBuilder.Entity<Entities>(entity =>

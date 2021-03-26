@@ -130,7 +130,7 @@ export default {
             this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.constituencies = response.data.constituency;
+                    this.constituencies = response.data;
 
 
                 })
@@ -148,7 +148,7 @@ export default {
             this.$http.GetAConstituencyBasedOn(this.ruleForm.RegionId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.constituencies = response.data.constituency;
+                    this.constituencies = response.data;
 
 
                 })
@@ -167,7 +167,7 @@ export default {
             this.$http.GetAllConstituencyDetailsBasedOn(this.ruleForm.ConstituencyId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.subConstituencies = response.data.constituencyDetails;
+                    this.subConstituencies = response.data;
 
 
                 })
@@ -185,7 +185,7 @@ export default {
             this.$http.GetAllConstituencyDetailsBasedOn(this.ruleForm.ConstituencyId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.subConstituencies = response.data.constituencyDetails;
+                    this.subConstituencies = response.data;
 
 
                 })

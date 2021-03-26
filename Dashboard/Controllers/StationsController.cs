@@ -126,7 +126,7 @@ namespace Dashboard.Controllers
                 db.Stations.Add(newStation);
                 db.SaveChanges();
 
-                return Ok(new { StationId = stations.StationId, message = string.Format("تم إضافة المحطة {0} بنجاح", newStation.ArabicName) });
+                return Ok( string.Format("تم إضافة المحطة {0} بنجاح", newStation.ArabicName));
             }
             catch (Exception e)
             {
@@ -134,7 +134,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpDelete("Delete/{StationId}")]
+        [HttpPost("Delete/{StationId}")]
         public IActionResult DeleteConstituency([FromRoute] long? StationId)
         {
             try
@@ -176,7 +176,7 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { stationId = station.StationId, message = string.Format("تم حذف المحطة {0} بنجاح", station.ArabicName) });
+                return Ok( string.Format("تم حذف المحطة {0} بنجاح", station.ArabicName));
             }
             catch
             {
@@ -184,7 +184,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut("Update")]
+        [HttpPost("Edit")]
         public IActionResult UpdateStation([FromBody] Stations stations)
         {
             try
@@ -235,7 +235,7 @@ namespace Dashboard.Controllers
                 db.SaveChanges();
 
 
-                return Ok(new { CenterId = selectedStation.StationId, message = string.Format("تم تحديث المحطة {0} بنجاح", selectedStation.ArabicName) });
+                return Ok(string.Format("تم تحديث المحطة {0} بنجاح", selectedStation.ArabicName));
             }
             catch (Exception ex)
             {

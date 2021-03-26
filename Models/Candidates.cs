@@ -13,7 +13,6 @@ namespace Models
         }
 
         public long CandidateId { get; set; }
-        public long? CandidateNumber { get; set; }
         public string FirstName { get; set; }
         public string FatherName { get; set; }
         public string GrandFatherName { get; set; }

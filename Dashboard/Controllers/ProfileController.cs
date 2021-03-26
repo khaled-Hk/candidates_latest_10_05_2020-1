@@ -214,7 +214,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.InnerException.Message);
+                return StatusCode(500, e.Message);
             }
         }
 

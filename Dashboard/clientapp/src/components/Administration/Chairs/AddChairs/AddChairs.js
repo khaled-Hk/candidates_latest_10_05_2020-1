@@ -75,7 +75,7 @@ export default {
             this.$http.GetConstituenciesBasedOn(this.RegionId)
                 .then(response => {
                     this.$blockUI.Stop();
-                    this.Constituencies = response.data.constituencies;
+                    this.Constituencies = response.data;
                 })
                 .catch((err) => {
                     this.$blockUI.Stop();
@@ -83,7 +83,7 @@ export default {
                         title: 'حدث خطأ  ',
                         dangerouslyUseHTMLString: true,
                         type: 'error',
-                        message: err.response.data.message
+                        message: err.response.data
                     });
                 });
         },

@@ -125,7 +125,7 @@ namespace Vue.Controllers
         }
 
         
-        [HttpDelete("{ConstituencyId}/Delete")]
+        [HttpPost("{ConstituencyId}/Delete")]
         public IActionResult DeleteConstituency([FromRoute] long? ConstituencyId)
         {
             try
@@ -157,7 +157,7 @@ namespace Vue.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost("Edit")]
         public IActionResult UpdateConstituency([FromBody] Constituencies constituency)
         {
             try

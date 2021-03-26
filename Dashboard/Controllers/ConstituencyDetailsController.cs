@@ -87,7 +87,7 @@ namespace Dashboard.Controllers
         }
 
         // DELETE: api/ConstituencyDetails/5
-        [HttpDelete("{id}")]
+        [HttpPost("{id}")]
         public async Task<ActionResult<ConstituencyDetails>> DeleteConstituencyDetails(long id)
         {
             var constituencyDetails = await db.ConstituencyDetails.FindAsync(id);
@@ -102,7 +102,7 @@ namespace Dashboard.Controllers
             return constituencyDetails;
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public IActionResult CreateConstituency([FromBody] ConstituencyDetails constituencyDetails)
         {
             try
@@ -174,7 +174,7 @@ namespace Dashboard.Controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpPost("{id}")]
         public IActionResult DeleteConstituency([FromRoute] long? id)
         {
             try
@@ -213,7 +213,7 @@ namespace Dashboard.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost("Edit")]
         public IActionResult UpdateConstituency([FromBody] ConstituencyDetails constituencyDetails)
         {
             try

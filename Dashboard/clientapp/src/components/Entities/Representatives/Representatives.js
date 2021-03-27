@@ -22,6 +22,7 @@ export default {
 
             state: 0,
             representatives: [],
+            count:0,
             ruleForm: {
                 EntityId:null,
             },
@@ -34,7 +35,8 @@ export default {
             this.$http.GetRepresentativesByEntityId(id)
                 .then(response => {
                     this.loading = false;
-                    this.representatives = response.data;
+                    this.representatives = response.data.representatives;
+                    this.count = response.data.count;
                 })
                 .catch((err) => {
                     this.loading = false;

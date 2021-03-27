@@ -22,6 +22,7 @@ export default {
 
             state: 0,
             candidates: [],
+            count:0,
             ruleForm: {
                 NID:null,
                 EntityId:null,
@@ -54,7 +55,8 @@ export default {
             this.$http.GetCandidatesByEntityId(id)
                 .then(response => {
                     this.loading = false;
-                    this.candidates = response.data;
+                    this.candidates = response.data.candidates;
+                    this.count = response.data.count;
                 })
                 .catch((err) => {
                     this.loading = false;

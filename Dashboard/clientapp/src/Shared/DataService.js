@@ -167,8 +167,8 @@ export default {
     GetConstituencyDetails() {
         return axios.get(`/api/Admin/ConstituencyDetails/All`);
     },
-    DeleteConstituencyDetail(constituencyId) {
-        return axios.post(`/api/Admin/ConstituencyDetails/${constituencyId}`);
+    DeleteConstituencyDetail(id) {
+        return axios.post(`/api/Admin/ConstituencyDetails/${id}/Delete`);
     },
     GetConstituencyDetailsBasedOn(constituencyDetailsId) {
         return axios.get(`/api/Admin/ConstituencyDetails/Get/${constituencyDetailsId}`);
@@ -180,7 +180,7 @@ export default {
         return axios.get(`/api/Admin/ConstituencyDetails?pageNo=${pageNo}&pageSize=${pageSize}`);
     },
     UpdateConstituencyDetail(constituencyDetail) {
-        return axios.post(`/api/Admin/ConstituencyDetails`, constituencyDetail);
+        return axios.post(`/api/Admin/ConstituencyDetails/Edit`, constituencyDetail);
     },
 
     // ************************ Centers **************************

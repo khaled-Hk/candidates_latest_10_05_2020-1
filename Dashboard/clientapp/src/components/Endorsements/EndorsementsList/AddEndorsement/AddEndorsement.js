@@ -57,9 +57,9 @@ export default {
                            
                             this.$blockUI.Stop();
                             this.$notify({
-                                title: response.data.message,
+                                title: response.data,
                                 dangerouslyUseHTMLString: true,
-                                type: 'info',
+                                type: 'success',
                                // message: err.response.data.message
                             });
                             this.$parent.getEndorsements(this.$parent.pageNo, this.$parent.pageSize);

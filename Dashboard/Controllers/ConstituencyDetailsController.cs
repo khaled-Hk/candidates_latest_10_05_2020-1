@@ -174,7 +174,7 @@ namespace Dashboard.Controllers
         }
 
 
-        [HttpPost("{id}")]
+        [HttpPost("{id}/Delete")]
         public IActionResult DeleteConstituency([FromRoute] long? id)
         {
             try
@@ -323,14 +323,15 @@ namespace Dashboard.Controllers
                 {
                     return BadRequest("الرجاء إختيار الدائرة الفرعية");
                 }
-                var selectConstituencyDetail = db.ConstituencyDetails.Where(x =>  x.ProfileId == UP.ProfileId && x.Status == 1 &&  x.ConstituencyDetailId == id).Select(obj => new { obj.ConstituencyId, RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).ToList();
+                var selectConstituencyDetail = db.ConstituencyDetails.Where(x =>  x.ProfileId == UP.ProfileId && x.Status == 1 &&  x.ConstituencyDetailId == id).Select(obj => new { obj.ConstituencyId, RegionId = obj.RegionId, ArabicName = obj.ArabicName, EnglishName = obj.EnglishName }).FirstOrDefault();
 
 
-                var chairsDetails = db.Chairs.Where(x => x.ConstituencyId == id).SingleOrDefault();
+               // var chairsDetails = db.Chairs.Where(x => x.ConstituencyId == id).SingleOrDefault();
 
                 //if (selectConstituencyDetail == null)
                 //    return BadRequest("لا يوجد بيانات بالدائرة الفرعية التي تم إختيارها"});
-                return Ok(new { ConstituencyDetail = selectConstituencyDetail, chairsDetails = chairsDetails });
+                //return Ok(new { ConstituencyDetail = selectConstituencyDetail, chairsDetails = chairsDetails });
+                return Ok( selectConstituencyDetail);
             }
             catch (Exception ex)
             {

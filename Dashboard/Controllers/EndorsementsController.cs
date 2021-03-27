@@ -119,19 +119,19 @@ namespace Dashboard.Controllers
             {
 
 
-                var userId = this.help.GetCurrentUser(HttpContext);
+              
 
-                if (userId <= 0)
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
                 {
-                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                    return StatusCode(401, new { message = "الرجاء الـتأكد من أنك قمت بتسجيل الدخول" });
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, new { message = "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي" });
                 }
 
-                var profile = db.Profile.Where(x => x.Status == 1).FirstOrDefault();
-
-                if (profile == null)
-                {
-                    return BadRequest( "لا يوجد ملف إنتخابي مفعل" );
-                }
+                var profile = db.Profile.Where(x => x.ProfileId == UP.ProfileId).FirstOrDefault();
 
                 if (endorsement.CandidateId == null || endorsement.CandidateId == 0)
                 {
@@ -168,7 +168,7 @@ namespace Dashboard.Controllers
                         Nid = endorsement.Nid,
                         CandidateId = endorsement.CandidateId,
                         CreatedOn = DateTime.Now,
-                        CreatedBy = userId
+                        CreatedBy = UP.UserId
                     });
                     db.SaveChanges();
                 }
@@ -182,7 +182,7 @@ namespace Dashboard.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, e.Message );
+                return StatusCode(500, e.InnerException.Message );
             }
         }
 

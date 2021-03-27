@@ -586,7 +586,7 @@ namespace Dashboard.Controllers
                 candidate.SubConstituencyId = candidates.SubConstituencyId;
                 candidate.CompetitionType = candidates.CompetitionType;
                
-                candidate.Levels = 3;
+                //candidate.Levels = 3;
 
 
                 db.Candidates.Update(candidate);

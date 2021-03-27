@@ -131,7 +131,7 @@ export default {
                     //this.$parent.GetRegions();
 
                     this.$blockUI.Stop();
-                    let constituencyDetail = response.data.constituencyDetail;
+                    let constituencyDetail = response.data;
                     this.ruleForm.ArabicName = constituencyDetail.arabicName
                     this.ruleForm.EnglishName = constituencyDetail.englishName
                     this.ruleForm.RegionId = constituencyDetail.regionId

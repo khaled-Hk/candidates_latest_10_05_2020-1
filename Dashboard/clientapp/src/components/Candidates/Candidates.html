@@ -78,7 +78,7 @@
                                     <td>{{R.subconstituencyName}}</td>
                                     <td>{{R.createdOn | moment}}</td>
                                     <td class="text-left">
-                                        <a href="#" title="تعديل بيانات المرشح" @click.prevent="UpdateCandidatesComponent(R.candidateId)">
+                                        <a href="#" title="تعديل بيانات المرشح" @click.prevent="UpdateCandidatesComponent({candidateId: R.candidateId, level : R.levels})">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
                                         <a href="/" title="اضافة مندوبين" @click="Navigate({ state : 3, candidateId : R.candidateId})">

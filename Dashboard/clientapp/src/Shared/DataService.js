@@ -260,6 +260,12 @@ export default {
     UploadCandidateAttachments(candidate) {
         return axios.post(`/api/Admin/Candidates/Attachments`, candidate);
     },
+    UpdateCandidateAttachments(candidate) {
+        return axios.post(`/api/Admin/Candidates/Attachments/Edit`, candidate);
+    },
+    GetCandidateAttachment(attachment) {
+        return axios.post(`/api/Admin/Candidates/Get/Attachment`, attachment);
+    },
     GetCandidateInfo(NationalId) {
         return axios.get(`/api/Admin/Candidates/Complete/${NationalId}`);
     },

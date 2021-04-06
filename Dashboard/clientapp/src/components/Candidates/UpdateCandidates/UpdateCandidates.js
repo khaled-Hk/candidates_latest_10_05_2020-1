@@ -24,6 +24,7 @@ export default {
     data() {
         return {
             constituencyDetails: [],
+            
             ruleForm: {
                 CandidateId:null,
                
@@ -41,8 +42,14 @@ export default {
                 RegionId: null,
                 SubConstituencyId: null,
                 CompetitionType: null,
+                Level: 0
                
 
+            },
+            documentForm: {
+                documentId: null,
+                selectedAttachment: null,
+                attachment:null
             },
             constituencies: [],
             regions: [],
@@ -66,6 +73,23 @@ export default {
     },
     methods: {
 
+        getDocument() {
+            this.$blockUI.Start();
+            this.$http.GetCandidateAttachment({ CandidateId: this.ruleForm.CandidateId, AttachmenttId: this.documentForm.documentId}).then(response => {
+
+                this.$blockUI.Stop();
+                this.documentForm.selectedAttachment = response.data;
+            }).catch(err => {
+
+                this.$notify({
+                    title: 'حدث خطأ',
+                    dangerouslyUseHTMLString: true,
+                    type: 'error',
+                    message: err.response.data
+                });
+                this.$blockUI.Stop();
+            })
+        },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -214,7 +238,7 @@ export default {
                     this.ruleForm.SubConstituencyId = candidate.subConstituencyId;
                     this.ruleForm.ConstituencyId = candidate.constituencyId;
                     this.ruleForm.BirthDate = candidate.birthDate;
-                 
+                    this.ruleForm.Level = candidate.levels;
                     this.ruleForm.Qualification = candidate.qualification;
                     this.ruleForm.CompetitionType = candidate.competitionType;
                     this.ruleForm.Gender = candidate.gender;
@@ -231,6 +255,70 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        getAttachmentType() {
+            switch (this.documentForm.documentId)
+            {
+                case 1:
+                    return "شهادة الميلاد";
+                case 2:
+                    return "شهادة الرقم الوطني";
+                case 3:
+                    return "شهادة وضع العائلة";
+                case 4:
+                    return "شهادة خلوّ من سوابق";
+                case 5:
+                    return "إيصال الدفع";
+                default:
+                    return "";
+            }
+        },
+        SelectDocument(e) {
+            var files = e.target.files;
+
+            if (files.length <= 0) {
+                return;
+            }
+
+            if (files[0].type !== 'application/pdf') {
+                this.$message({
+                    type: 'error',
+                    message: 'يجب ان يكون الملف من نوع  PDF'
+                });
+            }
+
+            var $this = this;
+            var reader = new FileReader();
+            reader.onload = function () {
+                $this.documentForm.attachment = reader.result;
+                //$this.UploadImage();
+            };
+            reader.onerror = function () {
+                $this.documentForm.attachment = null;
+            };
+            reader.readAsDataURL(files[0]);
+        },
+        updateCandidateAttachments() {
+            this.$blockUI.Start();
+            this.$http.UpdateCandidateAttachments({ CandidateId: this.ruleForm.CandidateId, AttachmenttId: this.documentForm.documentId, Attachment: this.documentForm.attachment }).then(response => {
+                this.documentForm.selectedAttachment  = response.data.path;
+                this.$notify({
+                    
+                    dangerouslyUseHTMLString: true,
+                    type: 'success',
+                    message: response.data.message
+                });
+                this.$blockUI.Stop();
+            }).catch(err => {
+
+                this.$notify({
+                    title: 'حدث خطأ',
+                    dangerouslyUseHTMLString: true,
+                    type: 'error',
+                    message: err.response.data
+                });
+                this.$blockUI.Stop();
+            })
         },
         Back() {
             this.$parent.state = 0;

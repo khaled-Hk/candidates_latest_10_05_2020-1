@@ -1,10 +1,10 @@
 ﻿<div class="col-md-12">
     <div class="card cardRTL">
-        
+
         <div class="card-header">
             <div class="row">
                 <div class="col-md-4">
-                    <h4 class="card-title">تحديث منطقة فرعية</h4>
+                    <h4 class="card-title">بيانات الناخب</h4>
                 </div>
                 <div class="col-md-6">
                 </div>
@@ -189,6 +189,84 @@
                         <el-form-item class="AddButtonLeftSide">
                             <button class="btn btn-warning" @click.prevent="resetForm('ruleForm')">إلـغاء</button>
                             <button class="btn btn-primary" @click.prevent="submitForm('ruleForm')">حـفظ</button>
+                        </el-form-item>
+                    </el-form>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="toolbar">
+                <!--        Here you can write extra buttons/actions for the toolbar              -->
+            </div>
+        </div><!-- end content-->
+    </div><!--  end card  -->
+
+
+    <div class="card cardRTL" v-if="ruleForm.Level >= 4">
+
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4 class="card-title">وثائق الناخب</h4>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-2">
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label- class="demo-ruleForm">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <el-form-item prop="CompetitionType">
+                                    <label>نوع الوثيقة</label>
+                                    <div class="form-group">
+                                        <el-select placeholder="نوع الوثيقة" v-model="documentForm.documentId" @change="getDocument" filterable>
+                                            <el-option v-for="item in [{label:'شهادة الميلاد', value: 1},{label:'شهادة الرقم الوطني', value: 2},{label:'شهادة وضع العائلة', value: 3},{label:' شهادة خلوّ من سوابق', value: 4},{label:'إيصال الدفع', value: 5}]"
+                                                       :key="item.value"
+                                                       :label="item.label"
+                                                       :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <div class="row" v-if="documentForm.selectedAttachment != null">
+                            <div class="col-md-12">
+
+                                <strong><a :href="documentForm.selectedAttachment" target="_blank" class="h5"><i class="far fa-eye"></i>  عرض {{getAttachmentType()}}</a></strong>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row" v-if="documentForm.selectedAttachment != null">
+                            <div class="col-md-12">
+                                <el-form-item>
+                                    <div class="custom-file">
+
+                                        <label>الرجاء إختيار {{getAttachmentType()}}</label>
+                                        <br />
+                                        <input multiple accept="application/pdf" @change="SelectDocument($event)" type="file" placeholder="إختار ملف" />
+
+                                    </div>
+
+                                </el-form-item>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <el-form-item class="AddButtonLeftSide">
+                            <button class="btn btn-primary" @click.prevent="updateCandidateAttachments()">تحميل الملف</button>
+                          
                         </el-form-item>
                     </el-form>
 

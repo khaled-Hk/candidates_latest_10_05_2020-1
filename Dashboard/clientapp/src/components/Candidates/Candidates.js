@@ -37,6 +37,7 @@ export default {
             pageNo: 1,
             pageSize: 10,
             pages: 0,
+            level:0,
             CandidateId: null,
             candidates: [],
             ConstituencyDetails: [],
@@ -101,10 +102,11 @@ export default {
         AddCandidatesComponent() {
             this.state = 1
         },
-        UpdateCandidatesComponent(candidateId) {
+        UpdateCandidatesComponent(object) {
 
             this.state = 2;
-            this.CandidateId = candidateId;
+            this.CandidateId = object.candidateId;
+            this.level = object.level;
         },
         Navigate(obj) {
             this.state = obj.state;

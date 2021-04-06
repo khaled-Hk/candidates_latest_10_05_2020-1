@@ -102,7 +102,7 @@ namespace Dashboard.Controllers
                 }
 
                 var candidate = db.Candidates.Where(x => x.CandidateId == CandidateId && x.ProfileId == UP.ProfileId)
-                    .Select(s => new { s.FirstName, s.FatherName, s.GrandFatherName, s.SurName, s.MotherName, s.BirthDate, s.CompetitionType, s.ConstituencyId, s.SubConstituencyId, s.Email, s.Gender, s.Qualification, s.HomePhone, s.CandidateId }).FirstOrDefault();
+                    .Select(s => new { s.FirstName, s.FatherName, s.GrandFatherName, s.SurName, s.MotherName, s.BirthDate, s.CompetitionType, s.ConstituencyId, s.SubConstituencyId, s.Email, s.Gender, s.Qualification, s.HomePhone, s.CandidateId, s.Levels }).FirstOrDefault();
 
                 if (candidate == null)
                 {
@@ -668,16 +668,17 @@ namespace Dashboard.Controllers
 
         public class CandidateDocument
         {
+            
             public string Nid { get; set; }
             public string BirthCertificateDocument { get; set; }
             public string NidDocument { get; set; }
             public string FamilyPaper{ get; set; }
             public string AbsenceOfPrecedents{ get; set; }
             public string PaymentReceipt{ get; set; }
+           
         }
 
         [HttpPost("Attachments")]
-
         public IActionResult AddCandidateAttachments([FromBody] CandidateDocument candidateDocument)
         {
             try
@@ -815,6 +816,250 @@ namespace Dashboard.Controllers
                 return StatusCode(500, e.InnerException.Message);
             }
         }
+
+        public class CandidateAttachment
+        {
+            public long? CandidateId { get; set; }
+            public int? AttachmenttId { get; set; }
+            public string Attachment { get; set; }
+        }
+
+        [HttpPost("Get/Attachment")]
+        public IActionResult GetCandidateAttachment([FromBody] CandidateAttachment attachment)
+        {
+            try
+            {
+               
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (attachment == null)
+                {
+                    return BadRequest("حدث خطأ في ارسال البيانات الرجاء إعادة الادخال");
+                }
+
+
+                if (attachment.CandidateId == null || attachment.CandidateId == 0)
+                {
+                    return BadRequest("الرجاء إختيار المرشح");
+                }
+
+                if (attachment.AttachmenttId == null)
+                {
+                    return BadRequest("الرجاء إختيار نوع الوثيقة");
+                }
+
+
+                var candidate = db.Candidates.Where(x => x.CandidateId == attachment.CandidateId && x.ProfileId == UP.ProfileId).FirstOrDefault();
+
+                if (candidate == null)
+                {
+                    return BadRequest("المرشح غير موجود");
+                }
+                string selectedAttachment = string.Empty;
+                switch(attachment.AttachmenttId)
+                {
+                    case 1:
+                        selectedAttachment = db.CandidateAttachments.Where(x => x.CandidateId == candidate.CandidateId).Select(x => x.BirthDateCertificate).FirstOrDefault();
+                        break;
+                    case 2:
+                        selectedAttachment = db.CandidateAttachments.Where(x => x.CandidateId == candidate.CandidateId).Select(x => x.Nidcertificate).FirstOrDefault();
+                        break;
+                    case 3:
+                        selectedAttachment = db.CandidateAttachments.Where(x => x.CandidateId == candidate.CandidateId).Select(x => x.FamilyPaper).FirstOrDefault();
+                        break;
+                    case 4:
+                        selectedAttachment = db.CandidateAttachments.Where(x => x.CandidateId == candidate.CandidateId).Select(x => x.AbsenceOfPrecedents).FirstOrDefault();
+                        break;
+                    case 5:
+                        selectedAttachment = db.CandidateAttachments.Where(x => x.CandidateId == candidate.CandidateId).Select(x => x.PaymentReceipt).FirstOrDefault();
+                        break;
+                    default:
+                        return BadRequest("الرجاء إختيار نوع الوثيقة");
+                }
+                
+
+                return Ok(selectedAttachment);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.InnerException.Message);
+            }
+        }
+
+        [HttpPost("Attachments/Edit")]
+        public IActionResult EditCandidateAttachments([FromBody] CandidateAttachment attachment)
+        {
+            try
+            {
+                if (attachment == null)
+                {
+                    return BadRequest("حذث خطأ في ارسال البيانات الرجاء إعادة الادخال");
+                }
+
+                UserProfile UP = this.help.GetProfileId(HttpContext, db);
+                if (UP.UserId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+                if (UP.ProfileId <= 0)
+                {
+                    return StatusCode(401, "الرجاء تفعيل ضبط الملف الانتخابي التشغيلي");
+                }
+
+                if (string.IsNullOrEmpty(attachment.Attachment))
+                {
+                    return BadRequest("الرجاء اختيار المرفق");
+                }
+                
+
+                var userId = this.help.GetCurrentUser(HttpContext);
+
+                if (userId <= 0)
+                {
+                    return StatusCode(401, "الرجاء الـتأكد من أنك قمت بتسجيل الدخول");
+                }
+
+                if (attachment.CandidateId == null || attachment.CandidateId == 0)
+                {
+                    return BadRequest("الرجاء إختيار المرشح");
+                }
+
+                if (attachment.AttachmenttId == null)
+                {
+                    return BadRequest("الرجاء إختيار نوع الوثيقة");
+                }
+
+
+                var candidate = db.Candidates.Where(x => x.CandidateId == attachment.CandidateId && x.ProfileId == UP.ProfileId).FirstOrDefault();
+
+                if (candidate == null)
+                {
+                    return BadRequest("المرشح غير موجود");
+                }
+
+                
+
+                byte[] document;
+                document = Convert.FromBase64String(attachment.Attachment.Substring(attachment.Attachment.IndexOf(",") + 1));
+
+    
+
+                string subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Attachments", attachment.CandidateId.ToString());
+
+                //string birthCertificateDocumentFileName = @"Section" + Guid.NewGuid() + ".pdf";
+                //string filesName = 
+                //    @"BirthCertificate" + Guid.NewGuid() + ".pdf",
+                //    @"Nid" + Guid.NewGuid() + ".pdf",
+                //    @"FamilyPaper" + Guid.NewGuid() + ".pdf",
+                //    @"AbsenceOfPrecedents" + Guid.NewGuid() + ".pdf",
+                //    @"PaymentReceipt" + Guid.NewGuid() + ".pdf",
+                // };
+                string fileName = "";
+                
+                switch (attachment.AttachmenttId)
+                {
+                    case 1:
+                        fileName = string.Format(@"BirthCertificate{0}.pdf", Guid.NewGuid());
+                        break;
+                    case 2:
+                        fileName = string.Format(@"Nid{0}.pdf", Guid.NewGuid());
+                        break;
+                    case 3:
+                        fileName = string.Format(@"FamilyPaper{0}.pdf", Guid.NewGuid());
+                        break;
+                    case 4:
+                        fileName = string.Format(@"AbsenceOfPrecedents{0}.pdf", Guid.NewGuid());
+                        break;
+                    case 5:
+                        fileName = string.Format(@"PaymentReceipt{0}.pdf", Guid.NewGuid());
+                        break;
+                    default:
+                        return BadRequest("الرجاء إختيار نوع الوثيقة");
+                }
+                var directory = string.Format("/Attachments/{0}/{1}", attachment.CandidateId, fileName);
+                bool exists = System.IO.Directory.Exists(subPath);
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(subPath);
+
+                MemoryStream stream = new MemoryStream(document);
+
+
+                
+                    IFormFile file = new FormFile(stream, 0, stream.Length, "وثائق الناحب", fileName);
+
+                    string fullpath = Path.Combine(subPath, file.FileName);
+                    using (var fileStream = new FileStream(fullpath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                var attachments = db.CandidateAttachments.Where(x => x.CandidateId == attachment.CandidateId).FirstOrDefault();
+                var path = "";
+                switch (attachment.AttachmenttId)
+                {
+                    case 1:
+                        path = (Directory.GetCurrentDirectory() + @"\wwwroot" + attachments.BirthDateCertificate).Replace("/", @"\");
+                        if (System.IO.File.Exists(path))
+                         System.IO.File.Delete(path);
+                        attachments.BirthDateCertificate = directory;
+                       
+                        break;
+                    case 2:
+                        path = (Directory.GetCurrentDirectory() + @"\wwwroot" + attachments.Nidcertificate).Replace("/", @"\");
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+                        attachments.Nidcertificate = directory;
+                        break;
+                    case 3:
+                        path = (Directory.GetCurrentDirectory() + @"\wwwroot" + attachments.FamilyPaper).Replace("/", @"\");
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+                        attachments.FamilyPaper = directory;
+                        break;
+                    case 4:
+                        path = (Directory.GetCurrentDirectory() + @"\wwwroot" + attachments.AbsenceOfPrecedents).Replace("/", @"\");
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+                        attachments.AbsenceOfPrecedents = directory;
+                        break;
+                    case 5:
+                        path = (Directory.GetCurrentDirectory() + @"\wwwroot" + attachments.PaymentReceipt).Replace("/", @"\");
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+                        attachments.PaymentReceipt = directory;
+                        break;
+                    default:
+                        return BadRequest("الرجاء إختيار نوع الوثيقة");
+                }
+              
+                db.CandidateAttachments.Update(attachments);
+
+              
+                db.SaveChanges();
+                return Ok(new { message = "لقد قمت برفع الملفات بنــجاح", path = directory });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
 
         [HttpGet]
         public IActionResult GetCandidateIdByNationalId([FromQuery] string nationalId)

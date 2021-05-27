@@ -37,7 +37,7 @@ export default {
        
         SelectBirthCertificateDocument(e)
         {
-            // this.fileList = fileList.slice(-3);
+          
             var files = e.target.files;
 
             if (files.length <= 0) {

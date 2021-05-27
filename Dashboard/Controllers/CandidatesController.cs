@@ -167,7 +167,10 @@ namespace Dashboard.Controllers
                                           Name = string.Format("{0} {1} {2} {3}", p.FirstName, p.FatherName, p.GrandFatherName, p.SurName),
                                           subconstituencyName = sc.ArabicName,
                                           p.Nid,
-                                          p.CreatedOn
+                                          createdOn = p.CreatedOn.Value.ToString("yyyy-MM-dd"),
+                                          constituencyName = sc.Constituency.ArabicName,
+                                          officaeName = sc.Constituency.Office.ArabicName,
+                                          officeUserId = UP.UserId
                                       }).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
 
                 return Ok(new { Candidates = CandidatesList, count = CandidatesCount });
@@ -789,9 +792,6 @@ namespace Dashboard.Controllers
                
                
 
-                candidate.Levels = 4;
-                db.Candidates.Update(candidate);
-
                 var attachments = new CandidateAttachments();
                 attachments.BirthDateCertificate = filesDirectories["BirthCertificate"];
                 attachments.CandidateId = candidate.CandidateId;
@@ -962,14 +962,7 @@ namespace Dashboard.Controllers
 
                 string subPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Attachments", attachment.CandidateId.ToString());
 
-                //string birthCertificateDocumentFileName = @"Section" + Guid.NewGuid() + ".pdf";
-                //string filesName = 
-                //    @"BirthCertificate" + Guid.NewGuid() + ".pdf",
-                //    @"Nid" + Guid.NewGuid() + ".pdf",
-                //    @"FamilyPaper" + Guid.NewGuid() + ".pdf",
-                //    @"AbsenceOfPrecedents" + Guid.NewGuid() + ".pdf",
-                //    @"PaymentReceipt" + Guid.NewGuid() + ".pdf",
-                // };
+               
                 string fileName = "";
                 
                 switch (attachment.AttachmenttId)
@@ -1098,7 +1091,7 @@ namespace Dashboard.Controllers
                 }
 
     
-                var candidate = (from c in db.Candidates join sc in db.ConstituencyDetails on c.SubConstituencyId equals sc.ConstituencyDetailId where c.Nid == NationalId select new { c.Nid, fullName = string.Format("{0} {1} {2}", c.FirstName, c.FatherName, c.SurName), subconstituencyName = sc.ArabicName }).FirstOrDefault();
+                var candidate = (from c in db.Candidates join sc in db.ConstituencyDetails on c.SubConstituencyId equals sc.ConstituencyDetailId where c.Nid == NationalId select new { c.Nid, name = string.Format("{0} {1} {2}", c.FirstName, c.FatherName, c.SurName), c.CandidateId, subconstituencyName = sc.ArabicName, constituencyName = sc.Constituency.ArabicName, officaeName = sc.Constituency.Office.ArabicName, createdOn = c.CreatedOn.Value.ToString("yyyy-MM-dd"), officeUserId = UP.UserId}).FirstOrDefault();
                 return Ok(candidate);
             }
             catch (Exception e)

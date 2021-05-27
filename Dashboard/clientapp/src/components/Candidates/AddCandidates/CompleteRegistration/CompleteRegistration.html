@@ -1,6 +1,6 @@
 ﻿<div class="col-md-12">
-    <div class="card cardRTL">
-        <div class="card-header">
+
+        <div class="form-box-one cardRTL" style="margin-top:-50px;">
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10">
@@ -12,10 +12,10 @@
                             </a>
                         </li>
                         <!--<li class="nav-item" style="cursor: context-menu">
-                            <a class="nav-link" disabled>
-                                جهات الإتصال
-                            </a>
-                        </li>-->
+                    <a class="nav-link" disabled>
+                        جهات الإتصال
+                    </a>
+                </li>-->
                         <li class="nav-item" style="cursor: context-menu">
                             <a class="nav-link" disabled>
                                 بيانات الناخب
@@ -36,22 +36,68 @@
                 </div>
                 <div class="col-md-1"></div>
             </div>
-        </div>
-        <div class="card-header">
-
-
-            <div class="row">
-                
-                
-
+            <!-- Header -->
+            <div class="header">
+                <img src="https://hnec.ly/wp-content/uploads/2020/06/LOGOsss.png"
+                     alt="" />
+                <div class="re-title">
+                    إيصال تسجيل مرشح
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            <div class="toolbar">
-                <center><p><h3>السيد/ة: {{candidate.fullName}}</h3></p></center>
-                <center><p><h4>الرقم الوطني:{{candidate.nid}} </h4></p></center>
-                <center><p><h4>تم تسجيلة بنجاح في الدائرة الفرعية {{candidate.subconstituencyName}} </h4></p></center>
+            <!-- End Header -->
+            <div class="line"></div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Item -->
+                <div class="item-1">
+                    <div class="label">التاريخ</div>
+                    <div class="input">{{candidate.createdOn}}</div>
+                </div>
+                <!-- End Item -->
+                <!-- Item -->
+                <div class="item-2">
+                    <div class="label">إسم المرشح</div>
+                    <div class="input">{{candidate.name}}</div>
+                </div>
+                <!-- End Item -->
+                <!-- Item -->
+                <div class="item-2">
+                    <div class="label">الرقم الوطني</div>
+                    <div class="input">{{candidate.nid}}</div>
+                </div>
+                <!-- End Item -->
+                <!-- Item -->
+                <div class="item-2">
+                    <div class="label">الدائرة الرئيسية</div>
+                    <div class="input">{{candidate.constituencyName}}</div>
+                </div>
+                <!-- End Item -->
+                <!-- Item -->
+                <div class="item-2">
+                    <div class="label">الدائرة الفرعية</div>
+                    <div class="input">{{candidate.subconstituencyName}}</div>
+                </div>
+                <!-- End Item -->
+                <!-- Item -->
+                <div class="item-2">
+                    <div class="label">المكتب الإنتخابي</div>
+                    <div class="input">{{candidate.officaeName}}</div>
+                </div>
+                <!-- End Item -->
+                <!-- Item -->
+                <div class="item-2">
+                    <div class="label">رقم التسجيل</div>
+                    <div class="input">{{candidate.candidateId}}</div>
+                </div>
+                <!-- End Item -->
             </div>
+            <!-- End Content -->
+            <!-- Footer  -->
+            <div class="report-footer">
+                <div class="em-number">موظف التسجيل: {{candidate.officeUserId}}</div>
+                <button class="btn btn-round btn-primary pull-left" @click.prevent="printReport()"><i class="fa fa-print"></i></button>
+            </div>
+            <!-- End Footer  -->
         </div>
-    </div>
 </div>
